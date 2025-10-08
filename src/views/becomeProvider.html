@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Become a Provider - Door2Door</title>
+  <link rel="stylesheet" href="../styles/globals.css">
+  <link rel="stylesheet" href="../styles/main.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app" class="min-h-screen bg-background">
+    <!-- Header -->
+    <header class="bg-white border-b sticky top-0 z-40">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo -->
+          <a href="./home.html" class="flex items-center space-x-2">
+            <div class="bg-primary text-primary-foreground rounded-lg p-2">
+              <span class="font-bold">D2D</span>
+            </div>
+            <span class="text-xl font-bold">Door2Door</span>
+          </a>
+
+          <div class="hidden md:flex flex-1 max-w-md mx-8">
+            <div class="relative w-full">
+              <i data-lucide="search"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4"></i>
+              <input type="text" placeholder="Search services..."
+                class="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <nav class="flex items-center space-x-4">
+            <a href="./search.html"
+              class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
+              <i data-lucide="search" class="w-4 h-4 md:hidden"></i>
+              <span class="hidden md:block">Search</span>
+            </a>
+
+            <a href="./userProfile.html"
+              class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
+              <i data-lucide="user" class="w-4 h-4 md:mr-2"></i>
+              <span class="hidden md:block">Profile</span>
+            </a>
+
+            <a href="./home.html"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-secondary text-secondary-foreground hover:bg-secondary/80">
+              Back to Home
+            </a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- Hero Section -->
+      <section class="py-16 md:py-24">
+        <div class="container mx-auto px-4">
+          <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">
+              Grow Your Business with Door2Door
+            </h1>
+            <p class="text-xl mb-8 opacity-">
+              Join thousands of trusted professionals who are building successful businesses on our platform.
+              Connect with customers in your area and take control of your schedule.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                class="inline-flex items-center px-8 py-3 bg-white text-primary rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                <i data-lucide="user-plus" class="w-5 h-5 mr-2"></i>
+                Start Application
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary mb-2">$75</div>
+              <div class="text-sm text-muted-foreground">Average hourly rate</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary mb-2">15k+</div>
+              <div class="text-sm text-muted-foreground">Active providers</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary mb-2">4.9</div>
+              <div class="text-sm text-muted-foreground">Average rating</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary mb-2">24/7</div>
+              <div class="text-sm text-muted-foreground">Support available</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Benefits Section -->
+      <section class="py-16">
+        <div class="container mx-auto px-4">
+          <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+              <h2 class="text-3xl font-bold mb-4">Why Choose Door2Door?</h2>
+              <p class="text-muted-foreground text-lg">Join a platform that puts your success first</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div class="bg-white p-6 rounded-lg border hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                  <i data-lucide="dollar-sign" class="w-6 h-6 text-blue-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-3">Flexible Earnings</h3>
+                <p class="text-muted-foreground">Set your own rates and work when you want. Keep 85% of what you earn.
+                </p>
+              </div>
+
+              <div class="bg-white p-6 rounded-lg border hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                  <i data-lucide="users" class="w-6 h-6 text-green-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-3">Steady Work</h3>
+                <p class="text-muted-foreground">Access to thousands of customers actively looking for your services.
+                </p>
+              </div>
+
+              <div class="bg-white p-6 rounded-lg border hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                  <i data-lucide="shield-check" class="w-6 h-6 text-purple-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-3">Insurance Coverage</h3>
+                <p class="text-muted-foreground">Comprehensive liability insurance for every job at no extra cost to
+                  you.</p>
+              </div>
+
+              <div class="bg-white p-6 rounded-lg border hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                  <i data-lucide="calendar" class="w-6 h-6 text-orange-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-3">Smart Scheduling</h3>
+                <p class="text-muted-foreground">Integrated calendar and booking system to manage your appointments
+                  easily.</p>
+              </div>
+
+              <div class="bg-white p-6 rounded-lg border hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                  <i data-lucide="headphones" class="w-6 h-6 text-red-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-3">24/7 Support</h3>
+                <p class="text-muted-foreground">Dedicated support team available around the clock to help you succeed.
+                </p>
+              </div>
+
+              <div class="bg-white p-6 rounded-lg border hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+                  <i data-lucide="trending-up" class="w-6 h-6 text-indigo-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-3">Business Growth</h3>
+                <p class="text-muted-foreground">Marketing tools and analytics to help you grow your customer base.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- How It Works Section -->
+      <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+          <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+              <h2 class="text-3xl font-bold mb-4">How It Works</h2>
+              <p class="text-muted-foreground text-lg">Get started in just a few simple steps</p>
+            </div>
+
+            <div class="space-y-8">
+              <div class="flex flex-col md:flex-row items-center gap-6">
+                <div
+                  class="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xl font-bold shrink-0">
+                  1
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-xl font-semibold mb-2">Create Your Profile</h3>
+                  <p class="text-muted-foreground">Tell us about your skills, experience, and service areas. Add photos
+                    of your work and set your rates.</p>
+                </div>
+                <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                  <i data-lucide="user-circle" class="w-8 h-8 text-blue-600"></i>
+                </div>
+              </div>
+
+              <div class="flex flex-col md:flex-row items-center gap-6">
+                <div
+                  class="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xl font-bold shrink-0">
+                  2
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-xl font-semibold mb-2">Get Verified</h3>
+                  <p class="text-muted-foreground">Complete our verification process including background check, license
+                    verification, and insurance confirmation.</p>
+                </div>
+                <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center shrink-0">
+                  <i data-lucide="shield-check" class="w-8 h-8 text-green-600"></i>
+                </div>
+              </div>
+
+              <div class="flex flex-col md:flex-row items-center gap-6">
+                <div
+                  class="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xl font-bold shrink-0">
+                  3
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-xl font-semibold mb-2">Start Receiving Jobs</h3>
+                  <p class="text-muted-foreground">Once approved, you'll start receiving job requests from customers in
+                    your area. Accept the ones that fit your schedule.</p>
+                </div>
+                <div class="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center shrink-0">
+                  <i data-lucide="briefcase" class="w-8 h-8 text-purple-600"></i>
+                </div>
+              </div>
+
+              <div class="flex flex-col md:flex-row items-center gap-6">
+                <div
+                  class="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xl font-bold shrink-0">
+                  4
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-xl font-semibold mb-2">Get Paid</h3>
+                  <p class="text-muted-foreground">Complete the job, get rated by the customer, and receive payment
+                    directly to your account within 24 hours.</p>
+                </div>
+                <div class="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center shrink-0">
+                  <i data-lucide="credit-card" class="w-8 h-8 text-orange-600"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Requirements Section -->
+      <section class="py-16">
+        <div class="container mx-auto px-4">
+          <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+              <h2 class="text-3xl font-bold mb-4">Requirements</h2>
+              <p class="text-muted-foreground text-lg">What you need to get started</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h3 class="text-xl font-semibold mb-4">Basic Requirements</h3>
+                <ul class="space-y-3">
+                  <li class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0"></i>
+                    <span>Must be 18 years or older</span>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0"></i>
+                    <span>Valid government-issued ID</span>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0"></i>
+                    <span>Clean background check</span>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0"></i>
+                    <span>Reliable transportation</span>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0"></i>
+                    <span>Smartphone for the app</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 class="text-xl font-semibold mb-4">Professional Requirements</h3>
+                <ul class="space-y-3">
+                  <li class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0"></i>
+                    <span>Valid business license (if required)</span>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0"></i>
+                    <span>Professional certifications</span>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0"></i>
+                    <span>Proof of insurance coverage</span>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0"></i>
+                    <span>Professional references</span>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0"></i>
+                    <span>Portfolio of previous work</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Application Form Section -->
+      <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+          <div class="max-w-2xl mx-auto">
+            <div class="text-center mb-8">
+              <h2 class="text-3xl font-bold mb-4">Start Your Application</h2>
+              <p class="text-muted-foreground text-lg">Fill out the form below to begin your journey as a Door2Door
+                provider</p>
+            </div>
+
+            <form class="bg-white p-8 rounded-lg border space-y-6">
+              <!-- Personal Information -->
+              <div>
+                <h3 class="text-lg font-semibold mb-4">Personal Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-2">First Name *</label>
+                    <input type="text" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-2">Last Name *</label>
+                    <input type="text" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-2">Email Address *</label>
+                    <input type="email" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-2">Phone Number *</label>
+                    <input type="tel" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <label class="block text-sm font-medium mb-2">Address *</label>
+                  <input type="text" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+              </div>
+
+              <!-- Service Information -->
+              <div>
+                <h3 class="text-lg font-semibold mb-4">Service Information</h3>
+                <div>
+                  <label class="block text-sm font-medium mb-2">Primary Service Category *</label>
+                  <select required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="">Select a category</option>
+                    <option value="plumbing">Plumbing</option>
+                    <option value="electrical">Electrical</option>
+                    <option value="carpentry">Carpentry</option>
+                    <option value="painting">Painting</option>
+                    <option value="cleaning">Cleaning</option>
+                    <option value="hvac">HVAC</option>
+                    <option value="landscaping">Landscaping</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="mt-4">
+                  <label class="block text-sm font-medium mb-2">Years of Experience *</label>
+                  <select required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="">Select experience level</option>
+                    <option value="1-2">1-2 years</option>
+                    <option value="3-5">3-5 years</option>
+                    <option value="6-10">6-10 years</option>
+                    <option value="10+">10+ years</option>
+                  </select>
+                </div>
+
+                <div class="mt-4">
+                  <label class="block text-sm font-medium mb-2">Describe Your Services</label>
+                  <textarea rows="4"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Tell us about the services you provide, your specialties, and what makes you unique..."></textarea>
+                </div>
+              </div>
+
+              <!-- Business Information -->
+              <div>
+                <h3 class="text-lg font-semibold mb-4">Business Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-2">Business Name</label>
+                    <input type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-2">Business License Number</label>
+                    <input type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  </div>
+                </div>
+
+                <div class="flex items-center space-x-2 mt-4">
+                  <input type="checkbox" id="insurance" class="rounded">
+                  <label for="insurance" class="text-sm">I have liability insurance coverage</label>
+                </div>
+
+                <div class="flex items-center space-x-2 mt-2">
+                  <input type="checkbox" id="background" class="rounded">
+                  <label for="background" class="text-sm">I consent to a background check</label>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="pt-4">
+                <button type="submit"
+                  class="w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                  Submit Application
+                </button>
+                <p class="text-sm text-muted-foreground mt-2 text-center">
+                  By submitting this application, you agree to our Terms of Service and Privacy Policy.
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="py-16">
+        <div class="container mx-auto px-4">
+          <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+              <h2 class="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
+              <p class="text-muted-foreground text-lg">Get answers to common questions about becoming a provider</p>
+            </div>
+
+            <div class="space-y-6">
+              <div class="bg-white border rounded-lg">
+                <button
+                  class="w-full px-6 py-4 text-left font-medium flex items-center justify-between hover:bg-gray-50">
+                  <span>How much can I earn as a provider?</span>
+                  <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                </button>
+                <div class="px-6 pb-4 text-muted-foreground">
+                  <p>Earnings vary by service type and location, but our providers typically earn $40-$150 per hour. You
+                    keep 85% of what you charge, and you set your own rates.</p>
+                </div>
+              </div>
+
+              <div class="bg-white border rounded-lg">
+                <button
+                  class="w-full px-6 py-4 text-left font-medium flex items-center justify-between hover:bg-gray-50">
+                  <span>How long does the approval process take?</span>
+                  <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                </button>
+                <div class="px-6 pb-4 text-muted-foreground">
+                  <p>Most applications are reviewed within 3-5 business days. The background check and verification
+                    process may take an additional 2-3 days.</p>
+                </div>
+              </div>
+
+              <div class="bg-white border rounded-lg">
+                <button
+                  class="w-full px-6 py-4 text-left font-medium flex items-center justify-between hover:bg-gray-50">
+                  <span>Do I need my own insurance?</span>
+                  <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                </button>
+                <div class="px-6 pb-4 text-muted-foreground">
+                  <p>While we provide liability coverage for all jobs, we recommend you maintain your own business
+                    insurance. This is often required for licensed professionals.</p>
+                </div>
+              </div>
+
+              <div class="bg-white border rounded-lg">
+                <button
+                  class="w-full px-6 py-4 text-left font-medium flex items-center justify-between hover:bg-gray-50">
+                  <span>Can I choose which jobs to accept?</span>
+                  <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                </button>
+                <div class="px-6 pb-4 text-muted-foreground">
+                  <p>Absolutely! You have complete control over which jobs you accept. You can review job details,
+                    customer ratings, and location before deciding.</p>
+                </div>
+              </div>
+
+              <div class="bg-white border rounded-lg">
+                <button
+                  class="w-full px-6 py-4 text-left font-medium flex items-center justify-between hover:bg-gray-50">
+                  <span>When do I get paid?</span>
+                  <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                </button>
+                <div class="px-6 pb-4 text-muted-foreground">
+                  <p>Payment is processed within 24 hours of job completion. You can choose between direct deposit or
+                    weekly payouts to your bank account.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="py-16 bg-primary text-primary-foreground">
+        <div class="container mx-auto px-4">
+          <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
+            <p class="text-xl mb-8 opacity-90">
+              Join thousands of successful providers who have built thriving businesses with Door2Door
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                class="inline-flex items-center px-8 py-3 bg-white text-primary rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                <i data-lucide="user-plus" class="w-5 h-5 mr-2"></i>
+                Start Your Application
+              </button>
+              <button
+                class="inline-flex items-center px-8 py-3 border border-white/30 text-white rounded-lg font-medium hover:bg-white/10 transition-colors">
+                <i data-lucide="phone" class="w-5 h-5 mr-2"></i>
+                Call Us: (555) 123-4567
+              </button>
+            </div>
+            <p class="text-sm opacity-70 mt-4">
+              Questions? Our team is here to help you get started.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Chat popup toggle button -->
+    <button id="chat-toggle"
+      class="fixed bottom-4 right-4 bg-primary text-primary-foreground rounded-full p-3 shadow-lg z-50 hover:bg-primary/90 transition-colors">
+      💬
+    </button>
+
+    <!-- Chat popup -->
+    <div id="chat-popup"
+      class="fixed bottom-4 right-4 w-80 bg-white border rounded-lg shadow-lg z-50 transition-all duration-300 hidden">
+      <!-- Chat popup content will be inserted here -->
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/utils.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/pages.js"></script>
+  <!-- <script src="../js/router.js"></script> -->
+  <script src="../js/main.js"></script>
+</body>
+
+</html>

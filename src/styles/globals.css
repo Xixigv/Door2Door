@@ -1,0 +1,143 @@
+:root {
+  /* Font and sizing */
+  --font-size: 16px;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+
+  /* Color palette */
+  --background: #ffffff;
+  --foreground: #23232a;
+  --primary: #030213;
+  --primary-foreground: #ffffff;
+  --secondary: #f2f2fc;
+  --secondary-foreground: #030213;
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #e9ebef;
+  --accent-foreground: #030213;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
+  --input-background: #f3f3f5;
+  --switch-background: #cbced4;
+
+  /* Misc */
+  --radius: 0.625rem;
+}
+
+/* Light/Dark mode support (optional, requires JS to add .dark to <html> or <body>) */
+.dark {
+  --background: #23232a;
+  --foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #23232a;
+  --secondary: #44445a;
+  --secondary-foreground: #ffffff;
+  --muted: #44445a;
+  --muted-foreground: #b3b3c2;
+  --accent: #44445a;
+  --accent-foreground: #ffffff;
+  --destructive: #be2c53;
+  --destructive-foreground: #ffffff;
+  --border: #44445a;
+  --input-background: #353545;
+  --switch-background: #757585;
+}
+
+/* Base styles */
+html {
+  font-size: var(--font-size);
+}
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, Arial, sans-serif;
+  margin: 0;
+}
+
+/* Typography */
+h1 {
+  font-size: 2rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+h2 {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+h3 {
+  font-size: 1.17rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+h4, label, button, input, p {
+  font-size: 1rem;
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+}
+
+label,
+button {
+  font-weight: var(--font-weight-medium);
+}
+
+/* Inputs & Buttons */
+input {
+  background: var(--input-background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5em;
+  font-size: 1rem;
+}
+
+button {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.5em 1em;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+button:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Links */
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Misc */
+.bg-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.text-primary-foreground {
+  color: var(--primary-foreground);
+}
+.rounded-lg {
+  border-radius: 0.625rem;
+}
+.font-bold {
+  font-weight: bold;
+}
+.text-xl { font-size: 1.25rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.py-3 { padding-top: .75rem; padding-bottom: .75rem; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.space-x-2 > :not(:last-child) { margin-right: .5rem; }
+.container { max-width: 1200px; margin: auto; }
+
+/* (add more utilities as needed for your layout) */

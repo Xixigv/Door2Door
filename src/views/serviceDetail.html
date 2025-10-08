@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Door2Door - Professional Services at Your Door</title>
+  <link rel="stylesheet" href="../styles/globals.css">
+  <link rel="stylesheet" href="../styles/main.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app" class="min-h-screen bg-background">
+    <!-- Header -->
+    <header class="bg-white border-b sticky top-0 z-40">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo -->
+          <a href="./home.html" class="flex items-center space-x-2">
+            <div class="bg-primary text-primary-foreground rounded-lg p-2">
+              <span class="font-bold">D2D</span>
+            </div>
+            <span class="text-xl font-bold">Door2Door</span>
+          </a>
+
+          <div class="hidden md:flex flex-1 max-w-md mx-8">
+            <div class="relative w-full">
+              <i data-lucide="search"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4"></i>
+              <input type="text" placeholder="Search services..."
+                class="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <nav class="flex items-center space-x-4">
+            <a href="./search.html"
+              class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
+              <i data-lucide="search" class="w-4 h-4 md:hidden"></i>
+              <span class="hidden md:block">Search</span>
+            </a>
+
+            <a href="./userProfile.html"
+              class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
+              <i data-lucide="user" class="w-4 h-4 md:mr-2"></i>
+              <span class="hidden md:block">Profile</span>
+            </a>
+
+            <!-- To be done -->
+            <a href="./becomeProvider.html" class="flex items-center space-x-2"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+              Become a Provider
+            </a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content">
+      <div class="min-h-screen bg-gray-50">
+        <div class="container mx-auto px-4 py-6"><a
+            class="inline-flex items-center text-muted-foreground hover:text-foreground mb-6" href="./home.html"><i
+              data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>Back to services</a>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-6">
+              <div class="card">
+                <div class="card-content">
+                  <div class="flex flex-col md:flex-row gap-6">
+                    <div class="w-full md:w-1/3"><img class="w-full h-48 object-cover rounded-lg"
+                        src="https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080&amp;utm_source=figma&amp;utm_medium=referral"
+                        alt="Premium Plumbing Services"></div>
+                    <div class="flex-1">
+                      <h1 class="text-2xl font-bold mb-2">Premium Plumbing Services</h1><span
+                        class="badge badge-secondary mb-3">Plumbing</span>
+                      <div class="flex items-center space-x-4 text-sm text-muted-foreground mb-4">
+                        <i data-lucide="map-pin" class="w-4 h-4 mr-1"></i><span>Downtown Area •
+                          2.3 miles away</span>
+                      </div>
+                      <p class="text-muted-foreground mb-4">Professional plumbing services
+                        including leak repairs, pipe installation, drain cleaning, and emergency
+                        services. Licensed and insured with 8+ years of experience.</p>
+                      <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><span class="text-muted-foreground">Hourly Rate:</span><span
+                            class="font-semibold ml-2">$75/hr</span></div>
+                        <div><span class="text-muted-foreground">Service Call:</span><span
+                            class="font-semibold ml-2">$45</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Service Provider</h3>
+                </div>
+                <div class="card-content">
+                  <div class="flex items-start space-x-4">
+                    <div class="avatar avatar-lg"><img
+                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&amp;h=150&amp;fit=crop&amp;crop=face"
+                        alt="Mike Johnson"></div>
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between mb-3">
+                        <div>
+                          <h3 class="font-semibold">Mike Johnson</h3>
+                          <div class="flex items-center space-x-1 mb-2"><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><span
+                              class="font-medium">4.9</span><span class="text-muted-foreground">(127 reviews)</span>
+                          </div>
+                        </div><span class="badge badge-outline text-green-700 border-green-700">Available
+                          Now</span>
+                      </div>
+                      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm mb-4">
+                        <div><span class="text-muted-foreground block">Experience</span><span class="font-medium">8
+                            years</span></div>
+                        <div><span class="text-muted-foreground block">Jobs
+                            Completed</span><span class="font-medium">342</span></div>
+                        <div><span class="text-muted-foreground block">Response Time</span><span
+                            class="font-medium">Within 30 minutes</span></div>
+                      </div>
+                      <div class="flex space-x-3"><button class="btn btn-outline btn-sm">
+                          <a href="./providerProfile.html">View Profile</a></button><button
+                          class="btn btn-outline btn-sm"><i data-lucide="message-square"
+                            class="w-4 h-4 mr-2"></i>Message</button><button class="btn btn-outline btn-sm"><i
+                            data-lucide="phone" class="w-4 h-4 mr-2"></i>Call</button></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Services Offered</h3>
+                </div>
+                <div class="card-content">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 bg-primary rounded-full"></div><span>Leak Detection
+                        &amp; Repair</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 bg-primary rounded-full"></div><span>Pipe
+                        Installation</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 bg-primary rounded-full"></div><span>Drain
+                        Cleaning</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 bg-primary rounded-full"></div><span>Water Heater
+                        Service</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 bg-primary rounded-full"></div><span>Emergency
+                        Plumbing</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 bg-primary rounded-full"></div><span>Fixture
+                        Installation</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Customer Reviews</h3>
+                </div>
+                <div class="card-content">
+                  <div class="space-y-6">
+                    <div class="flex space-x-4">
+                      <div class="avatar">
+                        <div class="avatar-fallback">JS</div>
+                      </div>
+                      <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-2"><span class="font-medium">Jennifer Smith</span>
+                          <div class="flex items-center"><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i></div>
+                          <span class="text-sm text-muted-foreground">2 days ago</span>
+                        </div>
+                        <p class="text-muted-foreground">Mike was fantastic! Fixed our kitchen
+                          sink leak quickly and explained everything clearly. Very
+                          professional and reasonably priced.</p>
+                      </div>
+                    </div>
+                    <div class="flex space-x-4">
+                      <div class="avatar"><img
+                          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&amp;h=150&amp;fit=crop&amp;crop=face"
+                          alt="Robert Brown"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-2"><span class="font-medium">Robert Brown</span>
+                          <div class="flex items-center"><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i></div>
+                          <span class="text-sm text-muted-foreground">1 week ago</span>
+                        </div>
+                        <p class="text-muted-foreground">Excellent service! Arrived on time,
+                          diagnosed the problem quickly. The water heater is working perfectly
+                          now. Highly recommend!</p>
+                      </div>
+                    </div>
+                    <div class="flex space-x-4">
+                      <div class="avatar"><img
+                          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&amp;h=150&amp;fit=crop&amp;crop=face"
+                          alt="Maria Garcia"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-2"><span class="font-medium">Maria Garcia</span>
+                          <div class="flex items-center"><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><i data-lucide="star"
+                              class="w-4 h-4 text-gray-300"></i></div>
+                          <span class="text-sm text-muted-foreground">2 weeks ago</span>
+                        </div>
+                        <p class="text-muted-foreground">Great work on our bathroom renovation
+                          plumbing. Professional and clean work. Would definitely use again.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="lg:col-span-1">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Book This Service</h3>
+                </div>
+                <div class="card-content">
+                  <div class="p-4 bg-gray-50 rounded-lg mb-4">
+                    <div class="text-sm text-muted-foreground mb-1">Starting at</div>
+                    <div class="text-2xl font-bold">$75/hr</div>
+                    <div class="text-sm text-muted-foreground">+ $45 service call</div>
+                  </div>
+                  <div class="space-y-3 mb-4">
+                    <div class="flex items-center space-x-2 text-sm"><i data-lucide="clock"
+                        class="w-4 h-4 text-green-600"></i><span>Available today</span></div>
+                    <div class="flex items-center space-x-2 text-sm"><i data-lucide="map-pin"
+                        class="w-4 h-4 text-blue-600"></i><span>Serves your area</span></div>
+                  </div><button class="btn btn-primary w-full btn-lg mb-3"><i data-lucide="calendar"
+                      class="w-4 h-4 mr-2"></i><a href="./booking.html">Schedule Service</a></button><button
+                    class="btn btn-outline w-full mb-4"><i data-lucide="message-square" class="w-4 h-4 mr-2"></i>Get
+                    Quote</button>
+                  <div class="pt-4 border-t">
+                    <h4 class="font-medium mb-2">Satisfaction Guaranteed</h4>
+                    <ul class="text-sm text-muted-foreground space-y-1">
+                      <li>• Licensed &amp; Insured</li>
+                      <li>• 30-day warranty</li>
+                      <li>• Background checked</li>
+                      <li>• Money-back guarantee</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Chat popup toggle button -->
+    <button id="chat-toggle"
+      class="fixed bottom-4 right-4 bg-primary text-primary-foreground rounded-full p-3 shadow-lg z-50 hover:bg-primary/90 transition-colors">
+      💬
+    </button>
+
+    <!-- Chat popup -->
+    <div id="chat-popup"
+      class="fixed bottom-4 right-4 w-80 bg-white border rounded-lg shadow-lg z-50 transition-all duration-300 hidden">
+      <!-- Chat popup content will be inserted here -->
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/utils.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/pages.js"></script>
+  <!-- <script src="../js/router.js"></script> -->
+  <script src="../js/main.js"></script>
+</body>
+
+</html>
