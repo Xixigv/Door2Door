@@ -1,186 +1,26 @@
 // Mock data for the Door2Door application
 
 const SERVICES_DATA = [
-  {
-    id: 1,
-    name: "Plumbing",
-    description: "Professional plumbing services",
-    image: "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    rating: 4.8,
-    providers: 15
-  },
-  {
-    id: 2,
-    name: "Carpentry",
-    description: "Custom woodwork and repairs",
-    image: "https://images.unsplash.com/photo-1638718260002-18bdc8082608?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXJwZW50ZXIlMjB3b29kd29ya2luZ3xlbnwxfHx8fDE3NTc4NjE3MDh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    rating: 4.9,
-    providers: 12
-  },
-  {
-    id: 3,
-    name: "Painting",
-    description: "Interior and exterior painting",
-    image: "https://images.unsplash.com/photo-1574359411659-15573a27fd0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMHBhaW50ZXIlMjBwYWludGluZ3xlbnwxfHx8fDE3NTc5NDg5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    rating: 4.7,
-    providers: 20
-  },
-  {
-    id: 4,
-    name: "Electrical",
-    description: "Licensed electrical services",
-    image: "https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    rating: 4.6,
-    providers: 8
-  },
-  {
-    id: 5,
-    name: "Cleaning",
-    description: "Professional home cleaning",
-    image: "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob21lJTIwY2xlYW5pbmclMjBzZXJ2aWNlfGVufDF8fHx8MTc1NzkyMzUwN3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    rating: 4.9,
-    providers: 25
-  }
+  
 ];
 
 const FEATURED_PROVIDERS = [
-  {
-    id: 1,
-    name: "Mike Johnson",
-    service: "Plumbing",
-    rating: 4.9,
-    reviews: 127,
-    price: "$75/hr",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    available: true
-  },
-  {
-    id: 2,
-    name: "Sarah Williams",
-    service: "House Cleaning",
-    rating: 4.8,
-    reviews: 203,
-    price: "$45/hr",
-    image: "https://images.unsplash.com/photo-1494790108755-2616b5e38f04?w=150&h=150&fit=crop&crop=face",
-    available: true
-  },
-  {
-    id: 3,
-    name: "David Chen",
-    service: "Carpentry",
-    rating: 4.9,
-    reviews: 89,
-    price: "$85/hr",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    available: false
-  }
+  
 ];
 
 const SERVICE_DETAILS = {
-  1: {
-    name: "Premium Plumbing Services",
-    category: "Plumbing",
-    image: "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    provider: {
-      id: 1,
-      name: "Mike Johnson",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-      rating: 4.9,
-      reviewCount: 127,
-      yearsExperience: 8,
-      completedJobs: 342,
-      responseTime: "Within 30 minutes",
-      availability: "Available Now"
-    },
-    pricing: {
-      hourlyRate: 75,
-      serviceCall: 45,
-      emergencyRate: 125
-    },
-    description: "Professional plumbing services including leak repairs, pipe installation, drain cleaning, and emergency services. Licensed and insured with 8+ years of experience.",
-    services: [
-      "Leak Detection & Repair",
-      "Pipe Installation",
-      "Drain Cleaning",
-      "Water Heater Service",
-      "Emergency Plumbing",
-      "Fixture Installation"
-    ],
-    location: "Downtown Area",
-    distance: "2.3 miles away"
-  }
+  
 };
 
 const REVIEWS = [
-  {
-    id: 1,
-    user: "Jennifer Smith",
-    avatar: "https://images.unsplash.com/photo-1494790108755-2616b5e38f04?w=150&h=150&fit=crop&crop=face",
-    rating: 5,
-    date: "2 days ago",
-    comment: "Mike was fantastic! Fixed our kitchen sink leak quickly and explained everything clearly. Very professional and reasonably priced."
-  },
-  {
-    id: 2,
-    user: "Robert Brown",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    rating: 5,
-    date: "1 week ago",
-    comment: "Excellent service! Arrived on time, diagnosed the problem quickly. The water heater is working perfectly now. Highly recommend!"
-  },
-  {
-    id: 3,
-    user: "Maria Garcia",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-    rating: 4,
-    date: "2 weeks ago",
-    comment: "Great work on our bathroom renovation plumbing. Professional and clean work. Would definitely use again."
-  }
+  
 ];
 
 const USER_DATA = {
-  id: 1,
-  name: "John Doe",
-  email: "john.doe@email.com",
-  phone: "+1 (555) 123-4567",
-  location: "San Francisco, CA",
-  avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-  memberSince: "March 2023",
-  totalBookings: 12,
-  totalSpent: 1245
 };
 
 const BOOKING_HISTORY = [
-  {
-    id: 1,
-    service: "Plumbing",
-    provider: "Mike Johnson",
-    date: "2024-01-15",
-    status: "Completed",
-    amount: 150,
-    rating: 5,
-    image: "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-  },
-  {
-    id: 2,
-    service: "House Cleaning",
-    provider: "Sarah Williams",
-    date: "2024-01-10",
-    status: "Completed",
-    amount: 120,
-    rating: 4,
-    image: "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob21lJTIwY2xlYW5pbmclMjBzZXJ2aWNlfGVufDF8fHx8MTc1NzkyMzUwN3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-  },
-  {
-    id: 3,
-    service: "Electrical Work",
-    provider: "Tom Anderson",
-    date: "2024-01-20",
-    status: "Scheduled",
-    amount: 200,
-    rating: null,
-    image: "https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-  }
+  
 ];
 
 const PROVIDER_DATA = {
@@ -209,14 +49,7 @@ const PROVIDER_DATA = {
       "Fixture Installation",
       "Sewer Line Repair",
       "Bathroom Remodeling"
-    ],
-    certifications: [
-      "Licensed Master Plumber",
-      "EPA Certified",
-      "OSHA 10 Certified",
-      "Backflow Prevention Certified"
-    ],
-    insurance: "Liability: $2M | Bonded: $50K"
+    ]
   }
 };
 
@@ -395,9 +228,6 @@ const SEARCH_SERVICES = [
 const CATEGORIES = ["All", "Plumbing", "Cleaning", "Carpentry", "Painting", "Electrical", "HVAC", "Landscaping"];
 
 const TIME_SLOTS = [
-  "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", 
-  "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", 
-  "4:00 PM", "5:00 PM", "6:00 PM"
 ];
 
 const SERVICE_OPTIONS = [

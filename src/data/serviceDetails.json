@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "name": "Premium Plumbing Services",
+    "category": "Plumbing",
+    "image": "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 1,
+      "name": "Mike Johnson",
+      "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.9,
+      "reviewCount": 127,
+      "yearsExperience": 8,
+      "completedJobs": 342,
+      "responseTime": "Within 30 minutes",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 75,
+      "serviceCall": 45
+    },
+    "description": "Professional plumbing services including leak repairs, pipe installation, drain cleaning, and emergency services. Licensed and insured with 8+ years of experience.",
+    "services": [
+      "Leak Detection & Repair",
+      "Pipe Installation",
+      "Drain Cleaning",
+      "Water Heater Service",
+      "Emergency Plumbing",
+      "Fixture Installation"
+    ],
+    "location": "Downtown Area",
+    "distance": "2.3 miles away"
+  },
+  {
+    "id": 2,
+    "name": "Expert Carpentry Solutions",
+    "category": "Carpentry",
+    "image": "https://images.unsplash.com/photo-1638718260002-18bdc8082608?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXJwZW50ZXIlMjB3b29kd29ya2luZ3xlbnwxfHx8fDE3NTc4NjE3MDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 3,
+      "name": "David Chen",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.9,
+      "reviewCount": 89,
+      "yearsExperience": 12,
+      "completedJobs": 267,
+      "responseTime": "Within 2 hours",
+      "availability": "Next Available: Tomorrow"
+    },
+    "pricing": {
+      "hourlyRate": 85,
+      "serviceCall": 60
+    },
+    "description": "Custom carpentry and woodworking services for residential and commercial projects. Specializing in cabinetry, trim work, and furniture restoration with 12+ years of master craftsmanship.",
+    "services": [
+      "Custom Cabinetry",
+      "Trim & Molding",
+      "Door Installation",
+      "Deck Building",
+      "Furniture Repair",
+      "Built-in Shelving"
+    ],
+    "location": "Westside",
+    "distance": "3.7 miles away"
+  },
+  {
+    "id": 3,
+    "name": "Professional Painting Services",
+    "category": "Painting",
+    "image": "https://images.unsplash.com/photo-1574359411659-15573a27fd0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMHBhaW50ZXIlMjBwYWludGluZ3xlbnwxfHx8fDE3NTc5NDg5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 32,
+      "name": "Laura Martinez",
+      "image": "https://images.unsplash.com/photo-1485875437342-9b39470b3d95?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.9,
+      "reviewCount": 203,
+      "yearsExperience": 10,
+      "completedJobs": 456,
+      "responseTime": "Within 1 hour",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 65,
+      "serviceCall": 40
+    },
+    "description": "High-quality interior and exterior painting services for homes and businesses. Expert color consultation, surface preparation, and finishing with premium materials. 10+ years of transforming spaces.",
+    "services": [
+      "Interior Painting",
+      "Exterior Painting",
+      "Cabinet Refinishing",
+      "Color Consultation",
+      "Wallpaper Removal",
+      "Pressure Washing"
+    ],
+    "location": "Northside",
+    "distance": "1.8 miles away"
+  },
+  {
+    "id": 4,
+    "name": "Licensed Electrical Services",
+    "category": "Electrical",
+    "image": "https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 49,
+      "name": "Ashley Rivera",
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.9,
+      "reviewCount": 201,
+      "yearsExperience": 15,
+      "completedJobs": 523,
+      "responseTime": "Within 45 minutes",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 100,
+      "serviceCall": 75
+    },
+    "description": "Fully licensed and insured electrical services for residential and commercial properties. Expert troubleshooting, installations, and safety inspections. Available for emergency calls 24/7.",
+    "services": [
+      "Circuit Installation",
+      "Panel Upgrades",
+      "Outlet & Switch Repair",
+      "Lighting Installation",
+      "Generator Setup",
+      "Electrical Inspections"
+    ],
+    "location": "Central District",
+    "distance": "2.9 miles away"
+  },
+  {
+    "id": 5,
+    "name": "Premium Home Cleaning",
+    "category": "Cleaning",
+    "image": "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob21lJTIwY2xlYW5pbmclMjBzZXJ2aWNlfGVufDF8fHx8MTc1NzkyMzUwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 2,
+      "name": "Sarah Williams",
+      "image": "https://images.unsplash.com/photo-1494790108755-2616b5e38f04?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.8,
+      "reviewCount": 203,
+      "yearsExperience": 6,
+      "completedJobs": 678,
+      "responseTime": "Within 4 hours",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 45,
+      "serviceCall": 0
+    },
+    "description": "Comprehensive home cleaning services with eco-friendly products and attention to detail. Regular maintenance, deep cleaning, and move-in/move-out services available. Trusted by hundreds of local families.",
+    "services": [
+      "Regular House Cleaning",
+      "Deep Cleaning",
+      "Move-In/Out Cleaning",
+      "Kitchen & Bathroom",
+      "Window Cleaning",
+      "Carpet Cleaning"
+    ],
+    "location": "Eastside",
+    "distance": "1.2 miles away"
+  }
+]
