@@ -4,12 +4,18 @@ const dynamoDB = require("../data/dynamoClient.js");
 const dynamoClient = require('@aws-sdk/client-dynamodb');
 const {unmarshall} = require('@aws-sdk/util-dynamodb');
 
+
 const router = express.Router();
-const TABLE_NAME = "Services"; // el nombre de tu tabla DynamoDB
+const TABLE_NAME = "Providers"; // el nombre de tu tabla DynamoDB
 
 router.get("/", async (req, res) => {
     try {
-        const command = new dynamoClient.ScanCommand({ TableName: TABLE_NAME });
+        const limit = parseInt(req.query.limit) || 10;
+
+        const command = new dynamoClient.ScanCommand({ 
+            TableName: TABLE_NAME,
+            Limit: limit
+        });
         const data = await dynamoDB.send(command);
 
         // Convierte y filtra cada item
@@ -17,11 +23,14 @@ router.get("/", async (req, res) => {
             const unmarshalled = unmarshall(item);
             return {
                 id: unmarshalled.id,
-                name: unmarshalled.category,
-                description: unmarshalled.shortDescription,
-                image: unmarshalled.image,
-                rating: unmarshalled.provider?.rating,
-                providers: unmarshalled.providers
+                name: unmarshalled.name,
+                image: unmarshalled.avatar,
+                service: unmarshalled.service,
+                rating: unmarshalled.rating,
+                reviews: unmarshalled.reviewCount,
+                price: unmarshalled.hourlyRate,
+                available: true,
+
             };
         });
         res.json(cleanData);

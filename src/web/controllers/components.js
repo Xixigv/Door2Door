@@ -4,67 +4,7 @@
 
 
 // Provider Card Component
-function createProviderCard(provider) {
-    const card = createElement('div', 'card hover:shadow-lg transition-shadow cursor-pointer');
-    
-    const cardContent = createElement('div', 'card-content p-6');
-    
-    const container = createElement('div', 'flex items-start space-x-4');
-    
-    // Avatar with availability indicator
-    const avatarContainer = createElement('div', 'relative');
-    const avatar = createAvatar(provider.image, provider.name, 'avatar');
-    avatarContainer.appendChild(avatar);
-    
-    if (provider.available) {
-        const indicator = createElement('div', 'absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white');
-        avatarContainer.appendChild(indicator);
-    }
-    
-    // Content
-    const content = createElement('div', 'flex-1');
-    const name = createElement('h3', 'font-semibold mb-1', provider.name);
-    const serviceType = createElement('p', 'text-sm text-muted-foreground mb-2', provider.service);
-    
-    const ratingRow = createElement('div', 'flex items-center space-x-4 mb-2');
-    const ratingContainer = createElement('div', 'flex items-center space-x-1');
-    const starIcon = createIcon('star', 'w-4 h-4 fill-yellow-400 text-yellow-400');
-    const rating = createElement('span', 'text-sm', provider.rating.toString());
-    const reviewCount = createElement('span', 'text-sm text-muted-foreground', `(${provider.reviews})`);
-    
-    ratingContainer.appendChild(starIcon);
-    ratingContainer.appendChild(rating);
-    ratingContainer.appendChild(reviewCount);
-    ratingRow.appendChild(ratingContainer);
-    
-    const bottomRow = createElement('div', 'flex items-center justify-between');
-    const price = createElement('span', 'font-semibold text-primary', provider.price);
-    
-    const badge = createBadge(
-        provider.available ? 'Available' : 'Busy',
-        provider.available ? 'badge badge-secondary text-green-700 bg-green-100' : 'badge badge-secondary'
-    );
-    
-    bottomRow.appendChild(price);
-    bottomRow.appendChild(badge);
-    
-    content.appendChild(name);
-    content.appendChild(serviceType);
-    content.appendChild(ratingRow);
-    content.appendChild(bottomRow);
-    
-    container.appendChild(avatarContainer);
-    container.appendChild(content);
-    cardContent.appendChild(container);
-    card.appendChild(cardContent);
-    
-    // Add click handler
-    card.addEventListener('click', () => {
-        navigateTo(`/profile/provider/${provider.id}`);
-    });
-    
-    return card;
-}
+
 
 // Review Component
 function createReviewCard(review) {

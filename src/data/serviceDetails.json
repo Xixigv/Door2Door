@@ -3,6 +3,7 @@
     "id": 1,
     "name": "Premium Plumbing Services",
     "category": "Plumbing",
+    "shortDescription": "Professional plumbing services",
     "image": "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
     "provider": {
       "id": 1,
@@ -29,12 +30,14 @@
       "Fixture Installation"
     ],
     "location": "Downtown Area",
-    "distance": "2.3 miles away"
+    "distance": "2.3 miles away",
+    "providers": 5
   },
   {
     "id": 2,
     "name": "Expert Carpentry Solutions",
     "category": "Carpentry",
+    "shortDescription": "Custom woodwork and repairs",
     "image": "https://images.unsplash.com/photo-1638718260002-18bdc8082608?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXJwZW50ZXIlMjB3b29kd29ya2luZ3xlbnwxfHx8fDE3NTc4NjE3MDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
     "provider": {
       "id": 3,
@@ -61,12 +64,14 @@
       "Built-in Shelving"
     ],
     "location": "Westside",
-    "distance": "3.7 miles away"
+    "distance": "3.7 miles away",
+    "providers": 5
   },
   {
     "id": 3,
     "name": "Professional Painting Services",
     "category": "Painting",
+    "shortDescription": "Interior and exterior painting",
     "image": "https://images.unsplash.com/photo-1574359411659-15573a27fd0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMHBhaW50ZXIlMjBwYWludGluZ3xlbnwxfHx8fDE3NTc5NDg5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
     "provider": {
       "id": 32,
@@ -93,12 +98,14 @@
       "Pressure Washing"
     ],
     "location": "Northside",
-    "distance": "1.8 miles away"
+    "distance": "1.8 miles away",
+    "providers": 5
   },
   {
     "id": 4,
     "name": "Licensed Electrical Services",
     "category": "Electrical",
+    "shortDescription": "Licensed electrical services",
     "image": "https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
     "provider": {
       "id": 49,
@@ -125,12 +132,14 @@
       "Electrical Inspections"
     ],
     "location": "Central District",
-    "distance": "2.9 miles away"
+    "distance": "2.9 miles away",
+    "providers": 5
   },
   {
     "id": 5,
     "name": "Premium Home Cleaning",
     "category": "Cleaning",
+    "shortDescription": "Professional home cleaning",
     "image": "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob21lJTIwY2xlYW5pbmclMjBzZXJ2aWNlfGVufDF8fHx8MTc1NzkyMzUwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
     "provider": {
       "id": 2,
@@ -157,6 +166,7 @@
       "Carpet Cleaning"
     ],
     "location": "Eastside",
-    "distance": "1.2 miles away"
+    "distance": "1.2 miles away",
+    "providers": 5
   }
 ]

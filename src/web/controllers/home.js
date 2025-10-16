@@ -9,20 +9,7 @@ function renderHomePage() {
     const servicesSection = renderServices();
     
     // Featured Providers
-    // const providersSection = createElement('section', 'py-16');
-    // const providersContainer = createElement('div', 'container mx-auto px-4');
-    // const providersTitle = createElement('h2', 'text-3xl font-bold text-center mb-12', 'Top Rated Providers');
-    
-    // const providersGrid = createElement('div', 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6');
-    
-    // FEATURED_PROVIDERS.forEach(provider => {
-    //     const providerCard = createProviderCard(provider);
-    //     providersGrid.appendChild(providerCard);
-    // });
-    
-    // providersContainer.appendChild(providersTitle);
-    // providersContainer.appendChild(providersGrid);
-    // providersSection.appendChild(providersContainer);
+    const providersSection = renderProviders();
     
     // // How it Works
     // const howItWorksSection = createElement('section', 'py-16 bg-gray-50');
@@ -70,7 +57,7 @@ function renderHomePage() {
     
     container.appendChild(hero);
     container.appendChild(servicesSection);
-    // container.appendChild(providersSection);
+    container.appendChild(providersSection);
     // container.appendChild(howItWorksSection);
     
     let main_content = document.getElementById('main-content');
@@ -193,10 +180,115 @@ function createServiceCard(service) {
     servicesGrid.append(card);
 }
 
-function getPopularProviders(){
+function renderProviders(){
+    const providersSection = document.createElement('section');
+    providersSection.className = 'py-16';
 
+    const providersContainer = document.createElement('div');
+    providersContainer.className = 'container mx-auto px-4';
+    const providersTitle = document.createElement('h2');
+    providersTitle.className = 'text-3xl font-bold text-center mb-12';
+    providersTitle.textContent = 'Top Rated Providers';
 
+    const providersGrid = document.createElement('div');
+    providersGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+    providersGrid.id = 'providersGrid';
+    
+    providersContainer.appendChild(providersTitle);
+    providersContainer.appendChild(providersGrid);
+    providersSection.appendChild(providersContainer);
 
+    return providersSection;
+}
+
+function createProviderCard(provider) {
+    const card = document.createElement('div');
+    card.className = 'card hover:shadow-lg transition-shadow cursor-pointer';
+
+    const cardContent = document.createElement('div');
+    cardContent.className = 'card-content p-6';
+
+    const container = document.createElement('div');
+    container.className = 'flex items-start space-x-4';
+
+    // Avatar with availability indicator
+    const avatarContainer = document.createElement('div');
+    avatarContainer.className = 'relative';
+    const avatar = createAvatar(provider.image, provider.name, 'avatar');
+    avatarContainer.appendChild(avatar);
+    
+    if (provider.available) {
+        const indicator = document.createElement('div');
+        indicator.className = 'absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white';
+        avatarContainer.appendChild(indicator);
+    }
+    
+    // Content
+    const content = document.createElement('div');
+    content.className = 'flex-1';
+
+    const name = document.createElement('h3');
+    name.className = 'font-semibold mb-1';
+    name.textContent = provider.name;
+
+    const serviceType = document.createElement('p');
+    serviceType.className = 'text-sm text-muted-foreground mb-2';
+    serviceType.textContent = provider.service;
+
+    const ratingRow = document.createElement('div');
+    ratingRow.className = 'flex items-center space-x-4 mb-2';
+
+    const ratingContainer = document.createElement('div');
+    ratingContainer.className = 'flex items-center space-x-1';
+    const starIcon = document.createElement('i');
+    starIcon.dataset.lucide = 'star';
+    starIcon.className = 'w-4 h-4 fill-yellow-400 text-yellow-400';
+    const rating = document.createElement('span');
+    rating.className = 'text-sm';
+    rating.textContent = provider.rating.toString();
+    const reviewCount = document.createElement('span');
+    reviewCount.className = 'text-sm text-muted-foreground';
+    reviewCount.textContent = `(${provider.reviews})`;
+
+    ratingContainer.appendChild(starIcon);
+    ratingContainer.appendChild(rating);
+    ratingContainer.appendChild(reviewCount);
+    ratingRow.appendChild(ratingContainer);
+
+    const bottomRow = document.createElement('div');
+    bottomRow.className = 'flex items-center justify-between';
+    const price = document.createElement('span');
+    price.className = 'font-semibold text-primary';
+    price.textContent = `$${provider.price}/hr`;
+
+    
+    const badge = createBadge(
+        provider.available ? 'Available' : 'Busy',
+        provider.available ? 'badge badge-secondary text-green-700 bg-green-100' : 'badge badge-secondary'
+    );
+    
+    bottomRow.appendChild(price);
+    bottomRow.appendChild(badge);
+    
+    content.appendChild(name);
+    content.appendChild(serviceType);
+    content.appendChild(ratingRow);
+    content.appendChild(bottomRow);
+    
+    container.appendChild(avatarContainer);
+    container.appendChild(content);
+    cardContent.appendChild(container);
+    card.appendChild(cardContent);
+    
+    // Add click handler
+    card.addEventListener('click', () => {
+        window.location.href = `/providerProfile`;
+        localStorage.setItem('provider', provider.id);
+        
+    });
+    
+    let providersGrid = document.getElementById('providersGrid');
+    providersGrid.append(card);
 }
 
 function getPopularServices(){
@@ -226,11 +318,46 @@ function getPopularServices(){
     xhr.send();
 }
 
+function getPopularProviders(){
+
+    
+    const xhr = new XMLHttpRequest();
+    // Link
+    const limit = 3; // cantidad de servicios que quieres obtener
+
+    xhr.open("GET", `/providers?limit=${limit}`, true);
+    
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const popularProviders = JSON.parse(xhr.responseText);
+            popularProviders.forEach(provider => {
+                createProviderCard(provider);
+            });
+            lucide.createIcons();
+        } else {
+            console.error('Request failed. Status:', xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error('Request error');
+    };
+
+    xhr.send();
+
+    // FEATURED_PROVIDERS.forEach(provider => {
+    //     const providerCard = createProviderCard(provider);
+    //     providersGrid.appendChild(providerCard);
+    // });
+
+}
+
 window.onload = function() {
     renderHomePage();
     getPopularServices();
-    
-    // getPopularProviders();
+    getPopularProviders();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
