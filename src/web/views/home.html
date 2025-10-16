@@ -5,11 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Door2Door - Professional Services at Your Door</title>
-  <link rel="stylesheet" href="../styles/globals.css">
-  <link rel="stylesheet" href="../styles/main.css">
-
-  <!-- Controllers -->
-  <script src="../js/data_handler.js"></script>
+  <link rel="stylesheet" href="web/styles/globals.css">
+  <link rel="stylesheet" href="web/styles/main.css">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
@@ -23,9 +20,9 @@
       <div class="container mx-auto px-4 py-3">
         <div class="flex items-center justify-between">
           <!-- Logo -->
-          <a href="./home.html" class="flex items-center space-x-2">
+          <a href="/home" class="flex items-center space-x-2">
             <div class="bg-primary text-primary-foreground rounded-lg p-2">
-              <span class="font-bold">D2D</span>
+              <span id="Logo" class="font-bold">D2D</span>
             </div>
             <span class="text-xl font-bold">Door2Door</span>
           </a>
@@ -63,108 +60,6 @@
     </header>
 
     <main id="main-content">
-      <div class="min-h-screen">
-        <section class="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-20">
-          <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6">Professional Services at Your Door</h1>
-            <p class="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-              Connect with trusted local professionals
-              for
-              all your home service needs. From plumbing to painting, we've got you covered.
-            </p>
-            <button class="btn btn-secondary btn-lg text-lg px-8 py-3">
-              <i data-lucide="arrow-right" class="ml-2 w-5 h-5">
-              </i>Find Services Now</button>
-          </div>
-        </section>
-        <section class="py-16 bg-gray-50">
-          <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Popular Services</h2>
-            <!-- change <a> tags next to onclick events with js  -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-              <a href="./serviceDetail.html" class="card hover:shadow-lg transition-shadow cursor-pointer">
-                <div class="card-content p-0">
-                  <div class="relative h-48 overflow-hidden rounded-t-lg"><img class="w-full h-full object-cover"
-                      src="https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080&amp;utm_source=figma&amp;utm_medium=referral"
-                      alt="Plumbing"></div>
-                  <div class="p-4">
-                    <h3 class="font-semibold mb-2">Plumbing</h3>
-                    <p class="text-sm text-muted-foreground mb-3">Professional plumbing services</p>
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center space-x-1"><i data-lucide="star"
-                          class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><span class="text-sm">4.8</span></div>
-                      <span class="text-sm text-muted-foreground">15 providers</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-              <a href="./serviceDetail.html" class="card hover:shadow-lg transition-shadow cursor-pointer">
-                <div class="card-content p-0">
-                  <div class="relative h-48 overflow-hidden rounded-t-lg"><img class="w-full h-full object-cover"
-                      src="https://images.unsplash.com/photo-1638718260002-18bdc8082608?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXJwZW50ZXIlMjB3b29kd29ya2luZ3xlbnwxfHx8fDE3NTc4NjE3MDh8MA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080&amp;utm_source=figma&amp;utm_medium=referral"
-                      alt="Carpentry"></div>
-                  <div class="p-4">
-                    <h3 class="font-semibold mb-2">Carpentry</h3>
-                    <p class="text-sm text-muted-foreground mb-3">Custom woodwork and repairs</p>
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center space-x-1"><i data-lucide="star"
-                          class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><span class="text-sm">4.9</span></div>
-                      <span class="text-sm text-muted-foreground">12 providers</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-              <a href="./serviceDetail.html" class="card hover:shadow-lg transition-shadow cursor-pointer">
-                <div class="card-content p-0">
-                  <div class="relative h-48 overflow-hidden rounded-t-lg"><img class="w-full h-full object-cover"
-                      src="https://images.unsplash.com/photo-1574359411659-15573a27fd0c?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMHBhaW50ZXIlMjBwYWludGluZ3xlbnwxfHx8fDE3NTc5NDg5MTl8MA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080&amp;utm_source=figma&amp;utm_medium=referral"
-                      alt="Painting"></div>
-                  <div class="p-4">
-                    <h3 class="font-semibold mb-2">Painting</h3>
-                    <p class="text-sm text-muted-foreground mb-3">Interior and exterior painting</p>
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center space-x-1"><i data-lucide="star"
-                          class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><span class="text-sm">4.7</span></div>
-                      <span class="text-sm text-muted-foreground">20 providers</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-              <a href="./serviceDetail.html" class="card hover:shadow-lg transition-shadow cursor-pointer">
-                <div class="card-content p-0">
-                  <div class="relative h-48 overflow-hidden rounded-t-lg"><img class="w-full h-full object-cover"
-                      src="https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080&amp;utm_source=figma&amp;utm_medium=referral"
-                      alt="Electrical"></div>
-                  <div class="p-4">
-                    <h3 class="font-semibold mb-2">Electrical</h3>
-                    <p class="text-sm text-muted-foreground mb-3">Licensed electrical services</p>
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center space-x-1"><i data-lucide="star"
-                          class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><span class="text-sm">4.6</span></div>
-                      <span class="text-sm text-muted-foreground">8 providers</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-              <a href="./serviceDetail.html" class="card hover:shadow-lg transition-shadow cursor-pointer">
-                <div class="card-content p-0">
-                  <div class="relative h-48 overflow-hidden rounded-t-lg"><img class="w-full h-full object-cover"
-                      src="https://images.unsplash.com/photo-1686178827149-6d55c72d81df?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob21lJTIwY2xlYW5pbmclMjBzZXJ2aWNlfGVufDF8fHx8MTc1NzkyMzUwN3ww&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080&amp;utm_source=figma&amp;utm_medium=referral"
-                      alt="Cleaning"></div>
-                  <div class="p-4">
-                    <h3 class="font-semibold mb-2">Cleaning</h3>
-                    <p class="text-sm text-muted-foreground mb-3">Professional home cleaning</p>
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center space-x-1"><i data-lucide="star"
-                          class="w-4 h-4 fill-yellow-400 text-yellow-400"></i><span class="text-sm">4.9</span></div>
-                      <span class="text-sm text-muted-foreground">25 providers</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </section>
         <section class="py-16">
           <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12">Top Rated Providers</h2>
@@ -302,12 +197,13 @@
   </div>
 
   <!-- Scripts -->
-  <script src="../js/utils.js"></script>
-  <script src="../js/data.js"></script>
-  <script src="../js/components.js"></script>
-  <script src="../js/pages.js"></script>
+  <script src="../web/controllers/utils.js"></script>
+  <!-- <script src="../web/controllers/data.js"></script> -->
+  <!-- <script src="../web/controllers/components.js"></script> -->
+  <!-- <script src="../web/controllers/pages.js"></script> -->
   <!-- <script src="../js/router.js"></script> -->
-  <script src="../js/main.js"></script>
+  <!-- <script src="../web/controllers/main.js"></script> -->
+  <script src="../web/controllers/home.js"></script>
 </body>
 
 </html>

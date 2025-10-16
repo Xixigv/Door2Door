@@ -4,7 +4,7 @@
 const AppState = {
     currentUser: null,
     chatOpen: false,
-    chatMessages: [...CHAT_MESSAGES],
+    // chatMessages: [...CHAT_MESSAGES],
     filters: {
         search: '',
         category: 'All',
@@ -18,16 +18,16 @@ const AppState = {
 // Initialize application
 function initializeApp() {
     initializeIcons();
-    setupChatPopup();
-    setupHeaderSearch();
+    // setupChatPopup();
+    // setupHeaderSearch();
     
-    // Load user data from localStorage if available
-    const savedUser = loadFromStorage('currentUser');
-    if (savedUser) {
-        AppState.currentUser = savedUser;
-    }
+    // // Load user data from localStorage if available
+    // const savedUser = loadFromStorage('currentUser');
+    // if (savedUser) {
+    //     AppState.currentUser = savedUser;
+    // }
     
-    console.log('Door2Door app initialized');
+    // console.log('Door2Door app initialized');
 }
 
 // Setup chat popup functionality
@@ -366,7 +366,7 @@ window.addEventListener('error', (e) => {
 lucide.createIcons();
 
 // // Initialize app when DOM is loaded
-// document.addEventListener('DOMContentLoaded', initializeApp);
+document.addEventListener('DOMContentLoaded', initializeApp);
 
 // // Export global functions
 // window.AppState = AppState;

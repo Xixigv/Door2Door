@@ -1,4 +1,4 @@
-// "use strict;"
+"use strict;"
 const fs = require('fs');
 // const path = require('path');
 
@@ -9,6 +9,9 @@ function getServices(){
 }
 
 function readServices(){
-    services = JSON.parse(fs.readFileSync('../data/services.json'));
+    services = JSON.parse(fs.readFileSync('./src/data/services.json'));
     services = services.map(service => service);
 }
+
+exports.getServices = getServices;
+exports.readServices = readServices;

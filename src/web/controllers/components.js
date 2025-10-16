@@ -1,52 +1,7 @@
 // Reusable component functions for the Door2Door application
 
 // Service Card Component
-function createServiceCard(service) {
-    console.log("Hola");
-    const card = createElement('div', 'card hover:shadow-lg transition-shadow cursor-pointer');
-    
-    const cardContent = createElement('div', 'card-content p-0');
-    
-    // Image
-    const imageContainer = createElement('div', 'relative h-48 overflow-hidden rounded-t-lg');
-    const image = createElement('img', 'w-full h-full object-cover');
-    image.src = service.image;
-    image.alt = service.name;
-    imageContainer.appendChild(image);
-    
-    // Content
-    const content = createElement('div', 'p-4');
-    const title = createElement('h3', 'font-semibold mb-2', service.name);
-    const description = createElement('p', 'text-sm text-muted-foreground mb-3', service.description);
-    
-    const footer = createElement('div', 'flex items-center justify-between');
-    const ratingContainer = createElement('div', 'flex items-center space-x-1');
-    const starIcon = createIcon('star', 'w-4 h-4 fill-yellow-400 text-yellow-400');
-    const rating = createElement('span', 'text-sm', service.rating.toString());
-    
-    ratingContainer.appendChild(starIcon);
-    ratingContainer.appendChild(rating);
-    
-    const providerCount = createElement('span', 'text-sm text-muted-foreground', `${service.providers} providers`);
-    
-    footer.appendChild(ratingContainer);
-    footer.appendChild(providerCount);
-    
-    content.appendChild(title);
-    content.appendChild(description);
-    content.appendChild(footer);
-    
-    cardContent.appendChild(imageContainer);
-    cardContent.appendChild(content);
-    card.appendChild(cardContent);
-    
-    // Add click handler
-    card.addEventListener('click', () => {
-        navigateTo(`/service/${service.id}`);
-    });
-    console.log(card);
-    return card;
-}
+
 
 // Provider Card Component
 function createProviderCard(provider) {
