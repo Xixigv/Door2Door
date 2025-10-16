@@ -81,7 +81,7 @@ function renderHomePage() {
 function renderTitle(){
 
     const hero = document.createElement('section');
-    hero.className = 'bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-20';
+    hero.className = 'bg-gradient-to-r from-primary to-primary/80 text-secondary-foreground py-20';
     const heroContainer = document.createElement('div');
     heroContainer.className = 'container mx-auto px-4 text-center';
     
