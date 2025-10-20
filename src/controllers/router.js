@@ -5,9 +5,11 @@ const router = express.Router();
 
 const servicesRouter = require('../routes/servicesRouter.js');
 const providersRouter = require('../routes/providersRouter.js');
+const usersRouter = require('../routes/usersRouter.js');
 
 router.use('/services', servicesRouter);
 router.use('/providers', providersRouter);
+router.use('/users', usersRouter);
 
 router.get('/', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/home.html")));
 router.get('/home', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/home.html")));
