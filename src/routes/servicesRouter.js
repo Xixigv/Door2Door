@@ -31,6 +31,30 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/all", async (req, res) => {
+    try {
+        const command = new dynamoClient.ScanCommand({ TableName: TABLE_NAME });
+        const data = await dynamoDB.send(command);
+        // const cleanData = data.Items.map(item => {
+        //     const unmarshalled = unmarshall(item);
+        //     return {
+        //         id: unmarshalled.id,
+        //         name: unmarshalled.category,
+        //         description: unmarshalled.shortDescription,
+        //         image: unmarshalled.image,
+        //         rating: unmarshalled.provider?.rating,
+        //         providers: unmarshalled.providers
+        //     };
+        // });
+
+        const cleanData = data.Items.map(item => unmarshall(item));
+        res.json(cleanData);
+    } catch (err) {
+        console.error("Couldn't retrieve service:", err);
+        res.status(500).json({ error: "Couldn't retrieve service" });
+    }
+});
+
 router.get('/:id', async(req, res) => {
     try {
         const id = parseInt(req.params.id);

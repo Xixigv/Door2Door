@@ -4,7 +4,8 @@
   "description": "This is a code bundle for Door2Door Services Page. The original project is available at https://www.figma.com/design/y3DVj7DvlW71cWfNBJYLYA/Door2Door-Services-Page.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",

@@ -1,6 +1,5 @@
 function renderHomePage() {
-    const container = document.createElement('div');
-    container.className = 'min-h-screen';
+    const container = createElement('div', 'min-h-screen');
 
     // Hero Section
     const hero = renderTitle();
@@ -11,54 +10,9 @@ function renderHomePage() {
     // Featured Providers
     const providersSection = renderProviders();
     
-    // // How it Works
-    // const howItWorksSection = createElement('section', 'py-16 bg-gray-50');
-    // const howItWorksContainer = createElement('div', 'container mx-auto px-4');
-    // const howItWorksTitle = createElement('h2', 'text-3xl font-bold text-center mb-12', 'How Door2Door Works');
-    
-    // const stepsGrid = createElement('div', 'grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto');
-    
-    // const steps = [
-    //     {
-    //         icon: 'search',
-    //         title: '1. Search Services',
-    //         description: 'Browse our categories or search for the specific service you need.'
-    //     },
-    //     {
-    //         icon: 'clock',
-    //         title: '2. Book & Schedule',
-    //         description: 'Choose your preferred provider and schedule a convenient time.'
-    //     },
-    //     {
-    //         icon: 'star',
-    //         title: '3. Get Quality Service',
-    //         description: 'Enjoy professional service and leave a review for others.'
-    //     }
-    // ];
-    
-    // steps.forEach(step => {
-    //     const stepContainer = createElement('div', 'text-center');
-    //     const iconContainer = createElement('div', 'bg-primary text-primary-foreground w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4');
-    //     const icon = createIcon(step.icon, 'w-8 h-8');
-    //     iconContainer.appendChild(icon);
-        
-    //     const stepTitle = createElement('h3', 'font-semibold mb-3', step.title);
-    //     const stepDescription = createElement('p', 'text-muted-foreground', step.description);
-        
-    //     stepContainer.appendChild(iconContainer);
-    //     stepContainer.appendChild(stepTitle);
-    //     stepContainer.appendChild(stepDescription);
-    //     stepsGrid.appendChild(stepContainer);
-    // });
-    
-    // howItWorksContainer.appendChild(howItWorksTitle);
-    // howItWorksContainer.appendChild(stepsGrid);
-    // howItWorksSection.appendChild(howItWorksContainer);
-    
     container.appendChild(hero);
     container.appendChild(servicesSection);
     container.appendChild(providersSection);
-    // container.appendChild(howItWorksSection);
     
     let main_content = document.getElementById('main-content');
     main_content.children[0].prepend(container);
@@ -67,23 +21,19 @@ function renderHomePage() {
 
 function renderTitle(){
 
-    const hero = document.createElement('section');
-    hero.className = 'bg-gradient-to-r from-primary to-primary/80 text-secondary-foreground py-20';
-    const heroContainer = document.createElement('div');
-    heroContainer.className = 'container mx-auto px-4 text-center';
+    const hero = createElement('section', 'bg-gradient-to-r from-primary to-primary/80 text-secondary-foreground py-20');
+    const heroContainer = createElement('div', 'container mx-auto px-4 text-center');
     
-    const title = document.createElement('h1');
-    title.className = 'text-4xl md:text-6xl font-bold mb-6';
-    title.textContent = 'Professional Services at Your Door';
+    const title = createElement('h1', 'text-4xl md:text-6xl font-bold mb-6', 
+        'Professional Services at Your Door');
+    const subtitle = createElement('p', 'text-xl mb-8 opacity-90 max-w-2xl mx-auto', 
+        'Connect with trusted local professionals for all your home service needs. From plumbing to painting, we\'ve got you covered.');
     
-    const subtitle = document.createElement('p');
-    subtitle.className = 'text-xl mb-8 opacity-90 max-w-2xl mx-auto';
-    subtitle.textContent = 'Connect with trusted local professionals for all your home service needs. From plumbing to painting, we\'ve got you covered.';
-    
-    const ctaButton = document.createElement('button');
-    ctaButton.className = 'btn btn-secondary btn-lg text-lg px-8 py-3';
-    ctaButton.innerHTML = '<i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>Find Services Now';
-    ctaButton.addEventListener('click', () => navigateTo('/search'));
+    const ctaButton = createButton(
+        '<i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>Find Services Now',
+        () => navigateTo('/search'),
+        'btn btn-secondary btn-lg text-lg px-8 py-3'
+    );
     
     heroContainer.appendChild(title);
     heroContainer.appendChild(subtitle);
@@ -96,16 +46,12 @@ function renderTitle(){
 
 function renderServices()
 {
-    const servicesSection = document.createElement('section');
-    servicesSection.className = 'py-16 bg-gray-50';
-    const servicesContainer = document.createElement('div');
-    servicesContainer.className = 'container mx-auto px-4';
-    const servicesTitle = document.createElement('h2');
-    servicesTitle.className = 'text-3xl font-bold text-center mb-12';
-    servicesTitle.textContent = 'Popular Services';
 
-    const servicesGrid = document.createElement('div');
-    servicesGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6';
+    const servicesSection = createElement('section', 'py-16 bg-gray-50');
+    const servicesContainer = createElement('div', 'container mx-auto px-4');
+    const servicesTitle = createElement('h2', 'text-3xl font-bold text-center mb-12', 'Popular Services');
+    
+    const servicesGrid = createElement('div', 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6');
     servicesGrid.id = 'servicesGrid';
 
     servicesContainer.appendChild(servicesTitle);
@@ -116,49 +62,32 @@ function renderServices()
 }
 
 function createServiceCard(service) {
-    const card = document.createElement('div');
-    card.className = 'card hover:shadow-lg transition-shadow cursor-pointer';
-
-    const cardContent = document.createElement('div');
-    cardContent.className = 'card-content p-0';
-
+    const card = createElement('div', 'card hover:shadow-lg transition-shadow cursor-pointer');
+    
+    const cardContent = createElement('div', 'card-content p-0');
+    
     // Image
-    const imageContainer = document.createElement('div');
-    imageContainer.className = 'relative h-48 overflow-hidden rounded-t-lg';
-    const image = document.createElement('img');
-    image.className = 'w-full h-full object-cover';
+    const imageContainer = createElement('div', 'relative h-48 overflow-hidden rounded-t-lg');
+    const image = createElement('img', 'w-full h-full object-cover');
     image.src = service.image;
     image.alt = service.name;
     imageContainer.appendChild(image);
     
     // Content
-    const content = document.createElement('div');
-    content.className = 'p-4';
-    const title = document.createElement('h3');
-    title.className = 'font-semibold mb-2';
-    title.textContent = service.name;
-    const description = document.createElement('p');
-    description.className = 'text-sm text-muted-foreground mb-3';
-    description.textContent = service.description;
-
-    const footer = document.createElement('div');
-    footer.className = 'flex items-center justify-between';
-    const ratingContainer = document.createElement('div');
-    ratingContainer.className = 'flex items-center space-x-1';
-    const starIcon = document.createElement('i');
-    starIcon.dataset.lucide = 'star';
-    starIcon.className = 'w-4 h-4 fill-yellow-400 text-yellow-400';
-    const rating = document.createElement('span');
-    rating.className = 'text-sm';
-    rating.textContent = service.rating.toString();
-
+    const content = createElement('div', 'p-4');
+    const title = createElement('h3', 'font-semibold mb-2', service.name);
+    const description = createElement('p', 'text-sm text-muted-foreground mb-3', service.description);
+    
+    const footer = createElement('div', 'flex items-center justify-between');
+    const ratingContainer = createElement('div', 'flex items-center space-x-1');
+    const starIcon = createIcon('star', 'w-4 h-4 fill-yellow-400 text-yellow-400');
+    const rating = createElement('span', 'text-sm', service.rating.toString());
+    
     ratingContainer.appendChild(starIcon);
     ratingContainer.appendChild(rating);
-
-    const providerCount = document.createElement('span');
-    providerCount.className = 'text-sm text-muted-foreground';
-    providerCount.textContent = `${service.providers} providers`;
-
+    
+    const providerCount = createElement('span', 'text-sm text-muted-foreground', `${service.providers} providers`);
+    
     footer.appendChild(ratingContainer);
     footer.appendChild(providerCount);
     
@@ -181,19 +110,13 @@ function createServiceCard(service) {
 }
 
 function renderProviders(){
-    const providersSection = document.createElement('section');
-    providersSection.className = 'py-16';
-
-    const providersContainer = document.createElement('div');
-    providersContainer.className = 'container mx-auto px-4';
-    const providersTitle = document.createElement('h2');
-    providersTitle.className = 'text-3xl font-bold text-center mb-12';
-    providersTitle.textContent = 'Top Rated Providers';
-
-    const providersGrid = document.createElement('div');
-    providersGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
-    providersGrid.id = 'providersGrid';
+    const providersSection = createElement('section', 'py-16');
+    const providersContainer = createElement('div', 'container mx-auto px-4');
+    const providersTitle = createElement('h2', 'text-3xl font-bold text-center mb-12', 'Top Rated Providers');
     
+    const providersGrid = createElement('div', 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6');
+    providersGrid.id = 'providersGrid';
+
     providersContainer.appendChild(providersTitle);
     providersContainer.appendChild(providersGrid);
     providersSection.appendChild(providersContainer);
@@ -202,65 +125,40 @@ function renderProviders(){
 }
 
 function createProviderCard(provider) {
-    const card = document.createElement('div');
-    card.className = 'card hover:shadow-lg transition-shadow cursor-pointer';
-
-    const cardContent = document.createElement('div');
-    cardContent.className = 'card-content p-6';
-
-    const container = document.createElement('div');
-    container.className = 'flex items-start space-x-4';
-
+const card = createElement('div', 'card hover:shadow-lg transition-shadow cursor-pointer');
+    
+    const cardContent = createElement('div', 'card-content p-6');
+    
+    const container = createElement('div', 'flex items-start space-x-4');
+    
     // Avatar with availability indicator
-    const avatarContainer = document.createElement('div');
-    avatarContainer.className = 'relative';
+    const avatarContainer = createElement('div', 'relative');
     const avatar = createAvatar(provider.image, provider.name, 'avatar');
     avatarContainer.appendChild(avatar);
     
     if (provider.available) {
-        const indicator = document.createElement('div');
-        indicator.className = 'absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white';
+        const indicator = createElement('div', 'absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white');
         avatarContainer.appendChild(indicator);
     }
     
     // Content
-    const content = document.createElement('div');
-    content.className = 'flex-1';
-
-    const name = document.createElement('h3');
-    name.className = 'font-semibold mb-1';
-    name.textContent = provider.name;
-
-    const serviceType = document.createElement('p');
-    serviceType.className = 'text-sm text-muted-foreground mb-2';
-    serviceType.textContent = provider.service;
-
-    const ratingRow = document.createElement('div');
-    ratingRow.className = 'flex items-center space-x-4 mb-2';
-
-    const ratingContainer = document.createElement('div');
-    ratingContainer.className = 'flex items-center space-x-1';
-    const starIcon = document.createElement('i');
-    starIcon.dataset.lucide = 'star';
-    starIcon.className = 'w-4 h-4 fill-yellow-400 text-yellow-400';
-    const rating = document.createElement('span');
-    rating.className = 'text-sm';
-    rating.textContent = provider.rating.toString();
-    const reviewCount = document.createElement('span');
-    reviewCount.className = 'text-sm text-muted-foreground';
-    reviewCount.textContent = `(${provider.reviews})`;
-
+    const content = createElement('div', 'flex-1');
+    const name = createElement('h3', 'font-semibold mb-1', provider.name);
+    const serviceType = createElement('p', 'text-sm text-muted-foreground mb-2', provider.service);
+    
+    const ratingRow = createElement('div', 'flex items-center space-x-4 mb-2');
+    const ratingContainer = createElement('div', 'flex items-center space-x-1');
+    const starIcon = createIcon('star', 'w-4 h-4 fill-yellow-400 text-yellow-400');
+    const rating = createElement('span', 'text-sm', provider.rating.toString());
+    const reviewCount = createElement('span', 'text-sm text-muted-foreground', `(${provider.reviews})`);
+    
     ratingContainer.appendChild(starIcon);
     ratingContainer.appendChild(rating);
     ratingContainer.appendChild(reviewCount);
     ratingRow.appendChild(ratingContainer);
-
-    const bottomRow = document.createElement('div');
-    bottomRow.className = 'flex items-center justify-between';
-    const price = document.createElement('span');
-    price.className = 'font-semibold text-primary';
-    price.textContent = `$${provider.price}/hr`;
-
+    
+    const bottomRow = createElement('div', 'flex items-center justify-between');
+    const price = createElement('span', 'font-semibold text-primary', `$${provider.price}/hr`);
     
     const badge = createBadge(
         provider.available ? 'Available' : 'Busy',
@@ -346,12 +244,6 @@ function getPopularProviders(){
     };
 
     xhr.send();
-
-    // FEATURED_PROVIDERS.forEach(provider => {
-    //     const providerCard = createProviderCard(provider);
-    //     providersGrid.appendChild(providerCard);
-    // });
-
 }
 
 window.onload = function() {
