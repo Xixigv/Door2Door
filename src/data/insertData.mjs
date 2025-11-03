@@ -1,6 +1,6 @@
 import { DynamoDBClient, BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
-import services from "./providersDetails.json" assert { type: "json" };
+import services from "./serviceDetails.json" assert { type: "json" };
 import dotenv from 'dotenv';
 dotenv.config('../../.env');
 
@@ -11,7 +11,7 @@ const client = new DynamoDBClient({
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     }
 });
-const tableName = "Providers"; // cambia por tu tabla
+const tableName = "Services"; // cambia por tu tabla
 
 async function uploadServicesBulk() {
   const putRequests = services.map(service => ({

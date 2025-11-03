@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "serviceId": 1,
     "name": "Mike Johnson",
     "title": "Professional Plumber",
     "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
@@ -20,6 +21,7 @@
   },
   {
     "id": 2,
+    "serviceId": 5,
     "name": "Sarah Williams",
     "title": "Expert House Cleaner",
     "avatar": "https://images.unsplash.com/photo-1494790108755-2616b5e38f04?w=150&h=150&fit=crop&crop=face",
@@ -39,6 +41,7 @@
   },
   {
     "id": 3,
+    "serviceId": 2,
     "name": "David Chen",
     "title": "Master Carpenter",
     "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
@@ -58,6 +61,7 @@
   },
   {
     "id": 4,
+    "serviceId": 6,
     "name": "Robert Martinez",
     "title": "Licensed Plumber",
     "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
@@ -77,6 +81,7 @@
   },
   {
     "id": 5,
+    "serviceId": 7,
     "name": "Jennifer Lopez",
     "title": "Professional Plumber",
     "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
@@ -96,6 +101,7 @@
   },
   {
     "id": 6,
+    "serviceId": 8,
     "name": "James Wilson",
     "title": "Senior Plumber",
     "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face",
@@ -115,6 +121,7 @@
   },
   {
     "id": 7,
+    "serviceId": 9,
     "name": "Emily Davis",
     "title": "Master Plumber",
     "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
@@ -134,6 +141,7 @@
   },
   {
     "id": 8,
+    "serviceId": 10,
     "name": "Rachel Green",
     "title": "Professional Carpenter",
     "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
@@ -153,6 +161,7 @@
   },
   {
     "id": 9,
+    "serviceId": 11,
     "name": "Steven Mitchell",
     "title": "Master Carpenter",
     "avatar": "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=150&h=150&fit=crop&crop=face",
@@ -172,6 +181,7 @@
   },
   {
     "id": 10,
+    "serviceId": 12,
     "name": "Angela Roberts",
     "title": "Carpenter",
     "avatar": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&h=150&fit=crop&crop=face",
@@ -191,6 +201,7 @@
   },
   {
     "id": 11,
+    "serviceId": 13,
     "name": "Patrick Moore",
     "title": "Professional Carpenter",
     "avatar": "https://images.unsplash.com/photo-1463412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face",
@@ -210,6 +221,7 @@
   },
   {
     "id": 12,
+    "serviceId": 3,
     "name": "Carlos Rodriguez",
     "title": "Professional Painter",
     "avatar": "https://images.unsplash.com/photo-1558222218-b7b54eede3f3?w=150&h=150&fit=crop&crop=face",
@@ -229,6 +241,7 @@
   },
   {
     "id": 13,
+    "serviceId": 14,
     "name": "Jessica Parker",
     "title": "Master Painter",
     "avatar": "https://images.unsplash.com/photo-1479936343636-73cdc5aae0c3?w=150&h=150&fit=crop&crop=face",
@@ -248,6 +261,7 @@
   },
   {
     "id": 14,
+    "serviceId": 15,
     "name": "Marcus Johnson",
     "title": "Painter",
     "avatar": "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=150&h=150&fit=crop&crop=face",
@@ -267,6 +281,7 @@
   },
   {
     "id": 15,
+    "serviceId": 16,
     "name": "Laura Martinez",
     "title": "Master Painter",
     "avatar": "https://images.unsplash.com/photo-1485875437342-9b39470b3d95?w=150&h=150&fit=crop&crop=face",
@@ -286,6 +301,7 @@
   },
   {
     "id": 16,
+    "serviceId": 17,
     "name": "Derek Thompson",
     "title": "Professional Painter",
     "avatar": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face",
@@ -305,6 +321,7 @@
   },
   {
     "id": 17,
+    "serviceId": 4,
     "name": "Michael Turner",
     "title": "Licensed Electrician",
     "avatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&h=150&fit=crop&crop=face",
@@ -324,6 +341,7 @@
   },
   {
     "id": 18,
+    "serviceId": 18,
     "name": "Elizabeth Cooper",
     "title": "Master Electrician",
     "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face",
@@ -343,6 +361,7 @@
   },
   {
     "id": 19,
+    "serviceId": 19,
     "name": "Jason Bailey",
     "title": "Electrician",
     "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face",
@@ -362,6 +381,7 @@
   },
   {
     "id": 20,
+    "serviceId": 20,
     "name": "Ashley Rivera",
     "title": "Master Electrician",
     "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
@@ -381,6 +401,7 @@
   },
   {
     "id": 21,
+    "serviceId": 21,
     "name": "Matthew Foster",
     "title": "Licensed Electrician",
     "avatar": "https://images.unsplash.com/photo-1463453091185-61582044d556?w=150&h=150&fit=crop&crop=face",
@@ -400,6 +421,7 @@
   },
   {
     "id": 22,
+    "serviceId": 22,
     "name": "Karen Hughes",
     "title": "Professional Cleaner",
     "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
@@ -419,6 +441,7 @@
   },
   {
     "id": 23,
+    "serviceId": 23,
     "name": "Linda Stewart",
     "title": "Professional Cleaner",
     "avatar": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&h=150&fit=crop&crop=face",
@@ -438,6 +461,7 @@
   },
   {
     "id": 24,
+    "serviceId": 24,
     "name": "Patricia Morris",
     "title": "Cleaner",
     "avatar": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face",
@@ -457,6 +481,7 @@
   },
   {
     "id": 25,
+    "serviceId": 25,
     "name": "Nancy Rogers",
     "title": "Professional Cleaner",
     "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face",
@@ -466,12 +491,12 @@
     "completedJobs": 489,
     "yearsExperience": 10,
     "responseTime": "Same Day",
-    "location": "San Jose, CA",
-    "joinDate": "April 2019",
+    "location": "San Francisco, CA",
+    "joinDate": "January 2020",
     "availability": "Available Now",
-    "hourlyRate": 50,
-    "bio": "Master cleaner with exceptional service and premium standards.",
-    "service": "Cleaning",
-    "services": ["Regular House Cleaning", "Deep Cleaning", "Move-In/Out Cleaning", "Kitchen Cleaning", "Bathroom Cleaning", "Window Cleaning", "Carpet Cleaning", "Tile & Grout Cleaning"]
+    "hourlyRate": 75,
+    "bio": "Licensed master plumber with 8+ years of experience specializing in residential and commercial services. Emergency calls 24/7.",
+    "service": "Plumbing",
+    "services": ["Leak Detection", "Pipe Installation", "Drain Cleaning", "Water Heater Service", "Emergency Plumbing", "Fixture Installation", "Sewer Repair", "Bathroom Remodeling"]
   }
 ]

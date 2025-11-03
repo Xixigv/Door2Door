@@ -31,7 +31,9 @@ function renderTitle(){
     
     const ctaButton = createButton(
         '<i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>Find Services Now',
-        () => navigateTo('/search'),
+        () => {
+            window.location.href = '/search';
+        },
         'btn btn-secondary btn-lg text-lg px-8 py-3'
     );
     
@@ -85,12 +87,9 @@ function createServiceCard(service) {
     
     ratingContainer.appendChild(starIcon);
     ratingContainer.appendChild(rating);
-    
-    const providerCount = createElement('span', 'text-sm text-muted-foreground', `${service.providers} providers`);
-    
+
     footer.appendChild(ratingContainer);
-    footer.appendChild(providerCount);
-    
+
     content.appendChild(title);
     content.appendChild(description);
     content.appendChild(footer);
@@ -193,8 +192,8 @@ function getPopularServices(){
 
     const xhr = new XMLHttpRequest();
     // Link
-    xhr.open('GET', 'http://localhost:3000/services', true);
-    
+    xhr.open("GET", `/services/popular`);
+
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {

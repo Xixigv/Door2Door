@@ -10,7 +10,7 @@ function renderServiceDetailPage(service) {
     // ToDo: replace with navigateTo function
     const backButton = createElement('button', 'inline-flex items-center text-muted-foreground hover:text-foreground mb-6');
     backButton.addEventListener('click', () => {
-        history.back();
+        window.location.href = '/';
     });
     backButton.innerHTML = '<i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>Back to services';
     
@@ -198,7 +198,7 @@ function renderServiceDetailPage(service) {
         '<i data-lucide="calendar" class="w-4 h-4 mr-2"></i>Schedule Service',
         () => {
             window.location.href = '/booking';
-            localStorage.setItem('service', service.id);
+            localStorage.setItem('provider', service.provider.id);
         },
         'btn btn-primary w-full btn-lg mb-3'
     );

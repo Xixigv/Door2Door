@@ -135,30 +135,7 @@ function createChatMessage(message) {
     return container;
 }
 
-// Calendar Day Component
-function createCalendarDay(date, isSelected = false, isDisabled = false, onClick = null) {
-    const day = createElement('div', 
-        `calendar-day ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}`,
-        date.getDate().toString()
-    );
-    
-    if (onClick && !isDisabled) {
-        day.addEventListener('click', onClick);
-    }
-    
-    return day;
-}
 
-// Time Slot Component
-function createTimeSlot(time, isSelected = false, onClick = null) {
-    const slot = createButton(
-        `<i data-lucide="clock" class="w-4 h-4 mr-2"></i>${time}`,
-        onClick,
-        `btn ${isSelected ? 'btn-primary' : 'btn-outline'} btn-sm justify-start`
-    );
-    
-    return slot;
-}
 
 // Progress Bar Component
 function createProgressBar(percentage) {

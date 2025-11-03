@@ -30,8 +30,7 @@
       "Fixture Installation"
     ],
     "location": "Downtown Area",
-    "distance": "2.3 miles away",
-    "providers": 5
+    "distance": "2.3 miles away"
   },
   {
     "id": 2,
@@ -64,8 +63,7 @@
       "Built-in Shelving"
     ],
     "location": "Westside",
-    "distance": "3.7 miles away",
-    "providers": 5
+    "distance": "3.7 miles away"
   },
   {
     "id": 3,
@@ -74,21 +72,21 @@
     "shortDescription": "Interior and exterior painting",
     "image": "https://images.unsplash.com/photo-1574359411659-15573a27fd0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMHBhaW50ZXIlMjBwYWludGluZ3xlbnwxfHx8fDE3NTc5NDg5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
     "provider": {
-      "id": 32,
-      "name": "Laura Martinez",
-      "image": "https://images.unsplash.com/photo-1485875437342-9b39470b3d95?w=150&h=150&fit=crop&crop=face",
-      "rating": 4.9,
-      "reviewCount": 203,
-      "yearsExperience": 10,
-      "completedJobs": 456,
-      "responseTime": "Within 1 hour",
+      "id": 12,
+      "name": "Carlos Rodriguez",
+      "image": "https://images.unsplash.com/photo-1558222218-b7b54eede3f3?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.7,
+      "reviewCount": 134,
+      "yearsExperience": 9,
+      "completedJobs": 267,
+      "responseTime": "Within 4 hours",
       "availability": "Available Now"
     },
     "pricing": {
-      "hourlyRate": 65,
+      "hourlyRate": 55,
       "serviceCall": 40
     },
-    "description": "High-quality interior and exterior painting services for homes and businesses. Expert color consultation, surface preparation, and finishing with premium materials. 10+ years of transforming spaces.",
+    "description": "High-quality interior and exterior painting services for homes and businesses. Expert color consultation, surface preparation, and finishing with premium materials. 9+ years of transforming spaces.",
     "services": [
       "Interior Painting",
       "Exterior Painting",
@@ -98,8 +96,7 @@
       "Pressure Washing"
     ],
     "location": "Northside",
-    "distance": "1.8 miles away",
-    "providers": 5
+    "distance": "1.8 miles away"
   },
   {
     "id": 4,
@@ -108,18 +105,18 @@
     "shortDescription": "Licensed electrical services",
     "image": "https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
     "provider": {
-      "id": 49,
-      "name": "Ashley Rivera",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
-      "rating": 4.9,
-      "reviewCount": 201,
-      "yearsExperience": 15,
-      "completedJobs": 523,
-      "responseTime": "Within 45 minutes",
+      "id": 17,
+      "name": "Michael Turner",
+      "image": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.6,
+      "reviewCount": 156,
+      "yearsExperience": 10,
+      "completedJobs": 298,
+      "responseTime": "Within 1 hour",
       "availability": "Available Now"
     },
     "pricing": {
-      "hourlyRate": 100,
+      "hourlyRate": 90,
       "serviceCall": 75
     },
     "description": "Fully licensed and insured electrical services for residential and commercial properties. Expert troubleshooting, installations, and safety inspections. Available for emergency calls 24/7.",
@@ -132,8 +129,7 @@
       "Electrical Inspections"
     ],
     "location": "Central District",
-    "distance": "2.9 miles away",
-    "providers": 5
+    "distance": "2.9 miles away"
   },
   {
     "id": 5,
@@ -166,7 +162,666 @@
       "Carpet Cleaning"
     ],
     "location": "Eastside",
-    "distance": "1.2 miles away",
-    "providers": 5
+    "distance": "1.2 miles away"
+  },
+  {
+    "id": 6,
+    "name": "Reliable Plumbing Solutions",
+    "category": "Plumbing",
+    "shortDescription": "Fast and reliable plumbing",
+    "image": "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 4,
+      "name": "Robert Martinez",
+      "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.7,
+      "reviewCount": 156,
+      "yearsExperience": 7,
+      "completedJobs": 298,
+      "responseTime": "Within 45 minutes",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 70,
+      "serviceCall": 40
+    },
+    "description": "Experienced plumber providing reliable solutions with quick response times. Specializing in emergency repairs and installations. 24/7 emergency services available.",
+    "services": [
+      "Leak Detection",
+      "Pipe Installation",
+      "Drain Cleaning",
+      "Water Heater Service",
+      "Emergency Plumbing",
+      "Gas Line Installation"
+    ],
+    "location": "San Jose",
+    "distance": "4.5 miles away"
+  },
+  {
+    "id": 7,
+    "name": "Eco-Friendly Plumbing",
+    "category": "Plumbing",
+    "shortDescription": "Sustainable plumbing solutions",
+    "image": "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 5,
+      "name": "Jennifer Lopez",
+      "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.8,
+      "reviewCount": 98,
+      "yearsExperience": 6,
+      "completedJobs": 215,
+      "responseTime": "Within 35 minutes",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 80,
+      "serviceCall": 50
+    },
+    "description": "Skilled plumber committed to quality solutions with eco-friendly practices and sustainable approaches. Specializing in water conservation and green plumbing technologies.",
+    "services": [
+      "Leak Detection",
+      "Low-Flow Fixtures",
+      "Greywater Systems",
+      "Water Heater Service",
+      "Emergency Plumbing",
+      "Fixture Installation"
+    ],
+    "location": "Palo Alto",
+    "distance": "5.2 miles away"
+  },
+  {
+    "id": 8,
+    "name": "Commercial Plumbing Experts",
+    "category": "Plumbing",
+    "shortDescription": "Residential & commercial plumbing",
+    "image": "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 6,
+      "name": "James Wilson",
+      "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.6,
+      "reviewCount": 143,
+      "yearsExperience": 10,
+      "completedJobs": 312,
+      "responseTime": "Within 1 hour",
+      "availability": "Available Tomorrow"
+    },
+    "pricing": {
+      "hourlyRate": 72,
+      "serviceCall": 45
+    },
+    "description": "Veteran plumber handling residential and commercial projects with expertise in complex systems. Specializing in radiant floor heating and commercial installations.",
+    "services": [
+      "Commercial Plumbing",
+      "Radiant Floor Heating",
+      "Pipe Installation",
+      "Drain Cleaning",
+      "Water Heater Service",
+      "Emergency Plumbing"
+    ],
+    "location": "Fremont",
+    "distance": "6.8 miles away"
+  },
+  {
+    "id": 9,
+    "name": "Smart Home Plumbing",
+    "category": "Plumbing",
+    "shortDescription": "Modern plumbing solutions",
+    "image": "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 7,
+      "name": "Emily Davis",
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.9,
+      "reviewCount": 187,
+      "yearsExperience": 11,
+      "completedJobs": 401,
+      "responseTime": "Within 25 minutes",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 85,
+      "serviceCall": 50
+    },
+    "description": "Highly skilled master plumber with proven excellence and innovative solutions. Specializing in smart home plumbing systems and water filtration technologies.",
+    "services": [
+      "Smart Home Plumbing",
+      "Water Filtration",
+      "Leak Detection",
+      "Pipe Installation",
+      "Emergency Plumbing",
+      "Fixture Installation"
+    ],
+    "location": "Downtown Area",
+    "distance": "2.1 miles away"
+  },
+  {
+    "id": 10,
+    "name": "Custom Woodwork Designs",
+    "category": "Carpentry",
+    "shortDescription": "Interior design carpentry",
+    "image": "https://images.unsplash.com/photo-1638718260002-18bdc8082608?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXJwZW50ZXIlMjB3b29kd29ya2luZ3xlbnwxfHx8fDE3NTc4NjE3MDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 8,
+      "name": "Rachel Green",
+      "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.8,
+      "reviewCount": 112,
+      "yearsExperience": 8,
+      "completedJobs": 198,
+      "responseTime": "Within 2 hours",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 82,
+      "serviceCall": 55
+    },
+    "description": "Talented carpenter specializing in interior design and custom woodwork with precision craftsmanship. Expert in crown molding and cabinet refinishing.",
+    "services": [
+      "Custom Cabinetry",
+      "Crown Molding",
+      "Cabinet Refinishing",
+      "Door Installation",
+      "Furniture Repair",
+      "Built-in Shelving"
+    ],
+    "location": "Oakland",
+    "distance": "3.5 miles away"
+  },
+  {
+    "id": 11,
+    "name": "Fine Woodworking Studio",
+    "category": "Carpentry",
+    "shortDescription": "Master craftsmanship",
+    "image": "https://images.unsplash.com/photo-1638718260002-18bdc8082608?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXJwZW50ZXIlMjB3b29kd29ya2luZ3xlbnwxfHx8fDE3NTc4NjE3MDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 9,
+      "name": "Steven Mitchell",
+      "image": "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.9,
+      "reviewCount": 145,
+      "yearsExperience": 14,
+      "completedJobs": 289,
+      "responseTime": "Within 1.5 hours",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 88,
+      "serviceCall": 60
+    },
+    "description": "Master carpenter with 14 years of excellence known for intricate designs and premium finishes. Specializing in fine woodworking and architectural millwork.",
+    "services": [
+      "Fine Woodworking",
+      "Architectural Millwork",
+      "Custom Cabinetry",
+      "Trim & Molding",
+      "Deck Building",
+      "Built-in Shelving"
+    ],
+    "location": "Berkeley",
+    "distance": "4.2 miles away"
+  },
+  {
+    "id": 12,
+    "name": "Residential Carpentry Services",
+    "category": "Carpentry",
+    "shortDescription": "Home improvement carpentry",
+    "image": "https://images.unsplash.com/photo-1638718260002-18bdc8082608?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXJwZW50ZXIlMjB3b29kd29ya2luZ3xlbnwxfHx8fDE3NTc4NjE3MDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 10,
+      "name": "Angela Roberts",
+      "image": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.7,
+      "reviewCount": 97,
+      "yearsExperience": 7,
+      "completedJobs": 176,
+      "responseTime": "Within 2.5 hours",
+      "availability": "Available Tomorrow"
+    },
+    "pricing": {
+      "hourlyRate": 80,
+      "serviceCall": 50
+    },
+    "description": "Skilled carpenter with 7 years specializing in custom solutions and attention to detail. Expert in closet organization and baseboard installation.",
+    "services": [
+      "Closet Organization",
+      "Baseboard Installation",
+      "Custom Cabinetry",
+      "Door Installation",
+      "Furniture Repair",
+      "Built-in Shelving"
+    ],
+    "location": "San Leandro",
+    "distance": "5.7 miles away"
+  },
+  {
+    "id": 13,
+    "name": "Renovation Carpentry Pro",
+    "category": "Carpentry",
+    "shortDescription": "Large-scale renovations",
+    "image": "https://images.unsplash.com/photo-1638718260002-18bdc8082608?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXJwZW50ZXIlMjB3b29kd29ya2luZ3xlbnwxfHx8fDE3NTc4NjE3MDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 11,
+      "name": "Patrick Moore",
+      "image": "https://images.unsplash.com/photo-1463412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.8,
+      "reviewCount": 128,
+      "yearsExperience": 9,
+      "completedJobs": 234,
+      "responseTime": "Within 1.5 hours",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 86,
+      "serviceCall": 60
+    },
+    "description": "Experienced carpenter handling renovations and large-scale installations with quality focus. Specializing in staircase installation and wood restoration.",
+    "services": [
+      "Staircase Installation",
+      "Wood Repair & Restoration",
+      "Custom Cabinetry",
+      "Trim & Molding",
+      "Deck Building",
+      "Built-in Shelving"
+    ],
+    "location": "Fremont",
+    "distance": "6.3 miles away"
+  },
+  {
+    "id": 14,
+    "name": "Expert Painting & Finishing",
+    "category": "Painting",
+    "shortDescription": "Premium painting services",
+    "image": "https://images.unsplash.com/photo-1574359411659-15573a27fd0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMHBhaW50ZXIlMjBwYWludGluZ3xlbnwxfHx8fDE3NTc5NDg5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 13,
+      "name": "Jessica Parker",
+      "image": "https://images.unsplash.com/photo-1479936343636-73cdc5aae0c3?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.8,
+      "reviewCount": 176,
+      "yearsExperience": 11,
+      "completedJobs": 356,
+      "responseTime": "Within 2 hours",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 60,
+      "serviceCall": 45
+    },
+    "description": "Master painter with expertise in flawless finishes and color consultation. Specializing in faux finishes and commercial painting projects.",
+    "services": [
+      "Faux Finishes",
+      "Commercial Painting",
+      "Interior Painting",
+      "Exterior Painting",
+      "Cabinet Refinishing",
+      "Color Consultation"
+    ],
+    "location": "Oakland",
+    "distance": "3.8 miles away"
+  },
+  {
+    "id": 15,
+    "name": "Budget Painting Solutions",
+    "category": "Painting",
+    "shortDescription": "Affordable quality painting",
+    "image": "https://images.unsplash.com/photo-1574359411659-15573a27fd0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMHBhaW50ZXIlMjBwYWludGluZ3xlbnwxfHx8fDE3NTc5NDg5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 14,
+      "name": "Marcus Johnson",
+      "image": "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.6,
+      "reviewCount": 98,
+      "yearsExperience": 6,
+      "completedJobs": 156,
+      "responseTime": "Within 5 hours",
+      "availability": "Available Tomorrow"
+    },
+    "pricing": {
+      "hourlyRate": 52,
+      "serviceCall": 35
+    },
+    "description": "Dedicated painter providing reliable residential painting at competitive prices. Perfect for small projects and touch-up services.",
+    "services": [
+      "Touch-up Services",
+      "Small Projects",
+      "Interior Painting",
+      "Exterior Painting",
+      "Color Consultation",
+      "Pressure Washing"
+    ],
+    "location": "Berkeley",
+    "distance": "4.1 miles away"
+  },
+  {
+    "id": 16,
+    "name": "Premium Painting & Design",
+    "category": "Painting",
+    "shortDescription": "Specialty finishes & design",
+    "image": "https://images.unsplash.com/photo-1574359411659-15573a27fd0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMHBhaW50ZXIlMjBwYWludGluZ3xlbnwxfHx8fDE3NTc5NDg5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 15,
+      "name": "Laura Martinez",
+      "image": "https://images.unsplash.com/photo-1485875437342-9b39470b3d95?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.9,
+      "reviewCount": 203,
+      "yearsExperience": 10,
+      "completedJobs": 456,
+      "responseTime": "Within 1 hour",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 65,
+      "serviceCall": 50
+    },
+    "description": "Master painter with expertise in color consultation and specialty finishes. Known for premium finishes and accent wall designs.",
+    "services": [
+      "Premium Finishes",
+      "Accent Walls",
+      "Interior Painting",
+      "Exterior Painting",
+      "Cabinet Refinishing",
+      "Color Consultation"
+    ],
+    "location": "San Jose",
+    "distance": "4.6 miles away"
+  },
+  {
+    "id": 17,
+    "name": "Professional Prep & Paint",
+    "category": "Painting",
+    "shortDescription": "Detail-oriented painting",
+        "image": "https://images.unsplash.com/photo-1574359411659-15573a27fd0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMHBhaW50ZXIlMjBwYWludGluZ3xlbnwxfHx8fDE3NTc5NDg5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 16,
+      "name": "Derek Thompson",
+      "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.7,
+      "reviewCount": 145,
+      "yearsExperience": 8,
+      "completedJobs": 289,
+      "responseTime": "Within 3 hours",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 58,
+      "serviceCall": 40
+    },
+    "description": "Skilled painter with consistent quality work for residential and commercial projects. Expert in surface preparation and primer application.",
+    "services": [
+      "Surface Preparation",
+      "Primer Application",
+      "Interior Painting",
+      "Exterior Painting",
+      "Cabinet Refinishing",
+      "Pressure Washing"
+    ],
+    "location": "Fremont",
+    "distance": "6.5 miles away"
+  },
+  {
+    "id": 18,
+    "name": "Master Electrical Solutions",
+    "category": "Electrical",
+    "shortDescription": "Expert electrical services",
+    "image": "https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 18,
+      "name": "Elizabeth Cooper",
+      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.8,
+      "reviewCount": 189,
+      "yearsExperience": 14,
+      "completedJobs": 367,
+      "responseTime": "Within 45 minutes",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 95,
+      "serviceCall": 80
+    },
+    "description": "Master electrician with comprehensive expertise in complex repairs and system upgrades. Specializing in commercial installations and system diagnostics.",
+    "services": [
+      "Commercial Installations",
+      "System Diagnostics",
+      "Circuit Installation",
+      "Panel Upgrades",
+      "Lighting Installation",
+      "Electrical Inspections"
+    ],
+    "location": "Oakland",
+    "distance": "3.9 miles away"
+  },
+  {
+    "id": 19,
+    "name": "Residential Electrical Pro",
+    "category": "Electrical",
+    "shortDescription": "Home electrical services",
+    "image": "https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 19,
+      "name": "Jason Bailey",
+      "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.7,
+      "reviewCount": 143,
+      "yearsExperience": 8,
+      "completedJobs": 267,
+      "responseTime": "Within 1.5 hours",
+      "availability": "Available Tomorrow"
+    },
+    "pricing": {
+      "hourlyRate": 88,
+      "serviceCall": 70
+    },
+    "description": "Skilled electrician handling residential work with precision and safety focus. Expert in troubleshooting and code compliance.",
+    "services": [
+      "Troubleshooting",
+      "Code Compliance",
+      "Circuit Installation",
+      "Panel Upgrades",
+      "Outlet & Switch Repair",
+      "Lighting Installation"
+    ],
+    "location": "Berkeley",
+    "distance": "4.3 miles away"
+  },
+  {
+    "id": 20,
+    "name": "Smart Home Electrical",
+    "category": "Electrical",
+    "shortDescription": "Modern electrical solutions",
+    "image": "https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 20,
+      "name": "Ashley Rivera",
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.9,
+      "reviewCount": 201,
+      "yearsExperience": 15,
+      "completedJobs": 523,
+      "responseTime": "Within 30 minutes",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 100,
+      "serviceCall": 85
+    },
+    "description": "Master electrician with 15 years of industry excellence. Specializing in home automation wiring and energy-efficient systems. 24/7 emergency availability.",
+    "services": [
+      "Home Automation Wiring",
+      "Energy-Efficient Systems",
+      "Circuit Installation",
+      "Panel Upgrades",
+      "Lighting Installation",
+      "Electrical Inspections"
+    ],
+    "location": "San Jose",
+    "distance": "4.8 miles away"
+  },
+  {
+    "id": 21,
+    "name": "Basic Electrical Services",
+    "category": "Electrical",
+    "shortDescription": "Reliable electrical repairs",
+    "image": "https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 21,
+      "name": "Matthew Foster",
+      "image": "https://images.unsplash.com/photo-1463453091185-61582044d556?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.5,
+      "reviewCount": 118,
+      "yearsExperience": 7,
+      "completedJobs": 201,
+      "responseTime": "Within 1.5 hours",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 85,
+      "serviceCall": 65
+    },
+    "description": "Licensed electrician providing reliable services with safety and customer focus. Specializing in basic repairs and maintenance services.",
+    "services": [
+      "Basic Repairs",
+      "Maintenance Services",
+      "Circuit Installation",
+      "Outlet & Switch Repair",
+      "Lighting Installation",
+      "Electrical Inspections"
+    ],
+    "location": "Fremont",
+    "distance": "6.7 miles away"
+  },
+  {
+    "id": 22,
+    "name": "Eco-Clean Home Services",
+    "category": "Cleaning",
+    "shortDescription": "Green cleaning solutions",
+    "image": "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob21lJTIwY2xlYW5pbmclMjBzZXJ2aWNlfGVufDF8fHx8MTc1NzkyMzUwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 22,
+      "name": "Karen Hughes",
+      "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.9,
+      "reviewCount": 245,
+      "yearsExperience": 11,
+      "completedJobs": 534,
+      "responseTime": "Same Day",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 48,
+      "serviceCall": 0
+    },
+    "description": "Master cleaner with meticulous service using eco-friendly products. Specializing in green cleaning methods and environmentally conscious practices.",
+    "services": [
+      "Green Cleaning",
+      "Regular House Cleaning",
+      "Deep Cleaning",
+      "Move-In/Out Cleaning",
+      "Kitchen Cleaning",
+      "Bathroom Cleaning"
+    ],
+    "location": "Downtown Area",
+    "distance": "2.0 miles away"
+  },
+  {
+    "id": 23,
+    "name": "Family Home Cleaning",
+    "category": "Cleaning",
+    "shortDescription": "Thorough family cleaning",
+    "image": "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob21lJTIwY2xlYW5pbmclMjBzZXJ2aWNlfGVufDF8fHx8MTc1NzkyMzUwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 23,
+      "name": "Linda Stewart",
+      "image": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.8,
+      "reviewCount": 198,
+      "yearsExperience": 8,
+      "completedJobs": 412,
+      "responseTime": "Within 4 hours",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 46,
+      "serviceCall": 0
+    },
+    "description": "Experienced cleaner providing thorough and efficient service for busy families. Includes laundry service options for complete home care.",
+    "services": [
+      "Laundry Service",
+      "Regular House Cleaning",
+      "Deep Cleaning",
+      "Move-In/Out Cleaning",
+      "Kitchen Cleaning",
+      "Bathroom Cleaning"
+    ],
+    "location": "Oakland",
+    "distance": "3.6 miles away"
+  },
+  {
+    "id": 24,
+    "name": "Personalized Cleaning Care",
+    "category": "Cleaning",
+    "shortDescription": "Customized cleaning services",
+    "image": "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob21lJTIwY2xlYW5pbmclMjBzZXJ2aWNlfGVufDF8fHx8MTc1NzkyMzUwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 24,
+      "name": "Patricia Morris",
+      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.7,
+      "reviewCount": 167,
+      "yearsExperience": 6,
+      "completedJobs": 301,
+      "responseTime": "Within 6 hours",
+      "availability": "Available in 2 Days"
+    },
+    "pricing": {
+      "hourlyRate": 44,
+      "serviceCall": 0
+    },
+    "description": "Dedicated cleaner with quality service and personalized attention. Specializing in dusting services and detailed cleaning.",
+    "services": [
+      "Dusting Services",
+      "Regular House Cleaning",
+      "Deep Cleaning",
+      "Move-In/Out Cleaning",
+      "Kitchen Cleaning",
+      "Bathroom Cleaning"
+    ],
+    "location": "Berkeley",
+    "distance": "4.4 miles away"
+  },
+  {
+    "id": 25,
+    "name": "Premium Deep Cleaning",
+    "category": "Cleaning",
+    "shortDescription": "Exceptional cleaning standards",
+    "image": "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob21lJTIwY2xlYW5pbmclMjBzZXJ2aWNlfGVufDF8fHx8MTc1NzkyMzUwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    "provider": {
+      "id": 25,
+      "name": "Nancy Rogers",
+      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face",
+      "rating": 4.9,
+      "reviewCount": 234,
+      "yearsExperience": 10,
+      "completedJobs": 489,
+      "responseTime": "Same Day",
+      "availability": "Available Now"
+    },
+    "pricing": {
+      "hourlyRate": 50,
+      "serviceCall": 0
+    },
+    "description": "Master cleaner with exceptional service and premium standards. Specializing in tile & grout cleaning and deep cleaning services.",
+    "services": [
+      "Tile & Grout Cleaning",
+      "Regular House Cleaning",
+      "Deep Cleaning",
+      "Move-In/Out Cleaning",
+      "Kitchen Cleaning",
+      "Window Cleaning"
+    ],
+    "location": "San Jose",
+    "distance": "4.9 miles away"
   }
 ]
