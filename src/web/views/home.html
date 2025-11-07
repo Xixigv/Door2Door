@@ -41,10 +41,10 @@
               <span class="hidden md:block">Search</span>
             </button>
 
-            <button onclick="window.location.href='/userProfile'"
+            <button onclick="window.location.href='/login'"
               class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
               <i data-lucide="user" class="w-4 h-4 md:mr-2"></i>
-              <span class="hidden md:block">Profile</span>
+              <span class="hidden md:block">Login</span>
             </button>
 
             <button onclick="window.location.href='/becomeProvider'"
@@ -97,18 +97,8 @@
       </div>
     </main>
 
-    <!-- Chat popup toggle button -->
-    <button id="chat-toggle"
-      class="fixed bottom-4 right-4 bg-primary text-primary-foreground rounded-full p-3 shadow-lg z-50 hover:bg-primary/90 transition-colors">
-      💬
-    </button>
+   
 
-    <!-- Chat popup -->
-    <div id="chat-popup"
-      class="fixed bottom-4 right-4 w-80 bg-white border rounded-lg shadow-lg z-50 transition-all duration-300 hidden">
-      <!-- Chat popup content will be inserted here -->
-    </div>
-  </div>
 
   <!-- Scripts -->
   <script src="../web/controllers/utils.js"></script>

@@ -154,11 +154,16 @@ const router = new Router();
 // Define routes
 router.addRoute('/', () => renderHomePage());
 router.addRoute('/search', () => renderSearchPage());
+router.addRoute('/login', () => renderLoginPage());
+router.addRoute('/register', () => renderRegisterPage());
 router.addRoute('/service/:id', (params) => renderServiceDetailPage(params.id));
 router.addRoute('/profile/user/:id', (params) => renderUserProfile(params.id));
 router.addRoute('/profile/provider/:id', (params) => renderProviderProfile(params.id));
 router.addRoute('/calendar/:serviceId', (params) => renderCalendarPage(params.serviceId));
 router.addRoute('/chat', () => renderChatPage());
+router.addRoute('/payment', () => renderPaymentsPage());
+router.addRoute('/home', () => renderHomePage());
+
 
 // Export for global use
 window.router = router;
