@@ -163,6 +163,7 @@ router.addRoute('/calendar/:serviceId', (params) => renderCalendarPage(params.se
 router.addRoute('/chat', () => renderChatPage());
 router.addRoute('/payment', () => renderPaymentsPage());
 router.addRoute('/home', () => renderHomePage());
+router.addRoute('/becomeProvider', () => renderBecomeProviderPage());
 
 
 // Export for global use
