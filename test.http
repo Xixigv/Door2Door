@@ -1,3 +1,47 @@
 ### 1
 GET http://localhost:3000/providers/3 HTTP/1.1
 content-type: application/json
+
+### Create a new user
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "test123",
+    "phone": "1234567890",
+    "location": "Test City",
+    "avatar": "https://example.com/avatar.jpg",
+    "memberSince": "2025-11-06",
+    "totalBookings": 0,
+    "totalSpent": 0,
+    "isProvider": false
+}
+
+### Login with the created user
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "test123"
+}
+
+### Get user details (replace TOKEN with the token from login response)
+GET http://localhost:3000/users/detail/USER_ID
+Authorization: Bearer TOKEN
+
+### Update user (replace TOKEN and USER_ID)
+PUT http://localhost:3000/users/USER_ID
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+    "name": "Updated Test User",
+    "phone": "0987654321"
+}
+
+### Delete user (replace TOKEN and USER_ID)
+DELETE http://localhost:3000/users/USER_ID
+Authorization: Bearer TOKEN
