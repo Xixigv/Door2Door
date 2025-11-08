@@ -2,6 +2,13 @@ function renderCalendarPage(provider) {
     const container = createElement('div', 'min-h-screen bg-gray-50');
     const mainContainer = createElement('div', 'container mx-auto px-4 py-6');
     
+    const bookingState = {
+        selectedDate: null,
+        selectedTime: null,
+        selectedService: null,
+        serviceCallFee: 35
+    };
+    
     // Back button
     const backButton = createElement('a', 'inline-flex items-center text-muted-foreground hover:text-foreground mb-6');
 
@@ -43,6 +50,9 @@ function renderCalendarPage(provider) {
                 calendar.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
                 // Add selection to clicked day
                 dayElement.classList.add('selected');
+                
+                bookingState.selectedDate = date;
+                updateBookingSummary();
             }
         });
         
@@ -72,6 +82,9 @@ function renderCalendarPage(provider) {
             });
             // Add selection to clicked slot
             timeSlot.className = timeSlot.className.replace('btn-outline', 'btn-primary');
+            
+            bookingState.selectedTime = time;
+            updateBookingSummary();
         });
         timeSlotsGrid.appendChild(timeSlot);
     });
@@ -91,10 +104,10 @@ function renderCalendarPage(provider) {
     const serviceOptions = createElement('div', 'space-y-4');
     
     const SERVICE_OPTIONS = [
-  { id: "basic", name: "Basic Service", duration: "1-2 hours", price: 75 },
-  { id: "standard", name: "Standard Service", duration: "2-4 hours", price: 150 },
-  { id: "comprehensive", name: "Comprehensive Service", duration: "4-6 hours", price: 300 },
-  { id: "emergency", name: "Emergency Service", duration: "ASAP", price: 125 }
+        { id: "basic", name: "Basic Service", duration: "1-2 hours", price: provider.hourlyRate, hours: 1.5 },
+        { id: "standard", name: "Standard Service", duration: "2-4 hours", price: provider.hourlyRate * 2, hours: 3 },
+        { id: "comprehensive", name: "Comprehensive Service", duration: "4-6 hours", price: provider.hourlyRate * 4, hours: 5 },
+        { id: "emergency", name: "Emergency Service", duration: "ASAP", price: provider.hourlyRate * 1.5, hours: 1 }
     ]
 
     SERVICE_OPTIONS.forEach(option => {
@@ -104,6 +117,13 @@ function renderCalendarPage(provider) {
         radio.name = 'serviceType';
         radio.value = option.id;
         radio.className = 'radio';
+        
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                bookingState.selectedService = option;
+                updateBookingSummary();
+            }
+        });
         
         const label = createElement('label', 'flex-1 cursor-pointer');
         const optionContent = createElement('div', 'flex items-center justify-between');
@@ -119,6 +139,12 @@ function renderCalendarPage(provider) {
         optionContent.appendChild(optionInfo);
         optionContent.appendChild(optionPrice);
         label.appendChild(optionContent);
+        
+        label.addEventListener('click', () => {
+            radio.checked = true;
+            bookingState.selectedService = option;
+            updateBookingSummary();
+        });
         
         optionRow.appendChild(radio);
         optionRow.appendChild(label);
@@ -177,14 +203,25 @@ function renderCalendarPage(provider) {
     const summaryContent = createElement('div', 'space-y-4');
     
     const summaryItems = createElement('div', 'space-y-3');
+    
+    // **MODIFIED: Create reference variables for dynamic updates**
     const dateItem = createElement('div', 'flex justify-between text-sm');
-    dateItem.innerHTML = '<span>Date:</span><span class="font-medium">Not selected</span>';
+    const dateLabel = createElement('span', '', 'Date:');
+    const dateValue = createElement('span', 'font-medium', 'Not selected');
+    dateItem.appendChild(dateLabel);
+    dateItem.appendChild(dateValue);
     
     const timeItem = createElement('div', 'flex justify-between text-sm');
-    timeItem.innerHTML = '<span>Time:</span><span class="font-medium">Not selected</span>';
+    const timeLabel = createElement('span', '', 'Time:');
+    const timeValue = createElement('span', 'font-medium', 'Not selected');
+    timeItem.appendChild(timeLabel);
+    timeItem.appendChild(timeValue);
     
     const serviceItem = createElement('div', 'flex justify-between text-sm');
-    serviceItem.innerHTML = '<span>Service:</span><span class="font-medium">Not selected</span>';
+    const serviceLabel = createElement('span', '', 'Service:');
+    const serviceValue = createElement('span', 'font-medium', 'Not selected');
+    serviceItem.appendChild(serviceLabel);
+    serviceItem.appendChild(serviceValue);
     
     summaryItems.appendChild(dateItem);
     summaryItems.appendChild(timeItem);
@@ -192,26 +229,129 @@ function renderCalendarPage(provider) {
     
     const pricing = createElement('div', 'pt-4 border-t');
     const serviceCallFee = createElement('div', 'flex justify-between mb-2');
-    serviceCallFee.innerHTML = `<span>Service Call Fee:</span><span>$35</span>`;
+    const feeLabel = createElement('span', '', 'Service Call Fee:');
+    const feeValue = createElement('span', '', `$${bookingState.serviceCallFee}`);
+    serviceCallFee.appendChild(feeLabel);
+    serviceCallFee.appendChild(feeValue);
     
     const hourlyRate = createElement('div', 'flex justify-between mb-2');
-    hourlyRate.innerHTML = `<span>Hourly Rate:</span><span>$${provider.hourlyRate}</span>`;
+    const rateLabel = createElement('span', '', 'Hourly Rate:');
+    const rateValue = createElement('span', '', `$${provider.hourlyRate}`);
+    hourlyRate.appendChild(rateLabel);
+    hourlyRate.appendChild(rateValue);
+    
+    const serviceCost = createElement('div', 'flex justify-between mb-2');
+    const costLabel = createElement('span', '', 'Service Cost:');
+    const costValue = createElement('span', '', '$0');
+    serviceCost.appendChild(costLabel);
+    serviceCost.appendChild(costValue);
     
     const total = createElement('div', 'flex justify-between font-medium text-lg pt-2 border-t');
-    total.innerHTML = '<span>Estimated Total:</span><span>$120</span>';
+    const totalLabel = createElement('span', '', 'Estimated Total:');
+    const totalValue = createElement('span', '', '$0');
+    total.appendChild(totalLabel);
+    total.appendChild(totalValue);
     
     const disclaimer = createElement('p', 'text-xs text-muted-foreground mt-2', 
         '*Final cost may vary based on actual time and materials used');
     
     pricing.appendChild(serviceCallFee);
     pricing.appendChild(hourlyRate);
+    pricing.appendChild(serviceCost);
     pricing.appendChild(total);
     pricing.appendChild(disclaimer);
     
+    function updateBookingSummary() {
+        // Update date display
+        if (bookingState.selectedDate) {
+            const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+            dateValue.textContent = bookingState.selectedDate.toLocaleDateString('en-US', options);
+            dateValue.classList.remove('text-muted-foreground');
+        } else {
+            dateValue.textContent = 'Not selected';
+            dateValue.classList.add('text-muted-foreground');
+        }
+        
+        // Update time display
+        if (bookingState.selectedTime) {
+            timeValue.textContent = bookingState.selectedTime;
+            timeValue.classList.remove('text-muted-foreground');
+        } else {
+            timeValue.textContent = 'Not selected';
+            timeValue.classList.add('text-muted-foreground');
+        }
+        
+        // Update service display
+        if (bookingState.selectedService) {
+            serviceValue.textContent = bookingState.selectedService.name;
+            serviceValue.classList.remove('text-muted-foreground');
+        } else {
+            serviceValue.textContent = 'Not selected';
+            serviceValue.classList.add('text-muted-foreground');
+        }
+        
+        let calculatedServiceCost = 0;
+        let calculatedTotal = 0;
+        
+        if (bookingState.selectedService) {
+            // Calculate service cost based on hours
+            calculatedServiceCost = bookingState.selectedService.hours * provider.hourlyRate;
+            calculatedTotal = bookingState.serviceCallFee + calculatedServiceCost;
+            
+            costValue.textContent = `$${calculatedServiceCost.toFixed(2)}`;
+            totalValue.textContent = `$${calculatedTotal.toFixed(2)}`;
+        } else {
+            costValue.textContent = '$0';
+            totalValue.textContent = `$${bookingState.serviceCallFee}`;
+        }
+        
+        const allSelected = bookingState.selectedDate && 
+                           bookingState.selectedTime && 
+                           bookingState.selectedService;
+        
+        if (allSelected) {
+            confirmBtn.disabled = false;
+            confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+            confirmBtn.disabled = true;
+            confirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    }
+    
     const confirmBtn = createButton('Confirm Booking', () => {
-        // Show confirmation
-        alert('Booking confirmed! You will receive a confirmation email shortly.');
+        if (!bookingState.selectedDate || !bookingState.selectedTime || !bookingState.selectedService) {
+            alert('Please select a date, time, and service type before confirming.');
+            return;
+        }
+        
+        const bookingData = {
+            provider: provider.name,
+            date: bookingState.selectedDate.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            }),
+            time: bookingState.selectedTime,
+            service: bookingState.selectedService.name,
+            duration: bookingState.selectedService.duration,
+            serviceCost: (bookingState.selectedService.hours * provider.hourlyRate).toFixed(2),
+            serviceCallFee: bookingState.serviceCallFee,
+            total: (bookingState.serviceCallFee + (bookingState.selectedService.hours * provider.hourlyRate)).toFixed(2),
+            notes: notesTextarea.value
+        };
+        
+        localStorage.setItem('amount', bookingData.total);
+        
+        // Show detailed confirmation
+        // alert(`Booking Confirmed!\n\nProvider: ${bookingData.provider}\nDate: ${bookingData.date}\nTime: ${bookingData.time}\nService: ${bookingData.service}\nTotal: ${bookingData.total}\n\nYou will receive a confirmation email shortly.`);
+        
+        window.location.href = '/payment';
+
     }, 'btn btn-primary w-full btn-lg mb-3');
+    
+    confirmBtn.disabled = true;
+    confirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
     
     const guarantees = createElement('div', 'text-xs text-muted-foreground space-y-1');
     const guaranteeItems = [
