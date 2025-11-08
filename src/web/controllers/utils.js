@@ -248,3 +248,38 @@ function initializeIcons() {
         lucide.createIcons();
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeHeaderSearch();
+});
+
+function initializeHeaderSearch() {
+    // Get the search input in the header
+    const headerSearchInput = document.querySelector('header input[type="text"]');
+    
+    if (!headerSearchInput) {
+        // console.warn('Header search input not found');
+        return;
+    }
+    
+    // Add event listener for Enter key
+    headerSearchInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent form submission if inside a form
+            
+            const searchQuery = headerSearchInput.value.trim();
+            
+            if (searchQuery) {
+                // Store the search query in localStorage
+                localStorage.setItem('searchQuery', searchQuery);
+                
+                // Redirect to search page
+                window.location.href = '/search';
+            } else {
+                // If empty, just go to search page without query
+                window.location.href = '/search';
+            }
+        }
+    });
+
+}

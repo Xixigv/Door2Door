@@ -501,6 +501,7 @@ function displayServices(services) {
     lucide.createIcons();
 }
 
+
 function getServices(){
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://localhost:3000/services/all', true);
@@ -528,7 +529,21 @@ window.onload = function() {
     main_content.innerHTML = '';
     main_content.appendChild(searchPage);
     
-    // : Load categories and services**
+    // **NEW: Check if there's a search query from the header**
+    const savedSearchQuery = localStorage.getItem('searchQuery');
+    if (savedSearchQuery) {
+        // Set the search input value
+        const searchInput = document.querySelector('.input.pl-10');
+        if (searchInput) {
+            searchInput.value = savedSearchQuery;
+            searchState.searchQuery = savedSearchQuery.toLowerCase();
+        }
+        
+        // Clear the localStorage after using it
+        localStorage.removeItem('searchQuery');
+    }
+    
+    // Load categories and services
     getCategories();
     getServices();
 }
