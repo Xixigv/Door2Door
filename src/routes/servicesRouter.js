@@ -89,6 +89,33 @@ router.get("/all", async (req, res) => {
     }
 });
 
+router.get("/categories", async (req, res) => {
+    try {
+        const command = new dynamoClient.ScanCommand({
+            TableName: TABLE_NAME,
+        });
+
+        const data = await dynamoDB.send(command);
+
+        // Extract unique categories
+        const categories = new Set();
+        data.Items.forEach(item => {
+            const unmarshalled = unmarshall(item);
+            if (unmarshalled.category) {
+                categories.add(unmarshalled.category);
+            }
+        });
+
+        // Convert Set to sorted array
+        const categoriesArray = Array.from(categories).sort();
+        
+        res.json(categoriesArray);
+    } catch (err) {
+        console.error("Couldn't retrieve categories:", err);
+        res.status(500).json({ error: "Couldn't retrieve categories" });
+    }
+});
+
 router.get('/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id);
@@ -110,6 +137,7 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ error: "Couldn't retrieve service" });
     }
 });
+
 
 
 module.exports = router;
