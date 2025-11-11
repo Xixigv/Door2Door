@@ -24,8 +24,8 @@ id,correo,contraseña,isProvider
 23,linda.stewart@aurora.com,Cleaner2024!,true
 24,patricia.morris@aurora.com,Cleaner2024!,true
 25,nancy.rogers@aurora.com,Plumber2024!,true
-26,john.doe@email.com,Electrician2024!,true
-27,emma.wilson@email.com,Cleaner2024!,true
-28,michael.chen@email.com,Carpenter2024!,true
-29,sarah.johnson@email.com,Painter2024!,true
-30,david.martinez@email.com,Plumber2024!,true
+26,john.doe@email.com,Electrician2024!,false
+27,emma.wilson@email.com,Cleaner2024!,false
+28,michael.chen@email.com,Carpenter2024!,false
+29,sarah.johnson@email.com,Painter2024!,false
+30,david.martinez@email.com,Plumber2024!,false
