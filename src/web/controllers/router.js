@@ -164,7 +164,7 @@ router.addRoute('/chat', () => renderChatPage());
 router.addRoute('/payment', () => renderPaymentsPage());
 router.addRoute('/home', () => renderHomePage());
 router.addRoute('/becomeProvider', () => renderBecomeProviderPage());
-
+router.addRoute('/providerProfileView', () => renderProviderProfileViewPage());
 
 // Export for global use
 window.router = router;

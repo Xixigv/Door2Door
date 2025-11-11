@@ -1,0 +1,162 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Door2Door - Professional Services at Your Door</title>
+  <link rel="stylesheet" href="web/styles/globals.css">
+  <link rel="stylesheet" href="web/styles/main.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app" class="min-h-screen bg-background">
+    <!-- Header -->
+    <header class="bg-white border-b sticky top-0 z-40">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo -->
+          <button onclick="window.location.href='/home'" href="/home" class="flex items-center space-x-2">
+            <div class="bg-primary text-primary-foreground rounded-lg p-2">
+              <span id="Logo" class="font-bold">D2D</span>
+            </div>
+            <span class="text-xl font-bold">Door2Door</span>
+          </button>
+
+          <div class="hidden md:flex flex-1 max-w-md mx-8">
+            <div class="relative w-full">
+              <i data-lucide="search"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4"></i>
+              <input type="text" placeholder="Search services..."
+                class="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <nav class="flex items-center space-x-4">
+            <button onclick="window.location.href='/search'"
+              class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
+              <i data-lucide="search" class="w-4 h-4 md:hidden"></i>
+              <span class="hidden md:block">Search</span>
+            </button>            
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+
+      <div class="min-h-screen bg-gray-50">
+        <div class="container mx-auto px-4 py-6">
+          <div class="card">
+            <div class="card-content">
+              <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+                <div class="avatar avatar-xl"><img
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&amp;h=150&amp;fit=crop&amp;crop=face"
+                    alt="John Doe"></div>
+                <div class="flex-1">
+                  <h1 class="text-2xl font-bold mb-2">John Doe</h1>
+                  <div class="space-y-1 text-muted-foreground mb-4">
+                    <div class="flex items-center space-x-2"><i data-lucide="map-pin" class="w-4 h-4"></i><span>San
+                        Francisco, CA</span></div>
+                    <div>Member since March 2023</div>
+                  </div>
+                  <div class="flex flex-wrap gap-4 text-sm">
+                    <div class="bg-primary/10 px-3 py-1 rounded-full"><span class="font-medium">12</span> bookings
+                      completed</div>
+                    <div class="bg-green-100 px-3 py-1 rounded-full"><span class="font-medium">$1245</span> total earned
+                    </div>
+                  </div>
+                
+            </div>
+          </div>
+
+
+
+          <!-- Upcoming Bookings Section -->
+<div class="mt-8">
+  <div class="card bg-white shadow-sm rounded-2xl border border-gray-200">
+    <div class="card-header flex items-center justify-between border-b px-6 py-4">
+      <h3 class="text-lg font-semibold text-gray-800">Upcoming Bookings</h3>
+    </div>
+
+    <div class="card-content px-6 py-4">
+      <div class="space-y-4">
+
+        <!-- Booking 1 -->
+        <div class="flex items-center space-x-4 p-4 border rounded-xl hover:shadow transition">
+          <img
+            class="w-12 h-12 rounded-lg object-cover"
+            src="https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?fit=crop&w=1080&q=80"
+            alt="Plumbing" />
+          <div class="flex-1">
+            <div class="flex items-center justify-between mb-1">
+              <h4 class="font-medium text-gray-900">Emergency Plumbing Repair</h4>
+              <span class="text-xs font-semibold px-2 py-1 bg-gray-200 rounded-full text-gray-700">Completed</span>
+            </div>
+            <p class="text-sm text-gray-500">Mike Johnson</p>
+            <div class="flex items-center justify-between mt-2 text-sm text-gray-600">
+              <span>2024-01-15</span>
+              <div class="flex items-center space-x-2">
+                <span class="font-medium text-gray-800">$150</span>
+                <div class="flex items-center space-x-1 text-yellow-500">
+                  <i data-lucide="star" class="w-4 h-4 fill-yellow-400"></i>
+                  <span>5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Booking 2 -->
+        <div class="flex items-center space-x-4 p-4 border rounded-xl hover:shadow transition">
+          <img
+            class="w-12 h-12 rounded-lg object-cover"
+            src="https://images.unsplash.com/photo-1686178827149-6d55c72d81df?fit=crop&w=1080&q=80"
+            alt="House Cleaning" />
+          <div class="flex-1">
+            <div class="flex items-center justify-between mb-1">
+              <h4 class="font-medium text-gray-900">House Cleaning</h4>
+              <span class="text-xs font-semibold px-2 py-1 bg-gray-200 rounded-full text-gray-700">Completed</span>
+            </div>
+            <p class="text-sm text-gray-500">Sarah Williams</p>
+            <div class="flex items-center justify-between mt-2 text-sm text-gray-600">
+              <span>2024-01-10</span>
+              <div class="flex items-center space-x-2">
+                <span class="font-medium text-gray-800">$120</span>
+                <div class="flex items-center space-x-1 text-ye
+
+
+
+
+
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Chat popup toggle button -->
+    <button id="chat-toggle"
+      class="fixed bottom-4 right-4 bg-primary text-primary-foreground rounded-full p-3 shadow-lg z-50 hover:bg-primary/90 transition-colors">
+      💬
+    </button>
+
+    <!-- Chat popup -->
+    <div id="chat-popup"
+      class="fixed bottom-4 right-4 w-80 bg-white border rounded-lg shadow-lg z-50 transition-all duration-300 hidden">
+      <!-- Chat popup content will be inserted here -->
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/utils.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/pages.js"></script>
+  <!-- <script src="../js/router.js"></script> -->
+  <script src="../js/main.js"></script>
+</body>
+
+</html>
