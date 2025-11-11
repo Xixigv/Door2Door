@@ -1,26 +1,202 @@
 [
-    {
-        "id": 1,
-        "user": "Jennifer Smith",
-        "avatar": "https://images.unsplash.com/photo-1494790108755-2616b5e38f04?w=150&h=150&fit=crop&crop=face",
-        "rating": 5,
-        "date": "2 days ago",
-        "comment": "Mike was fantastic! Fixed our kitchen sink leak quickly and explained everything clearly. Very professional and reasonably priced."
-    },
-    {
-        "id": 2,
-        "user": "Robert Brown",
-        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-        "rating": 5,
-        "date": "1 week ago",
-        "comment": "Excellent service! Arrived on time, diagnosed the problem quickly. The water heater is working perfectly now. Highly recommend!"
-    },
-    {
-        "id": 3,
-        "user": "Maria Garcia",
-        "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-        "rating": 4,
-        "date": "2 weeks ago",
-        "comment": "Great work on our bathroom renovation plumbing. Professional and clean work. Would definitely use again."   
-    }
+  {
+    "id": 1,
+    "userId": 28,
+    "providerId": 1,
+    "rating": 5,
+    "date": "2 days ago",
+    "comment": "Mike fixed our leaking kitchen pipes in no time. Very professional plumber and fair pricing!"
+  },
+  {
+    "id": 2,
+    "userId": 19,
+    "providerId": 2,
+    "rating": 5,
+    "date": "4 days ago",
+    "comment": "Sarah left our home spotless. The deep cleaning was amazing and attention to detail was perfect."
+  },
+  {
+    "id": 3,
+    "userId": 30,
+    "providerId": 3,
+    "rating": 4,
+    "date": "1 week ago",
+    "comment": "David repaired our air conditioner and it’s running like new. Great HVAC technician!"
+  },
+  {
+    "id": 4,
+    "userId": 7,
+    "providerId": 4,
+    "rating": 5,
+    "date": "3 days ago",
+    "comment": "Robert upgraded our electrical panel safely and quickly. Very reliable electrician."
+  },
+  {
+    "id": 5,
+    "userId": 12,
+    "providerId": 5,
+    "rating": 5,
+    "date": "6 days ago",
+    "comment": "Jennifer designed a beautiful garden layout for our front yard. Her landscaping skills are excellent."
+  },
+  {
+    "id": 6,
+    "userId": 21,
+    "providerId": 6,
+    "rating": 4,
+    "date": "5 days ago",
+    "comment": "James painted our living room and it looks amazing. Smooth finish and neat work."
+  },
+  {
+    "id": 7,
+    "userId": 26,
+    "providerId": 7,
+    "rating": 5,
+    "date": "1 week ago",
+    "comment": "Emily assembled our new furniture quickly and professionally. Highly recommend for handyman work!"
+  },
+  {
+    "id": 8,
+    "userId": 18,
+    "providerId": 8,
+    "rating": 5,
+    "date": "2 weeks ago",
+    "comment": "Rachel installed our new roof efficiently and left the site very clean. Excellent roofing service!"
+  },
+  {
+    "id": 9,
+    "userId": 27,
+    "providerId": 9,
+    "rating": 4,
+    "date": "3 days ago",
+    "comment": "Steven fixed our lawn irrigation system and gave great maintenance advice. Solid landscaping work!"
+  },
+  {
+    "id": 10,
+    "userId": 13,
+    "providerId": 10,
+    "rating": 5,
+    "date": "1 week ago",
+    "comment": "Angela provided fast and reliable home cleaning. Everything smells fresh and looks organized."
+  },
+  {
+    "id": 11,
+    "userId": 29,
+    "providerId": 11,
+    "rating": 5,
+    "date": "2 days ago",
+    "comment": "Patrick repaired our broken door locks perfectly. Great locksmith, very polite and quick."
+  },
+  {
+    "id": 12,
+    "userId": 9,
+    "providerId": 12,
+    "rating": 5,
+    "date": "5 days ago",
+    "comment": "Carlos set up our new smart thermostat and explained all features clearly. Fantastic HVAC specialist!"
+  },
+  {
+    "id": 13,
+    "userId": 16,
+    "providerId": 13,
+    "rating": 4,
+    "date": "1 week ago",
+    "comment": "Jessica’s interior painting made our bedroom look brand new. Clean lines and great color advice."
+  },
+  {
+    "id": 14,
+    "userId": 25,
+    "providerId": 14,
+    "rating": 5,
+    "date": "3 days ago",
+    "comment": "Marcus quickly repaired our electrical outlets and did a safety check. Excellent and professional!"
+  },
+  {
+    "id": 15,
+    "userId": 17,
+    "providerId": 15,
+    "rating": 4,
+    "date": "2 weeks ago",
+    "comment": "Laura cleaned our office space efficiently. Very punctual and left everything spotless."
+  },
+  {
+    "id": 16,
+    "userId": 23,
+    "providerId": 16,
+    "rating": 5,
+    "date": "6 days ago",
+    "comment": "Derek repaired our plumbing leak quickly. He’s very friendly and professional."
+  },
+  {
+    "id": 17,
+    "userId": 3,
+    "providerId": 17,
+    "rating": 5,
+    "date": "2 days ago",
+    "comment": "Michael installed our HVAC system and it works flawlessly. Very skilled and courteous."
+  },
+  {
+    "id": 18,
+    "userId": 8,
+    "providerId": 18,
+    "rating": 4,
+    "date": "1 week ago",
+    "comment": "Elizabeth cleaned our house thoroughly and left it shining. Great attention to detail!"
+  },
+  {
+    "id": 19,
+    "userId": 22,
+    "providerId": 19,
+    "rating": 5,
+    "date": "3 days ago",
+    "comment": "Jason provided excellent gardening services. Our backyard looks fantastic now!"
+  },
+  {
+    "id": 20,
+    "userId": 10,
+    "providerId": 20,
+    "rating": 5,
+    "date": "4 days ago",
+    "comment": "Ashley cleaned our Airbnb property perfectly before guests arrived. Very dependable service."
+  },
+  {
+    "id": 21,
+    "userId": 6,
+    "providerId": 21,
+    "rating": 4,
+    "date": "1 week ago",
+    "comment": "Matthew handled our roof repair professionally. Good communication and fair price."
+  },
+  {
+    "id": 22,
+    "userId": 30,
+    "providerId": 22,
+    "rating": 5,
+    "date": "5 days ago",
+    "comment": "Karen deep-cleaned our apartment, and it looks spotless. Truly a five-star cleaning service!"
+  },
+  {
+    "id": 23,
+    "userId": 11,
+    "providerId": 23,
+    "rating": 5,
+    "date": "2 days ago",
+    "comment": "Linda repaired our garden fence beautifully. Skilled and very friendly service!"
+  },
+  {
+    "id": 24,
+    "userId": 2,
+    "providerId": 24,
+    "rating": 4,
+    "date": "1 week ago",
+    "comment": "Patricia helped redesign our backyard layout. Great landscaping ideas and attention to detail."
+  },
+  {
+    "id": 25,
+    "userId": 14,
+    "providerId": 25,
+    "rating": 5,
+    "date": "3 days ago",
+    "comment": "Nancy provided top-notch cleaning for our rental property. Everything looks brand new!"
+  }
 ]

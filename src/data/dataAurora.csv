@@ -1,4 +1,4 @@
-id,correo,contraseña,isProvider
+id,email,password,isProvider
 1,mike.johnson@aurora.com,Plumber2024!,true
 2,sarah.williams@aurora.com,Cleaner2024!,true
 3,david.chen@aurora.com,Carpenter2024!,true
