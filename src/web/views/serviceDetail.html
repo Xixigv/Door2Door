@@ -5,18 +5,17 @@
   <link rel="stylesheet" href="web/styles/globals.css">
   <link rel="stylesheet" href="web/styles/main.css">
 
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body>
-  <div id="app" class="min-h-screen bg-background">
+<body class="bg-gray-50 min-h-screen">
+    <div id="app" class="min-h-screen bg-background">
     <!-- Header -->
     <header class="bg-white border-b sticky top-0 z-40">
       <div class="container mx-auto px-4 py-3">
         <div class="flex items-center justify-between">
-          <!-- Logo -->
+
           <button onclick="window.location.href='/home'" href="/home" class="flex items-center space-x-2">
             <div class="bg-primary text-primary-foreground rounded-lg p-2">
               <span id="Logo" class="font-bold">D2D</span>
@@ -33,7 +32,6 @@
             </div>
           </div>
 
-          <!-- Navigation -->
           <nav class="flex items-center space-x-4">
             <button onclick="window.location.href='/search'"
               class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
@@ -41,13 +39,13 @@
               <span class="hidden md:block">Search</span>
             </button>
 
-            <button onclick="window.location.href='/userProfile'"
+            <button onclick="window.location.href='/login'"
               class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
               <i data-lucide="user" class="w-4 h-4 md:mr-2"></i>
-              <span class="hidden md:block">Profile</span>
+              <span class="hidden md:block">Login</span>
             </button>
 
-            <button onclick="window.location.href='/becomeProvider'" class="flex items-center space-x-2"
+            <button onclick="window.location.href='/becomeProvider'"
               class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
               Become a Provider
             </button>
@@ -56,23 +54,53 @@
       </div>
     </header>
 
-    <!-- Main Content -->
-    <main id="main-content">
-      
-    </main>
+    <main class="container mx-auto mt-8 p-4">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Upcoming Service Details</h2>
+      </div>
+      <div class="card-content space-y-4">
+        
+        <!-- Cliente -->
+        <div class="flex items-center space-x-4">
+          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=100&h=100&fit=crop"
+               alt="Cliente" class="rounded-lg" width="80" height="80">
+          <div>
+            <h3 class="text-lg font-medium">Cilent: <span id="client-name">Ana Lopez</span></h3>
+            <p class="text-sm text-muted-foreground">Address: <span id="client-address">Av. Central #123</span></p>
+            <p class="text-sm text-muted-foreground">Telephone number: <span id="client-phone">+52 55 1234 5678</span></p>
+          </div>
+        </div>
 
-    <!-- Chat popup toggle button -->
-    <button id="chat-toggle"
-      class="fixed bottom-4 right-4 bg-primary text-primary-foreground rounded-full p-3 shadow-lg z-50 hover:bg-primary/90 transition-colors">
-      💬
-    </button>
+       
+        <div>
+          <h4 class="font-medium">Service:</h4>
+          <p id="service-name">General cleaning</p>
+        </div>
 
-    <!-- Chat popup -->
-    <div id="chat-popup"
-      class="fixed bottom-4 right-4 w-80 bg-white border rounded-lg shadow-lg z-50 transition-all duration-300 hidden">
-      <!-- Chat popup content will be inserted here -->
+     
+        <div>
+          <h4 class="font-medium">Date and Time:</h4>
+          <p id="service-date">12 november 2025, 10:00 AM</p>
+        </div>
+
+        <div class="select w-full">
+          <div class="select-trigger" id="statusSelectTrigger">
+            Status: <span id="current-status-label" class="ml-2 text-foreground font-medium">Booked</span>
+          </div>
+          <div class="select-content" id="statusOptions">
+            <div class="select-item" data-status="Booked">Booked</div>
+            <div class="select-item" data-status="In Progress">In Progress</div>
+            <div class="select-item" data-status="Finalized">Finalized</div>
+          </div>
+        </div>
+
+        
+        <button id="status-btn" class="btn btn-primary w-full">Start service</button>
+      </div>
     </div>
-  </div>
+  </main>
+
 
   <!-- Scripts -->
   <script src="../web/controllers/utils.js"></script>

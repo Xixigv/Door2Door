@@ -515,3 +515,44 @@
 .space-y-4 > * + * { margin-top: 1rem; }
 .space-y-6 > * + * { margin-top: 1.5rem; }
 .space-y-8 > * + * { margin-top: 2rem; }
+
+
+.select {
+  position: relative;
+  display: inline-block;
+}
+
+.select-trigger {
+  background: var(--input-background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5em 0.75em;
+  cursor: pointer;
+  display: inline-block;
+  width: 100%;
+}
+
+.select-content {
+  display: none;
+  position: absolute;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-top: 0.25em;
+  width: 100%;
+  z-index: 10;
+}
+
+.select-content.show {
+  display: block;
+}
+
+.select-item {
+  padding: 0.5em 0.75em;
+  cursor: pointer;
+}
+
+.select-item:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}

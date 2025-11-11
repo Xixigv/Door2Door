@@ -281,3 +281,50 @@ window.onload = function() {
     const serviceId = localStorage.getItem('service');
     getService(serviceId);
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const statusTrigger = document.getElementById("statusSelectTrigger");
+  const statusOptions = document.getElementById("statusOptions");
+  const currentStatusLabel = document.getElementById("current-status-label");
+  const statusBtn = document.getElementById("status-btn");
+
+  if (!statusTrigger || !statusOptions || !currentStatusLabel || !statusBtn) return;
+
+  let currentStatus = currentStatusLabel.textContent.trim();
+
+  statusTrigger.addEventListener("click", () => {
+    statusOptions.classList.toggle("show");
+  });
+
+  statusOptions.querySelectorAll(".select-item").forEach(item => {
+    item.addEventListener("click", () => {
+      currentStatus = item.getAttribute("data-status");
+      currentStatusLabel.textContent = currentStatus;
+
+      switch (currentStatus.toLowerCase()) {
+        case "booked":
+          statusBtn.textContent = "Start Service";
+          statusBtn.className = "btn btn-primary w-full";
+          break;
+        case "in progress":
+          statusBtn.textContent = "Mark as Finalized";
+          statusBtn.className = "btn bg-yellow-500 text-white w-full";
+          break;
+        case "finalized":
+          statusBtn.textContent = "Service Completed";
+          statusBtn.className = "btn bg-green-600 text-white w-full";
+          statusBtn.disabled = true;
+          break;
+      }
+
+      statusOptions.classList.remove("show");
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!statusTrigger.contains(e.target) && !statusOptions.contains(e.target)) {
+      statusOptions.classList.remove("show");
+    }
+  });
+});
