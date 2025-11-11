@@ -1,39 +1,62 @@
 import { DynamoDBClient, BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
-import services from "./serviceDetails.json" assert { type: "json" };
-import dotenv from 'dotenv';
-dotenv.config('../../.env');
+import services from "./reviews.json" assert { type: "json" };
+import dotenv from "dotenv";
+dotenv.config({ path: "../../.env" });
 
 const client = new DynamoDBClient({
-    region: "us-east-2",
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-    }
+  region: "us-east-2",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  }
 });
-const tableName = "Services"; // cambia por tu tabla
+
+const tableName = "Reviews";
+const BATCH_SIZE = 25;
+
+// helper: splits array into chunks of size N
+function chunkArray(array, size) {
+  const result = [];
+  for (let i = 0; i < array.length; i += size) {
+    result.push(array.slice(i, i + size));
+  }
+  return result;
+}
 
 async function uploadServicesBulk() {
-  const putRequests = services.map(service => ({
-    PutRequest: {
-      Item: marshall(service)
-    }
-  }));
+  const chunks = chunkArray(services, BATCH_SIZE);
+  console.log(`Uploading ${services.length} services in ${chunks.length} batches...`);
 
-  // DynamoDB permite máximo 25 items por BatchWrite
-  const batch = {
-    RequestItems: {
-      [tableName]: putRequests
-    }
-  };
+  for (let i = 0; i < chunks.length; i++) {
+    const batch = {
+      RequestItems: {
+        [tableName]: chunks[i].map(service => ({
+          PutRequest: {
+            Item: marshall(service)
+          }
+        }))
+      }
+    };
 
-  try {
-    const command = new BatchWriteItemCommand(batch);
-    const result = await client.send(command);
-    console.log("Servicios subidos correctamente:", result);
-  } catch (err) {
-    console.error("Error subiendo servicios:", err);
+    try {
+      const command = new BatchWriteItemCommand(batch);
+      let result = await client.send(command);
+
+      // retry unprocessed items if any
+      while (result.UnprocessedItems && Object.keys(result.UnprocessedItems).length > 0) {
+        console.log(`Retrying ${Object.keys(result.UnprocessedItems[tableName]).length} unprocessed items...`);
+        const retryCommand = new BatchWriteItemCommand({ RequestItems: result.UnprocessedItems });
+        result = await client.send(retryCommand);
+      }
+
+      console.log(`✅ Batch ${i + 1}/${chunks.length} uploaded successfully`);
+    } catch (err) {
+      console.error(`❌ Error uploading batch ${i + 1}:`, err);
+    }
   }
+
+  console.log("🎉 All services uploaded successfully!");
 }
 
 uploadServicesBulk();

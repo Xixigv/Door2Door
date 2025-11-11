@@ -1,32 +1,402 @@
 [
-    {
-        "id": 1,
-        "service": "Plumbing",
-        "provider": "Mike Johnson",
-        "date": "2024-01-15",
-        "status": "Completed",
-        "amount": 150,
-        "rating": 5,
-        "image": "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwbHVtYmVyJTIwZml4aW5nJTIwc2lua3xlbnwxfHx8fDE3NTc4NTQxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-    },
-    {
-        "id": 2,
-        "service": "House Cleaning",
-        "provider": "Sarah Williams",
-        "date": "2024-01-10",
-        "status": "Completed",
-        "amount": 120,
-        "rating": 4,
-        "image": "https://images.unsplash.com/photo-1686178827149-6d55c72d81df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob21lJTIwY2xlYW5pbmclMjBzZXJ2aWNlfGVufDF8fHx8MTc1NzkyMzUwN3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-    },
-    {
-        "id": 3,
-        "service": "Electrical Work",
-        "provider": "Tom Anderson",
-        "date": "2024-01-20",
-        "status": "Scheduled",
-        "amount": 200,
-        "rating": null,
-        "image": "https://images.unsplash.com/photo-1665242043190-0ef29390d289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMHdvcmtpbmd8ZW58MXx8fHwxNzU3OTIwNTEyfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-    }
+  {
+    "id": 1,
+    "userId": 28,
+    "providerId": 1,
+    "service": "Drain Cleaning",
+    "date": "2025-03-14",
+    "status": "Completed",
+    "amount": 81,
+    "rating": 5
+  },
+  {
+    "id": 2,
+    "userId": 30,
+    "providerId": 2,
+    "service": "Deep Cleaning",
+    "date": "2025-07-09",
+    "status": "Completed",
+    "amount": 48,
+    "rating": 4
+  },
+  {
+    "id": 3,
+    "userId": 26,
+    "providerId": 3,
+    "service": "Trim & Molding",
+    "date": "2025-06-05",
+    "status": "Completed",
+    "amount": 93,
+    "rating": 5
+  },
+  {
+    "id": 4,
+    "userId": 27,
+    "providerId": 4,
+    "service": "Gas Line Installation",
+    "date": "2024-12-17",
+    "status": "Completed",
+    "amount": 74,
+    "rating": 5
+  },
+  {
+    "id": 5,
+    "userId": 29,
+    "providerId": 5,
+    "service": "Greywater Systems",
+    "date": "2025-04-22",
+    "status": "Completed",
+    "amount": 88,
+    "rating": 4
+  },
+  {
+    "id": 6,
+    "userId": 21,
+    "providerId": 6,
+    "service": "Radiant Floor Heating",
+    "date": "2025-01-10",
+    "status": "Completed",
+    "amount": 64,
+    "rating": 4
+  },
+  {
+    "id": 7,
+    "userId": 19,
+    "providerId": 7,
+    "service": "Water Filtration",
+    "date": "2024-09-28",
+    "status": "Completed",
+    "amount": 91,
+    "rating": 5
+  },
+  {
+    "id": 8,
+    "userId": 15,
+    "providerId": 8,
+    "service": "Cabinet Refinishing",
+    "date": "2025-03-07",
+    "status": "Completed",
+    "amount": 85,
+    "rating": 4
+  },
+  {
+    "id": 9,
+    "userId": 13,
+    "providerId": 9,
+    "service": "Fine Woodworking",
+    "date": "2025-02-12",
+    "status": "Completed",
+    "amount": 96,
+    "rating": 5
+  },
+  {
+    "id": 10,
+    "userId": 20,
+    "providerId": 10,
+    "service": "Closet Organization",
+    "date": "2025-05-19",
+    "status": "Completed",
+    "amount": 77,
+    "rating": 4
+  },
+  {
+    "id": 11,
+    "userId": 11,
+    "providerId": 11,
+    "service": "Deck Building",
+    "date": "2024-10-15",
+    "status": "Completed",
+    "amount": 91,
+    "rating": 5
+  },
+  {
+    "id": 12,
+    "userId": 26,
+    "providerId": 12,
+    "service": "Wallpaper Removal",
+    "date": "2025-06-09",
+    "status": "Completed",
+    "amount": 53,
+    "rating": 5
+  },
+  {
+    "id": 13,
+    "userId": 28,
+    "providerId": 13,
+    "service": "Commercial Painting",
+    "date": "2025-07-28",
+    "status": "Completed",
+    "amount": 62,
+    "rating": 4
+  },
+  {
+    "id": 14,
+    "userId": 17,
+    "providerId": 14,
+    "service": "Touch-up Services",
+    "date": "2024-08-20",
+    "status": "Completed",
+    "amount": 57,
+    "rating": 3
+  },
+  {
+    "id": 15,
+    "userId": 22,
+    "providerId": 15,
+    "service": "Premium Finishes",
+    "date": "2025-03-23",
+    "status": "Completed",
+    "amount": 70,
+    "rating": 5
+  },
+  {
+    "id": 16,
+    "userId": 14,
+    "providerId": 16,
+    "service": "Surface Preparation",
+    "date": "2024-11-06",
+    "status": "Completed",
+    "amount": 63,
+    "rating": 4
+  },
+  {
+    "id": 17,
+    "userId": 12,
+    "providerId": 17,
+    "service": "Lighting Installation",
+    "date": "2025-01-25",
+    "status": "Completed",
+    "amount": 95,
+    "rating": 5
+  },
+  {
+    "id": 18,
+    "userId": 18,
+    "providerId": 18,
+    "service": "Panel Upgrades",
+    "date": "2025-02-02",
+    "status": "Completed",
+    "amount": 103,
+    "rating": 4
+  },
+  {
+    "id": 19,
+    "userId": 9,
+    "providerId": 19,
+    "service": "Troubleshooting",
+    "date": "2024-12-29",
+    "status": "Completed",
+    "amount": 91,
+    "rating": 5
+  },
+  {
+    "id": 20,
+    "userId": 25,
+    "providerId": 20,
+    "service": "Energy-Efficient Systems",
+    "date": "2025-06-16",
+    "status": "Completed",
+    "amount": 109,
+    "rating": 5
+  },
+  {
+    "id": 21,
+    "userId": 30,
+    "providerId": 21,
+    "service": "Generator Setup",
+    "date": "2025-04-13",
+    "status": "Completed",
+    "amount": 89,
+    "rating": 4
+  },
+  {
+    "id": 22,
+    "userId": 19,
+    "providerId": 22,
+    "service": "Green Cleaning",
+    "date": "2025-01-30",
+    "status": "Completed",
+    "amount": 46,
+    "rating": 5
+  },
+  {
+    "id": 23,
+    "userId": 7,
+    "providerId": 23,
+    "service": "Laundry Service",
+    "date": "2025-02-11",
+    "status": "Completed",
+    "amount": 51,
+    "rating": 4
+  },
+  {
+    "id": 24,
+    "userId": 6,
+    "providerId": 24,
+    "service": "Dusting Services",
+    "date": "2025-07-15",
+    "status": "Completed",
+    "amount": 42,
+    "rating": 3
+  },
+  {
+    "id": 25,
+    "userId": 8,
+    "providerId": 25,
+    "service": "Bathroom Remodeling",
+    "date": "2025-05-05",
+    "status": "Completed",
+    "amount": 79,
+    "rating": 4
+  },
+  {
+    "id": 26,
+    "userId": 27,
+    "providerId": 3,
+    "service": "Deck Building",
+    "date": "2025-06-21",
+    "status": "Completed",
+    "amount": 91,
+    "rating": 5
+  },
+  {
+    "id": 27,
+    "userId": 5,
+    "providerId": 8,
+    "service": "Crown Molding",
+    "date": "2025-02-14",
+    "status": "Completed",
+    "amount": 84,
+    "rating": 5
+  },
+  {
+    "id": 28,
+    "userId": 2,
+    "providerId": 10,
+    "service": "Door Installation",
+    "date": "2025-08-04",
+    "status": "Completed",
+    "amount": 82,
+    "rating": 4
+  },
+  {
+    "id": 29,
+    "userId": 1,
+    "providerId": 11,
+    "service": "Wood Repair & Restoration",
+    "date": "2025-03-12",
+    "status": "Completed",
+    "amount": 94,
+    "rating": 5
+  },
+  {
+    "id": 30,
+    "userId": 4,
+    "providerId": 13,
+    "service": "Faux Finishes",
+    "date": "2025-07-19",
+    "status": "Completed",
+    "amount": 58,
+    "rating": 5
+  },
+  {
+    "id": 31,
+    "userId": 6,
+    "providerId": 16,
+    "service": "Primer Application",
+    "date": "2025-10-07",
+    "status": "Completed",
+    "amount": 60,
+    "rating": 4
+  },
+  {
+    "id": 32,
+    "userId": 10,
+    "providerId": 17,
+    "service": "Outlet & Switch Repair",
+    "date": "2025-09-23",
+    "status": "Completed",
+    "amount": 85,
+    "rating": 5
+  },
+  {
+    "id": 33,
+    "userId": 13,
+    "providerId": 18,
+    "service": "System Diagnostics",
+    "date": "2025-06-29",
+    "status": "Completed",
+    "amount": 112,
+    "rating": 5
+  },
+  {
+    "id": 34,
+    "userId": 15,
+    "providerId": 19,
+    "service": "Lighting Installation",
+    "date": "2025-05-25",
+    "status": "Completed",
+    "amount": 86,
+    "rating": 4
+  },
+  {
+    "id": 35,
+    "userId": 16,
+    "providerId": 20,
+    "service": "Panel Upgrades",
+    "date": "2025-09-02",
+    "status": "Completed",
+    "amount": 108,
+    "rating": 5
+  },
+  {
+    "id": 36,
+    "userId": 3,
+    "providerId": 21,
+    "service": "Lighting Installation",
+    "date": "2025-03-09",
+    "status": "Completed",
+    "amount": 92,
+    "rating": 4
+  },
+  {
+    "id": 37,
+    "userId": 9,
+    "providerId": 22,
+    "service": "Window Cleaning",
+    "date": "2025-06-24",
+    "status": "Completed",
+    "amount": 50,
+    "rating": 5
+  },
+  {
+    "id": 38,
+    "userId": 12,
+    "providerId": 23,
+    "service": "Deep Cleaning",
+    "date": "2025-10-22",
+    "status": "Completed",
+    "amount": 45,
+    "rating": 4
+  },
+  {
+    "id": 39,
+    "userId": 18,
+    "providerId": 24,
+    "service": "Carpet Cleaning",
+    "date": "2025-09-13",
+    "status": "Completed",
+    "amount": 49,
+    "rating": 5
+  },
+  {
+    "id": 40,
+    "userId": 24,
+    "providerId": 25,
+    "service": "Sewer Repair",
+    "date": "2025-07-06",
+    "status": "Completed",
+    "amount": 82,
+    "rating": 4
+  }
 ]
