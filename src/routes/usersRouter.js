@@ -107,11 +107,6 @@ async function getUserFromDynamo(id) {
     const data = await dynamoDB.send(new ddb.GetItemCommand({ TableName: TABLE, Key: key }));
     if (data && data.Item) return unmarshall(data.Item);
 
-    // Si originalmente se intentó como número, intenta como string
-    if (n) {
-      const data2 = await dynamoDB.send(new ddb.GetItemCommand({ TableName: TABLE, Key: { id: { S: String(id) } } }));
-      if (data2 && data2.Item) return unmarshall(data2.Item);
-    }
     return null;
   } catch (e) {
     throw e;
@@ -254,12 +249,12 @@ router.post('/login', async (req, res) => {
   Primero intenta buscar en Dynamo (perfil completo).
   Si no lo encuentra, busca en Aurora (solo información básica).
 */
-router.get('/detail/:id', authenticateToken, async (req, res) => {
+router.get('/detail/:id',/* authenticateToken,*/ async (req, res) => {
   const { id } = req.params;
   try {
     try {
-      const user = await getUserFromDynamo(id);
-      if (user) return res.json({ success: true, data: user });
+      let user = await getUserFromDynamo(id);
+      if (user) return res.json({ data: user });
     } catch (e) {}
 
     const rows = await auroraQuery('SELECT id, name, email FROM users WHERE id = $1;', [id]);

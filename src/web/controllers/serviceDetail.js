@@ -280,6 +280,3 @@ window.onload = function() {
     const serviceId = localStorage.getItem('service');
     getService(serviceId);
 }
-
-
-

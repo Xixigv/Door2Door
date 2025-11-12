@@ -7,11 +7,13 @@ const servicesRouter = require('../routes/servicesRouter.js');
 const providersRouter = require('../routes/providersRouter.js');
 const usersRouter = require('../routes/usersRouter.js');
 const bookingsRouter = require('../routes/bookingsRouter.js');
+const reviewsRouter = require('../routes/reviewsRouter.js');
 
 router.use('/bookings', bookingsRouter);
 router.use('/services', servicesRouter);
 router.use('/providers', providersRouter);
 router.use('/users', usersRouter);
+router.use('/reviews', reviewsRouter);
 
 router.get('/', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/home.html")));
 router.get('/home', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/home.html")));

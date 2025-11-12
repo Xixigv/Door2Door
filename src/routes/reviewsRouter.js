@@ -10,7 +10,7 @@ const numId = () => Date.now();
 // CREATE
 router.post('/', async (req, res) => {
   try {
-    const { providerId, userId, bookingId = null, rating, comment = '' } = req.body || {};
+    const { providerId, userId, rating, comment = '', date = '' } = req.body || {};
     if (!providerId || !userId || rating === undefined) return res.status(400).json({ error: 'missing fields' });
 
     const r = Number(rating);
@@ -18,13 +18,11 @@ router.post('/', async (req, res) => {
 
     const item = {
       id: { N: String(numId()) },
-      providerId: { S: String(providerId) },
-      userId: { S: String(userId) },
-      bookingId: bookingId ? { S: String(bookingId) } : { NULL: true },
+      providerId: { N: String(providerId) },
+      userId: { N: String(userId) },
       rating: { N: String(r) },
       comment: { S: String(comment) },
-      createdAt: { S: new Date().toISOString() },
-      updatedAt: { S: new Date().toISOString() }
+      date: { S: String(date)},
     };
 
     await dynamoDB.send(new ddb.PutItemCommand({ TableName: TABLE, Item: item, ConditionExpression: 'attribute_not_exists(id)' }));

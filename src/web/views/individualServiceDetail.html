@@ -34,7 +34,7 @@
 
         
 
-            <button onclick="window.location.href='/providerProfileView'"
+            <button onclick="window.location.href='/userProfile'"
               class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
               <i data-lucide="user" class="w-4 h-4 md:mr-2"></i>
               <span class="hidden md:block">Profile</span>
@@ -46,7 +46,7 @@
       </div>
     </header>
 
-    <main class="container mx-auto mt-8 p-4">
+    <main id="main-content" class="container mx-auto mt-8 p-4">
       <div class="card bg-white shadow-sm rounded-2xl border border-gray-200">
         <div class="card-header">
           <h2 class="card-title text-xl font-semibold">Service Details</h2>
@@ -55,14 +55,7 @@
         <div class="card-content space-y-4 px-6 py-4">
           <!-- Cliente -->
           <div id="client-info" class="flex items-center space-x-4 hidden">
-            <img id="client-img"
-              src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=100&h=100&fit=crop"
-              alt="Client" class="rounded-lg w-20 h-20 object-cover">
-            <div>
-              <h3 class="text-lg font-medium">Client: <span id="client-name">Ana Lopez</span></h3>
-              <p class="text-sm text-gray-500">Address: <span id="client-address">Av. Central #123</span></p>
-              <p class="text-sm text-gray-500">Telephone: <span id="client-phone">+52 55 1234 5678</span></p>
-            </div>
+            
           </div>
 
           <!-- Detalles del servicio -->
@@ -100,17 +93,12 @@
       </div>
     </main>
   </div>
-
-
     
   </div>
 
-
-
-
   <!-- Scripts -->
   <script src="../web/controllers/utils.js"></script>
-  <script src="../web/controllers/serviceDetail.js"></script>
+  <script src="../web/controllers/individualServiceDetail.js"></script>
 </body>
 
 </html>
