@@ -6,7 +6,8 @@ function renderCalendarPage(provider) {
         selectedDate: null,
         selectedTime: null,
         selectedService: null,
-        serviceCallFee: 35
+        serviceCallFee: 35,
+        existingBookings: [] // Store fetched bookings
     };
     
     // Back button
@@ -52,6 +53,7 @@ function renderCalendarPage(provider) {
                 dayElement.classList.add('selected');
                 
                 bookingState.selectedDate = date;
+                updateAvailableTimeSlots(); // Update time slots based on selected date
                 updateBookingSummary();
             }
         });
@@ -69,25 +71,90 @@ function renderCalendarPage(provider) {
     const timeSlotsGrid = createElement('div', 'grid grid-cols-2 gap-2');
     
     const TIME_SLOTS = [
-        "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", 
-        "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", 
-        "4:00 PM", "5:00 PM", "6:00 PM"
-    ]
+        { time: "8:00 AM", value: "08:00" },
+        { time: "9:00 AM", value: "09:00" },
+        { time: "10:00 AM", value: "10:00" },
+        { time: "11:00 AM", value: "11:00" },
+        { time: "12:00 PM", value: "12:00" },
+        { time: "1:00 PM", value: "13:00" },
+        { time: "2:00 PM", value: "14:00" },
+        { time: "3:00 PM", value: "15:00" },
+        { time: "4:00 PM", value: "16:00" },
+        { time: "5:00 PM", value: "17:00" },
+        { time: "6:00 PM", value: "18:00" }
+    ];
 
-    TIME_SLOTS.forEach(time => {
-        const timeSlot = createTimeSlot(time, false, () => {
-            // Remove previous selection
-            timeSlotsGrid.querySelectorAll('.btn-primary').forEach(btn => {
-                btn.className = btn.className.replace('btn-primary', 'btn-outline');
-            });
-            // Add selection to clicked slot
-            timeSlot.className = timeSlot.className.replace('btn-outline', 'btn-primary');
+    // Function to check if a time slot is occupied
+    function isTimeSlotOccupied(dateStr, timeValue, serviceDuration) {
+        if (!bookingState.selectedService) return false;
+        
+        const requestedStart = parseTime(timeValue);
+        const requestedEnd = requestedStart + (bookingState.selectedService.hours * 60);
+        
+        return bookingState.existingBookings.some(booking => {
+            if (booking.date !== dateStr) return false;
             
-            bookingState.selectedTime = time;
-            updateBookingSummary();
+            const bookingStart = parseTime(booking.bookingTime);
+            const bookingEnd = bookingStart + (booking.serviceDuration * 60);
+            
+            // Check if time slots overlap
+            return (requestedStart < bookingEnd && requestedEnd > bookingStart);
         });
-        timeSlotsGrid.appendChild(timeSlot);
-    });
+    }
+    
+    // Helper function to parse time string to minutes
+    function parseTime(timeStr) {
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        return hours * 60 + minutes;
+    }
+    
+    // Function to update available time slots based on selected date and service
+    function updateAvailableTimeSlots() {
+        timeSlotsGrid.innerHTML = '';
+        
+        if (!bookingState.selectedDate) {
+            TIME_SLOTS.forEach(slot => {
+                const timeSlot = createTimeSlot(slot.time, false, null, true);
+                timeSlotsGrid.appendChild(timeSlot);
+            });
+            return;
+        }
+        
+        const selectedDateStr = formatDateToYYYYMMDD(bookingState.selectedDate);
+        
+        TIME_SLOTS.forEach(slot => {
+            const isOccupied = isTimeSlotOccupied(selectedDateStr, slot.value, bookingState.selectedService?.hours);
+            
+            const timeSlot = createTimeSlot(slot.time, false, () => {
+                if (!isOccupied) {
+                    // Remove previous selection
+                    timeSlotsGrid.querySelectorAll('.btn-primary').forEach(btn => {
+                        btn.className = btn.className.replace('btn-primary', 'btn-outline');
+                    });
+                    // Add selection to clicked slot
+                    timeSlot.className = timeSlot.className.replace('btn-outline', 'btn-primary');
+                    
+                    bookingState.selectedTime = slot.value;
+                    updateBookingSummary();
+                }
+            }, isOccupied);
+            
+            timeSlotsGrid.appendChild(timeSlot);
+        });
+        
+        lucide.createIcons();
+    }
+    
+    // Helper function to format date to yyyy-mm-dd
+    function formatDateToYYYYMMDD(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    
+    // Initial render of time slots (all disabled until date is selected)
+    updateAvailableTimeSlots();
     
     timeSection.appendChild(timeTitle);
     timeSection.appendChild(timeSlotsGrid);
@@ -108,7 +175,7 @@ function renderCalendarPage(provider) {
         { id: "standard", name: "Standard Service", duration: "2-4 hours", price: provider.hourlyRate * 2, hours: 3 },
         { id: "comprehensive", name: "Comprehensive Service", duration: "4-6 hours", price: provider.hourlyRate * 4, hours: 5 },
         { id: "emergency", name: "Emergency Service", duration: "ASAP", price: provider.hourlyRate * 1.5, hours: 1 }
-    ]
+    ];
 
     SERVICE_OPTIONS.forEach(option => {
         const optionRow = createElement('div', 'flex items-center space-x-2');
@@ -121,6 +188,8 @@ function renderCalendarPage(provider) {
         radio.addEventListener('change', () => {
             if (radio.checked) {
                 bookingState.selectedService = option;
+                bookingState.selectedTime = null; // Reset time selection when service changes
+                updateAvailableTimeSlots(); // Recalculate available slots
                 updateBookingSummary();
             }
         });
@@ -143,6 +212,8 @@ function renderCalendarPage(provider) {
         label.addEventListener('click', () => {
             radio.checked = true;
             bookingState.selectedService = option;
+            bookingState.selectedTime = null; // Reset time selection when service changes
+            updateAvailableTimeSlots(); // Recalculate available slots
             updateBookingSummary();
         });
         
@@ -204,7 +275,6 @@ function renderCalendarPage(provider) {
     
     const summaryItems = createElement('div', 'space-y-3');
     
-    // **MODIFIED: Create reference variables for dynamic updates**
     const dateItem = createElement('div', 'flex justify-between text-sm');
     const dateLabel = createElement('span', '', 'Date:');
     const dateValue = createElement('span', 'font-medium', 'Not selected');
@@ -274,7 +344,12 @@ function renderCalendarPage(provider) {
         
         // Update time display
         if (bookingState.selectedTime) {
-            timeValue.textContent = bookingState.selectedTime;
+            // Convert 24h to 12h format for display
+            const [hours, minutes] = bookingState.selectedTime.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+            timeValue.textContent = `${displayHour}:${minutes} ${ampm}`;
             timeValue.classList.remove('text-muted-foreground');
         } else {
             timeValue.textContent = 'Not selected';
@@ -294,7 +369,6 @@ function renderCalendarPage(provider) {
         let calculatedTotal = 0;
         
         if (bookingState.selectedService) {
-            // Calculate service cost based on hours
             calculatedServiceCost = bookingState.selectedService.hours * provider.hourlyRate;
             calculatedTotal = bookingState.serviceCallFee + calculatedServiceCost;
             
@@ -342,9 +416,10 @@ function renderCalendarPage(provider) {
         };
         
         localStorage.setItem('amount', bookingData.total);
-        
-        // Show detailed confirmation
-        // alert(`Booking Confirmed!\n\nProvider: ${bookingData.provider}\nDate: ${bookingData.date}\nTime: ${bookingData.time}\nService: ${bookingData.service}\nTotal: ${bookingData.total}\n\nYou will receive a confirmation email shortly.`);
+        localStorage.setItem('bookingDate', formatDateToYYYYMMDD(bookingState.selectedDate));
+        localStorage.setItem('bookingTime', bookingState.selectedTime);
+        localStorage.setItem('serviceDuration', bookingState.selectedService.hours);
+        localStorage.setItem('serviceType', bookingState.selectedService.id);
         
         window.location.href = '/payment';
 
@@ -383,7 +458,36 @@ function renderCalendarPage(provider) {
     mainContainer.appendChild(contentGrid);
     container.appendChild(mainContainer);
     
+    // Fetch existing bookings for this provider
+    fetchProviderBookings(provider.id);
+    
     return container;
+    
+    // Function to fetch bookings from API
+    function fetchProviderBookings(providerId) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `/bookings/provider/${providerId}?future=true`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const bookings = JSON.parse(xhr.responseText);
+                bookingState.existingBookings = bookings;
+                // Update time slots if a date is already selected
+                if (bookingState.selectedDate) {
+                    updateAvailableTimeSlots();
+                }
+            } else {
+                console.error('Failed to fetch bookings. Status:', xhr.status);
+            }
+        };
+        
+        xhr.onerror = function() {
+            console.error('Request error while fetching bookings');
+        };
+        
+        xhr.send();
+    }
 }
 
 // Calendar Day Component
@@ -400,20 +504,23 @@ function createCalendarDay(date, isSelected = false, isDisabled = false, onClick
     return day;
 }
 
-// Time Slot Component
-function createTimeSlot(time, isSelected = false, onClick = null) {
+// Time Slot Component - Updated to handle occupied slots
+function createTimeSlot(time, isSelected = false, onClick = null, isOccupied = false) {
     const slot = createButton(
         `<i data-lucide="clock" class="w-4 h-4 mr-2"></i>${time}`,
-        onClick,
-        `btn ${isSelected ? 'btn-primary' : 'btn-outline'} btn-sm justify-start`
+        isOccupied ? null : onClick,
+        `btn ${isSelected ? 'btn-primary' : 'btn-outline'} btn-sm justify-start ${isOccupied ? 'opacity-40 cursor-not-allowed' : ''}`
     );
+    
+    if (isOccupied) {
+        slot.disabled = true;
+        slot.title = 'This time slot is already booked';
+    }
     
     return slot;
 }
 
-function getProvider(id)
-{
-
+function getProvider(id) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `/providers/${id}`, true);
 
@@ -428,7 +535,6 @@ function getProvider(id)
             main_content.innerHTML = '';
             main_content.appendChild(providerDetailPage);
             lucide.createIcons();
-
         } else {
             console.error('Request failed. Status:', xhr.status);
         }
@@ -444,4 +550,4 @@ function getProvider(id)
 window.onload = function() {
     const providerId = localStorage.getItem('provider');
     getProvider(providerId);
-}
+};

@@ -1,6 +1,6 @@
 import { DynamoDBClient, BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
-import services from "./reviews.json" assert { type: "json" };
+import services from "./bookingHistory.json" assert { type: "json" };
 import dotenv from "dotenv";
 dotenv.config({ path: "../../.env" });
 
@@ -12,7 +12,7 @@ const client = new DynamoDBClient({
   }
 });
 
-const tableName = "Reviews";
+const tableName = "Bookings";
 const BATCH_SIZE = 25;
 
 // helper: splits array into chunks of size N

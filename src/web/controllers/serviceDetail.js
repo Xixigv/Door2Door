@@ -192,8 +192,7 @@ function renderServiceDetailPage(service) {
     
     features.appendChild(availableToday);
     features.appendChild(servesArea);
-    
-    // Pending set id for booking page
+
     const scheduleBtn = createButton(
         '<i data-lucide="calendar" class="w-4 h-4 mr-2"></i>Schedule Service',
         () => {

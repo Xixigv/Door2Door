@@ -10,20 +10,27 @@ const numId = () => Date.now();
 // CREATE
 router.post('/', async (req, res) => {
   try {
-    const { userId, providerId, serviceId, date, status = 'pending', notes = null, price = 0 } = req.body || {};
-    if (!userId || !providerId || !serviceId || !date) return res.status(400).json({ error: 'missing fields' });
+    const { userId, providerId, service, date, status = 'pending', amount = 0, serviceType, serviceDuration, bookingTime, notes = null } = req.body || {};
+    if (!userId || !providerId || !service || !date) return res.status(400).json({ error: 'missing fields' });
+
+    // Validate date format yyyy-mm-dd
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(date)) {
+      return res.status(400).json({ error: 'date must be in yyyy-mm-dd format' });
+    }
 
     const item = {
       id: { N: String(numId()) },
-      userId: { S: String(userId) },
-      providerId: { S: String(providerId) },
-      serviceId: { S: String(serviceId) },
-      date: { S: new Date(date).toISOString() },
+      userId: { N: String(userId) },
+      providerId: { N: String(providerId) },
+      service: { S: String(service) },
+      date: { S: String(date) },
       status: { S: String(status) },
-      price: { N: String(Number(price) || 0) },
-      notes: notes ? { S: String(notes) } : { NULL: true },
-      createdAt: { S: new Date().toISOString() },
-      updatedAt: { S: new Date().toISOString() }
+      amount: { N: String(Number(amount) || 0) },
+      serviceType: { S: String(serviceType) },
+      serviceDuration: { N: String(Number(serviceDuration) || 0) },
+      bookingTime: { S: String(bookingTime) },
+      notes: notes ? { S: String(notes) } : { NULL: true }
     };
 
     await dynamoDB.send(new ddb.PutItemCommand({ TableName: TABLE, Item: item, ConditionExpression: 'attribute_not_exists(id)' }));
@@ -41,29 +48,26 @@ router.get('/:id', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// UPDATE
+// UPDATE - Only allows changing status
 router.put('/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const names = {}, values = {}, set = [];
-    const add = (k, v, isNum = false) => {
-      names['#' + k] = k; values[':' + k] = v == null ? { NULL: true } : (isNum ? { N: String(v) } : { S: String(v) });
-      set.push(`#${k}=:${k}`);
-    };
-    if (req.body.date) add('date', new Date(req.body.date).toISOString());
-    if (req.body.status) add('status', req.body.status);
-    if (req.body.notes !== undefined) add('notes', req.body.notes);
-    if (req.body.price !== undefined) add('price', Number(req.body.price) || 0, true);
-    add('updatedAt', new Date().toISOString());
+    const { status } = req.body;
+    
+    // Validate that status is provided
+    if (!status) {
+      return res.status(400).json({ error: 'status field is required' });
+    }
 
     const r = await dynamoDB.send(new ddb.UpdateItemCommand({
       TableName: TABLE,
       Key: { id: { N: String(id) } },
-      UpdateExpression: 'SET ' + set.join(','),
-      ExpressionAttributeNames: names,
-      ExpressionAttributeValues: values,
+      UpdateExpression: 'SET #status = :status',
+      ExpressionAttributeNames: { '#status': 'status' },
+      ExpressionAttributeValues: { ':status': { S: String(status) } },
       ReturnValues: 'ALL_NEW'
     }));
+    
     res.json(unmarshall(r.Attributes || {}));
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -106,22 +110,46 @@ router.get('/user/:userId', async (req, res) => {
       TableName: TABLE,
       IndexName: 'userId-index',
       KeyConditionExpression: 'userId = :u',
-      ExpressionAttributeValues: { ':u': { S: userId } }
+      ExpressionAttributeValues: { ':u': { N: userId } }
     }));
     res.json((data.Items || []).map(unmarshall));
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// GET todos los bookings de un provedor
+// GET todos los bookings de un provedor con filtros opcionales
 router.get('/provider/:providerId', async (req, res) => {
   try {
     const providerId = String(req.params.providerId);
+    const { status, future } = req.query;
+    
+    const names = { '#p': 'providerId' };
+    const values = { ':p': { N: providerId } };
+    const filters = [];
+    
+    // Filter by status if provided
+    if (status) {
+      names['#s'] = 'status';
+      values[':s'] = { S: String(status) };
+      filters.push('#s = :s');
+    }
+    
+    // Filter for future bookings if requested
+    if (future === 'true') {
+      const today = new Date().toISOString().split('T')[0]; // Get yyyy-mm-dd format
+      names['#d'] = 'date';
+      values[':today'] = { S: today };
+      filters.push('#d >= :today');
+    }
+    
     const data = await dynamoDB.send(new ddb.QueryCommand({
       TableName: TABLE,
       IndexName: 'providerId-index',
-      KeyConditionExpression: 'providerId = :p',
-      ExpressionAttributeValues: { ':p': { S: providerId } }
+      KeyConditionExpression: '#p = :p',
+      ExpressionAttributeNames: names,
+      ExpressionAttributeValues: values,
+      ...(filters.length ? { FilterExpression: filters.join(' AND ') } : {})
     }));
+    
     res.json((data.Items || []).map(unmarshall));
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

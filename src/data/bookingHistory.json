@@ -7,7 +7,9 @@
     "date": "2025-03-14",
     "status": "Completed",
     "amount": 81,
-    "rating": 5
+    "serviceType": "Basic",
+    "serviceDuration": 2,
+    "bookingTime": "08:00"
   },
   {
     "id": 2,
@@ -17,7 +19,9 @@
     "date": "2025-07-09",
     "status": "Completed",
     "amount": 48,
-    "rating": 4
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "11:00"
   },
   {
     "id": 3,
@@ -27,7 +31,9 @@
     "date": "2025-06-05",
     "status": "Completed",
     "amount": 93,
-    "rating": 5
+    "serviceType": "Basic",
+    "serviceDuration": 2,
+    "bookingTime": "15:00"
   },
   {
     "id": 4,
@@ -37,7 +43,9 @@
     "date": "2024-12-17",
     "status": "Completed",
     "amount": 74,
-    "rating": 5
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "13:00"
   },
   {
     "id": 5,
@@ -47,7 +55,9 @@
     "date": "2025-04-22",
     "status": "Completed",
     "amount": 88,
-    "rating": 4
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "08:00"
   },
   {
     "id": 6,
@@ -57,7 +67,9 @@
     "date": "2025-01-10",
     "status": "Completed",
     "amount": 64,
-    "rating": 4
+    "serviceType": "Emergency",
+    "serviceDuration": 10,
+    "bookingTime": "13:00"
   },
   {
     "id": 7,
@@ -67,7 +79,9 @@
     "date": "2024-09-28",
     "status": "Completed",
     "amount": 91,
-    "rating": 5
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "12:00"
   },
   {
     "id": 8,
@@ -77,7 +91,9 @@
     "date": "2025-03-07",
     "status": "Completed",
     "amount": 85,
-    "rating": 4
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "14:00"
   },
   {
     "id": 9,
@@ -87,7 +103,9 @@
     "date": "2025-02-12",
     "status": "Completed",
     "amount": 96,
-    "rating": 5
+    "serviceType": "Emergency",
+    "serviceDuration": 10,
+    "bookingTime": "15:00"
   },
   {
     "id": 10,
@@ -97,7 +115,9 @@
     "date": "2025-05-19",
     "status": "Completed",
     "amount": 77,
-    "rating": 4
+    "serviceType": "Emergency",
+    "serviceDuration": 10,
+    "bookingTime": "12:00"
   },
   {
     "id": 11,
@@ -107,7 +127,9 @@
     "date": "2024-10-15",
     "status": "Completed",
     "amount": 91,
-    "rating": 5
+    "serviceType": "Standard",
+    "serviceDuration": 4,
+    "bookingTime": "10:00"
   },
   {
     "id": 12,
@@ -117,7 +139,9 @@
     "date": "2025-06-09",
     "status": "Completed",
     "amount": 53,
-    "rating": 5
+    "serviceType": "Basic",
+    "serviceDuration": 2,
+    "bookingTime": "11:00"
   },
   {
     "id": 13,
@@ -127,7 +151,9 @@
     "date": "2025-07-28",
     "status": "Completed",
     "amount": 62,
-    "rating": 4
+    "serviceType": "Basic",
+    "serviceDuration": 2,
+    "bookingTime": "16:00"
   },
   {
     "id": 14,
@@ -137,7 +163,9 @@
     "date": "2024-08-20",
     "status": "Completed",
     "amount": 57,
-    "rating": 3
+    "serviceType": "Basic",
+    "serviceDuration": 2,
+    "bookingTime": "09:00"
   },
   {
     "id": 15,
@@ -147,7 +175,9 @@
     "date": "2025-03-23",
     "status": "Completed",
     "amount": 70,
-    "rating": 5
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "11:00"
   },
   {
     "id": 16,
@@ -157,7 +187,9 @@
     "date": "2024-11-06",
     "status": "Completed",
     "amount": 63,
-    "rating": 4
+    "serviceType": "Standard",
+    "serviceDuration": 4,
+    "bookingTime": "08:00"
   },
   {
     "id": 17,
@@ -167,7 +199,9 @@
     "date": "2025-01-25",
     "status": "Completed",
     "amount": 95,
-    "rating": 5
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "16:00"
   },
   {
     "id": 18,
@@ -177,7 +211,9 @@
     "date": "2025-02-02",
     "status": "Completed",
     "amount": 103,
-    "rating": 4
+    "serviceType": "Standard",
+    "serviceDuration": 4,
+    "bookingTime": "16:00"
   },
   {
     "id": 19,
@@ -187,7 +223,9 @@
     "date": "2024-12-29",
     "status": "Completed",
     "amount": 91,
-    "rating": 5
+    "serviceType": "Standard",
+    "serviceDuration": 4,
+    "bookingTime": "13:00"
   },
   {
     "id": 20,
@@ -197,7 +235,9 @@
     "date": "2025-06-16",
     "status": "Completed",
     "amount": 109,
-    "rating": 5
+    "serviceType": "Emergency",
+    "serviceDuration": 10,
+    "bookingTime": "09:00"
   },
   {
     "id": 21,
@@ -207,7 +247,9 @@
     "date": "2025-04-13",
     "status": "Completed",
     "amount": 89,
-    "rating": 4
+    "serviceType": "Emergency",
+    "serviceDuration": 10,
+    "bookingTime": "12:00"
   },
   {
     "id": 22,
@@ -217,7 +259,9 @@
     "date": "2025-01-30",
     "status": "Completed",
     "amount": 46,
-    "rating": 5
+    "serviceType": "Standard",
+    "serviceDuration": 4,
+    "bookingTime": "13:00"
   },
   {
     "id": 23,
@@ -227,7 +271,9 @@
     "date": "2025-02-11",
     "status": "Completed",
     "amount": 51,
-    "rating": 4
+    "serviceType": "Emergency",
+    "serviceDuration": 10,
+    "bookingTime": "09:00"
   },
   {
     "id": 24,
@@ -237,7 +283,9 @@
     "date": "2025-07-15",
     "status": "Completed",
     "amount": 42,
-    "rating": 3
+    "serviceType": "Basic",
+    "serviceDuration": 2,
+    "bookingTime": "18:00"
   },
   {
     "id": 25,
@@ -247,7 +295,9 @@
     "date": "2025-05-05",
     "status": "Completed",
     "amount": 79,
-    "rating": 4
+    "serviceType": "Emergency",
+    "serviceDuration": 10,
+    "bookingTime": "11:00"
   },
   {
     "id": 26,
@@ -257,7 +307,9 @@
     "date": "2025-06-21",
     "status": "Completed",
     "amount": 91,
-    "rating": 5
+    "serviceType": "Standard",
+    "serviceDuration": 4,
+    "bookingTime": "08:00"
   },
   {
     "id": 27,
@@ -267,7 +319,9 @@
     "date": "2025-02-14",
     "status": "Completed",
     "amount": 84,
-    "rating": 5
+    "serviceType": "Basic",
+    "serviceDuration": 2,
+    "bookingTime": "15:00"
   },
   {
     "id": 28,
@@ -277,7 +331,9 @@
     "date": "2025-08-04",
     "status": "Completed",
     "amount": 82,
-    "rating": 4
+    "serviceType": "Basic",
+    "serviceDuration": 2,
+    "bookingTime": "14:00"
   },
   {
     "id": 29,
@@ -287,7 +343,9 @@
     "date": "2025-03-12",
     "status": "Completed",
     "amount": 94,
-    "rating": 5
+    "serviceType": "Standard",
+    "serviceDuration": 4,
+    "bookingTime": "14:00"
   },
   {
     "id": 30,
@@ -297,7 +355,9 @@
     "date": "2025-07-19",
     "status": "Completed",
     "amount": 58,
-    "rating": 5
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "08:00"
   },
   {
     "id": 31,
@@ -307,7 +367,9 @@
     "date": "2025-10-07",
     "status": "Completed",
     "amount": 60,
-    "rating": 4
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "16:00"
   },
   {
     "id": 32,
@@ -317,7 +379,9 @@
     "date": "2025-09-23",
     "status": "Completed",
     "amount": 85,
-    "rating": 5
+    "serviceType": "Emergency",
+    "serviceDuration": 10,
+    "bookingTime": "11:00"
   },
   {
     "id": 33,
@@ -327,7 +391,9 @@
     "date": "2025-06-29",
     "status": "Completed",
     "amount": 112,
-    "rating": 5
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "09:00"
   },
   {
     "id": 34,
@@ -337,7 +403,9 @@
     "date": "2025-05-25",
     "status": "Completed",
     "amount": 86,
-    "rating": 4
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "17:00"
   },
   {
     "id": 35,
@@ -347,7 +415,9 @@
     "date": "2025-09-02",
     "status": "Completed",
     "amount": 108,
-    "rating": 5
+    "serviceType": "Standard",
+    "serviceDuration": 4,
+    "bookingTime": "13:00"
   },
   {
     "id": 36,
@@ -357,7 +427,9 @@
     "date": "2025-03-09",
     "status": "Completed",
     "amount": 92,
-    "rating": 4
+    "serviceType": "Basic",
+    "serviceDuration": 2,
+    "bookingTime": "14:00"
   },
   {
     "id": 37,
@@ -367,7 +439,9 @@
     "date": "2025-06-24",
     "status": "Completed",
     "amount": 50,
-    "rating": 5
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "14:00"
   },
   {
     "id": 38,
@@ -377,7 +451,9 @@
     "date": "2025-10-22",
     "status": "Completed",
     "amount": 45,
-    "rating": 4
+    "serviceType": "Comprehensive",
+    "serviceDuration": 6,
+    "bookingTime": "18:00"
   },
   {
     "id": 39,
@@ -387,7 +463,9 @@
     "date": "2025-09-13",
     "status": "Completed",
     "amount": 49,
-    "rating": 5
+    "serviceType": "Emergency",
+    "serviceDuration": 10,
+    "bookingTime": "13:00"
   },
   {
     "id": 40,
@@ -397,6 +475,8 @@
     "date": "2025-07-06",
     "status": "Completed",
     "amount": 82,
-    "rating": 4
+    "serviceType": "Emergency",
+    "serviceDuration": 10,
+    "bookingTime": "11:00"
   }
 ]
