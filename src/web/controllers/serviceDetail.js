@@ -299,6 +299,163 @@ window.onload = function() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getBooking(bookingId) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `/bookings/${bookingId}`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const booking = JSON.parse(xhr.responseText);
+            renderBookingDetails(booking);
+            lucide.createIcons();
+        } else {
+            console.error('Request failed. Status:', xhr.status);
+        }
+    };
+
+    xhr.onerror = function () {
+        console.error('Request error');
+    };
+
+    xhr.send();
+}
+
+function renderBookingDetails(booking) {
+    const mainContent = document.getElementById('main-content');
+    mainContent.innerHTML = `
+        <div class="container mx-auto py-8 px-4">
+            <button id="back-btn" class="inline-flex items-center text-gray-500 hover:text-gray-800 mb-6">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>Back
+            </button>
+
+            <div class="bg-white rounded-2xl shadow p-6 mb-6">
+                <h1 class="text-2xl font-bold mb-4">${booking.service}</h1>
+                <p><strong>Date:</strong> ${booking.date}</p>
+                <p><strong>Time:</strong> ${booking.bookingTime}</p>
+                <p><strong>Duration:</strong> ${booking.serviceDuration} hrs</p>
+                <p><strong>Amount:</strong> $${booking.amount}</p>
+                <p><strong>Status:</strong> ${booking.status}</p>
+                <p><strong>Notes:</strong> ${booking.notes}</p>
+            </div>
+
+            <div id="action-section"></div>
+        </div>
+    `;
+
+    const userRole = localStorage.getItem('role'); 
+    const actionSection = document.getElementById('action-section');
+
+    if (userRole === 'provider') {
+        actionSection.innerHTML = `
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <h2 class="text-lg font-semibold mb-2">Update Service Status</h2>
+                <select id="status-select" class="border rounded px-3 py-2 mb-3">
+                    <option value="Booked" ${booking.status === "Booked" ? "selected" : ""}>Booked</option>
+                    <option value="In Progress" ${booking.status === "In Progress" ? "selected" : ""}>In Progress</option>
+                    <option value="Finalized" ${booking.status === "Finalized" ? "selected" : ""}>Finalized</option>
+                </select>
+                <button id="update-status" class="btn btn-primary">Update</button>
+            </div>
+        `;
+
+        document.getElementById('update-status').addEventListener('click', () => {
+            const newStatus = document.getElementById('status-select').value;
+            updateBookingStatus(booking.id, newStatus);
+        });
+
+    } else if (userRole === 'user') {
+        actionSection.innerHTML = `
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <h2 class="text-lg font-semibold mb-2">Leave a Review</h2>
+                <textarea id="review-text" rows="4" class="w-full border rounded p-2 mb-3" placeholder="Write your feedback..."></textarea>
+                <button id="submit-review" class="btn btn-primary">Submit Review</button>
+            </div>
+        `;
+
+        document.getElementById('submit-review').addEventListener('click', () => {
+            const review = document.getElementById('review-text').value;
+            if (review.trim() === "") {
+                alert("Please write a review before submitting.");
+                return;
+            }
+            submitReview(booking.id, review);
+        });
+    }
+
+    document.getElementById('back-btn').addEventListener('click', () => {
+        window.location.href = '/';
+    });
+}
+
+function updateBookingStatus(bookingId, newStatus) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', `/bookings/${bookingId}`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            alert('Status updated successfully!');
+            window.location.reload();
+        } else {
+            alert('Error updating status.');
+        }
+    };
+    xhr.send(JSON.stringify({ status: newStatus }));
+}
+
+function submitReview(bookingId, review) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `/reviews`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function () {
+        if (xhr.status === 201) {
+            alert('Review submitted!');
+            window.location.reload();
+        } else {
+            alert('Error submitting review.');
+        }
+    };
+    xhr.send(JSON.stringify({ bookingId, review }));
+}
+
+window.onload = function () {
+    const bookingId = localStorage.getItem('booking');
+    getBooking(bookingId);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
   // --- Datos de ejemplo ---
   const services = [
