@@ -1,3 +1,26 @@
+// Function to create a booking via API
+function createBooking(bookingData, onSuccess, onError) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/bookings', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    
+    xhr.onload = function() {
+        if (xhr.status === 201) {
+            const createdBooking = JSON.parse(xhr.responseText);
+            onSuccess(createdBooking);
+        } else {
+            const error = JSON.parse(xhr.responseText);
+            onError(error.error || 'Unknown error');
+        }
+    };
+    
+    xhr.onerror = function() {
+        onError('Network error. Please check your connection and try again.');
+    };
+    
+    xhr.send(JSON.stringify(bookingData));
+}
+
 function renderCalendarPage(provider) {
     const container = createElement('div', 'min-h-screen bg-gray-50');
     const mainContainer = createElement('div', 'container mx-auto px-4 py-6');
@@ -85,20 +108,33 @@ function renderCalendarPage(provider) {
     ];
 
     // Function to check if a time slot is occupied
-    function isTimeSlotOccupied(dateStr, timeValue, serviceDuration) {
-        if (!bookingState.selectedService) return false;
-        
+    function isTimeSlotOccupied(dateStr, timeValue) {
         const requestedStart = parseTime(timeValue);
-        const requestedEnd = requestedStart + (bookingState.selectedService.hours * 60);
         
+        // If service is selected, check for overlaps considering the service duration
+        if (bookingState.selectedService) {
+            const requestedEnd = requestedStart + (bookingState.selectedService.hours * 60);
+            
+            return bookingState.existingBookings.some(booking => {
+                if (booking.date !== dateStr) return false;
+                
+                const bookingStart = parseTime(booking.bookingTime);
+                const bookingEnd = bookingStart + (booking.serviceDuration * 60);
+                
+                // Check if time slots overlap
+                return (requestedStart < bookingEnd && requestedEnd > bookingStart);
+            });
+        }
+        
+        // If no service selected, check if this time falls within any existing booking's duration
         return bookingState.existingBookings.some(booking => {
             if (booking.date !== dateStr) return false;
             
             const bookingStart = parseTime(booking.bookingTime);
             const bookingEnd = bookingStart + (booking.serviceDuration * 60);
             
-            // Check if time slots overlap
-            return (requestedStart < bookingEnd && requestedEnd > bookingStart);
+            // Check if the requested time falls within the existing booking's time range
+            return (requestedStart >= bookingStart && requestedStart < bookingEnd);
         });
     }
     
@@ -123,7 +159,7 @@ function renderCalendarPage(provider) {
         const selectedDateStr = formatDateToYYYYMMDD(bookingState.selectedDate);
         
         TIME_SLOTS.forEach(slot => {
-            const isOccupied = isTimeSlotOccupied(selectedDateStr, slot.value, bookingState.selectedService?.hours);
+            const isOccupied = isTimeSlotOccupied(selectedDateStr, slot.value);
             
             const timeSlot = createTimeSlot(slot.time, false, () => {
                 if (!isOccupied) {
@@ -171,10 +207,10 @@ function renderCalendarPage(provider) {
     const serviceOptions = createElement('div', 'space-y-4');
     
     const SERVICE_OPTIONS = [
-        { id: "basic", name: "Basic Service", duration: "1-2 hours", price: provider.hourlyRate, hours: 1.5 },
-        { id: "standard", name: "Standard Service", duration: "2-4 hours", price: provider.hourlyRate * 2, hours: 3 },
-        { id: "comprehensive", name: "Comprehensive Service", duration: "4-6 hours", price: provider.hourlyRate * 4, hours: 5 },
-        { id: "emergency", name: "Emergency Service", duration: "ASAP", price: provider.hourlyRate * 1.5, hours: 1 }
+        { id: "basic", name: "Basic Service", duration: "1-2 hours", price: provider.hourlyRate * 2, hours: 2 },
+        { id: "standard", name: "Standard Service", duration: "2-4 hours", price: provider.hourlyRate * 4, hours: 4 },
+        { id: "comprehensive", name: "Comprehensive Service", duration: "4-6 hours", price: provider.hourlyRate * 6, hours: 6 },
+        { id: "emergency", name: "Emergency Service", duration: "ASAP", price: provider.hourlyRate * 10, hours: 10 }
     ];
 
     SERVICE_OPTIONS.forEach(option => {
@@ -398,30 +434,54 @@ function renderCalendarPage(provider) {
             return;
         }
         
-        const bookingData = {
-            provider: provider.name,
-            date: bookingState.selectedDate.toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                month: 'long', 
-                day: 'numeric', 
-                year: 'numeric' 
-            }),
-            time: bookingState.selectedTime,
-            service: bookingState.selectedService.name,
-            duration: bookingState.selectedService.duration,
-            serviceCost: (bookingState.selectedService.hours * provider.hourlyRate).toFixed(2),
-            serviceCallFee: bookingState.serviceCallFee,
-            total: (bookingState.serviceCallFee + (bookingState.selectedService.hours * provider.hourlyRate)).toFixed(2),
-            notes: notesTextarea.value
+        // Disable button to prevent double-clicking
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Creating booking...';
+        
+        const userId = localStorage.getItem('userId'); // Get logged-in user ID
+        const total = (bookingState.serviceCallFee + (bookingState.selectedService.hours * provider.hourlyRate)).toFixed(2);
+        
+        // Prepare booking data for API
+        const bookingPayload = {
+            userId: parseInt(userId),
+            providerId: provider.id,
+            service: provider.service,
+            date: formatDateToYYYYMMDD(bookingState.selectedDate),
+            status: 'Booked',
+            amount: parseFloat(total),
+            serviceType: bookingState.selectedService.name,
+            serviceDuration: bookingState.selectedService.hours,
+            bookingTime: bookingState.selectedTime,
+            notes: notesTextarea.value || null
         };
         
-        localStorage.setItem('amount', bookingData.total);
-        localStorage.setItem('bookingDate', formatDateToYYYYMMDD(bookingState.selectedDate));
-        localStorage.setItem('bookingTime', bookingState.selectedTime);
-        localStorage.setItem('serviceDuration', bookingState.selectedService.hours);
-        localStorage.setItem('serviceType', bookingState.selectedService.id);
-        
-        window.location.href = '/payment';
+        // Create booking via API
+        createBooking(
+            bookingPayload,
+            // Success callback
+            (createdBooking) => {
+                console.log('Booking created:', createdBooking);
+                
+                // Store booking info for payment page
+                localStorage.setItem('bookingId', createdBooking.id);
+                localStorage.setItem('amount', total);
+                localStorage.setItem('bookingDate', bookingPayload.date);
+                localStorage.setItem('bookingTime', bookingPayload.bookingTime);
+                localStorage.setItem('serviceDuration', bookingPayload.serviceDuration);
+                localStorage.setItem('serviceType', bookingPayload.serviceType);
+                
+                // Redirect to payment
+                window.location.href = '/payment';
+            },
+            // Error callback
+            (errorMessage) => {
+                alert('Failed to create booking: ' + errorMessage);
+                
+                // Re-enable button
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'Confirm Booking';
+            }
+        );
 
     }, 'btn btn-primary w-full btn-lg mb-3');
     
