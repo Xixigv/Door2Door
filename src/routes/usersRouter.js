@@ -254,7 +254,7 @@ router.get('/detail/:id',/* authenticateToken,*/ async (req, res) => {
   try {
     try {
       let user = await getUserFromDynamo(id);
-      if (user) return res.json({ data: user });
+      if (user) return res.json({success: true, data: user });
     } catch (e) {}
 
     const rows = await auroraQuery('SELECT id, name, email FROM users WHERE id = $1;', [id]);

@@ -463,12 +463,12 @@ function renderCalendarPage(provider) {
                 console.log('Booking created:', createdBooking);
                 
                 // Store booking info for payment page
-                localStorage.setItem('bookingId', createdBooking.id);
                 localStorage.setItem('amount', total);
-                localStorage.setItem('bookingDate', bookingPayload.date);
-                localStorage.setItem('bookingTime', bookingPayload.bookingTime);
-                localStorage.setItem('serviceDuration', bookingPayload.serviceDuration);
-                localStorage.setItem('serviceType', bookingPayload.serviceType);
+                // localStorage.setItem('bookingId', createdBooking.id);
+                // localStorage.setItem('bookingDate', bookingPayload.date);
+                // localStorage.setItem('bookingTime', bookingPayload.bookingTime);
+                // localStorage.setItem('serviceDuration', bookingPayload.serviceDuration);
+                // localStorage.setItem('serviceType', bookingPayload.serviceType);
                 
                 // Redirect to payment
                 window.location.href = '/payment';

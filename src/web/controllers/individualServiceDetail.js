@@ -143,6 +143,42 @@ function getUserDetail(userId, /*authenticateToken,*/ ) {
 }
 
 
+function updateBookingStatus(bookingId, status, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', `/bookings/${bookingId}`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const booking = JSON.parse(xhr.responseText);
+            console.log('Booking status updated successfully:', booking);
+            if (callback) callback(null, booking);
+        } else if (xhr.status === 400) {
+            const error = JSON.parse(xhr.responseText);
+            console.error('Bad request:', error.error);
+            if (callback) callback(error.error, null);
+        } else if (xhr.status === 500) {
+            const error = JSON.parse(xhr.responseText);
+            console.error('Server error:', error.error);
+            if (callback) callback(error.error, null);
+        } else {
+            console.error('Request failed. Status:', xhr.status);
+            if (callback) callback('Request failed', null);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error('Request error');
+        if (callback) callback('Network error', null);
+    };
+
+    const data = {
+        status: status
+    };
+
+    xhr.send(JSON.stringify(data));
+}
+
 function renderClientInfo(client) {
     const container = document.getElementById("client-info");
     if (!container) return;
@@ -274,13 +310,32 @@ function setupStatusSection(role, status) {
     // Update status on click
     let currentStatus = status;
     statusBtn.addEventListener("click", () => {
+        const bookingId = localStorage.getItem('booking');
+
         if (currentStatus === "Booked") {
-            currentStatus = "In Progress";
+            nextStatus = "In Progress";
         } else if (currentStatus === "In Progress") {
-            currentStatus = "Completed";
+            nextStatus = "Completed";
         }
 
-        saveToStorage("serviceStatus", currentStatus);
+        updateBookingStatus(bookingId, nextStatus, (error, booking) => {
+            if (error) {
+                alert(`Failed to update status: ${error}`);
+                statusBtn.disabled = false;
+                statusBtn.textContent = originalText;
+            } else {
+                // Update UI with new status
+                currentStatus = nextStatus;
+                saveToStorage("serviceStatus", currentStatus);
+                
+                const label = document.getElementById("current-status-label");
+                if (label) {
+                    label.textContent = currentStatus;
+                }
+                
+                updateStatusButton(statusBtn, currentStatus);
+            }
+        });;
         
         const label = document.getElementById("current-status-label");
         if (label) {
