@@ -73,7 +73,44 @@
 
   <!-- Scripts -->
   <script src="../web/controllers/utils.js"></script>
-  <script src="../web/controllers/home.js"></script>
-</body>
+  <script src="../web/controllers/auth.js"></script>
+  <script src="../web/controllers/main.js"></script>
+  <script>
+    // Restore session if exists
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Check if user is already logged in
+      const session = await auth.checkSession();
+      if (session && session.loggedIn) {
+        // User already authenticated, redirect to profile
+        const role = session.role || 'user';
+        if (role === 'provider') window.location.href = '/providerProfile';
+        else window.location.href = '/userProfile';
+        return;
+      }
 
-</html>
+      // Attach form submit handler
+      const form = document.getElementById('loginForm');
+      if (!form) return;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const btn = form.querySelector('button[type="submit"]');
+        const originalText = btn ? btn.innerText : null;
+        try {
+          if (btn) { btn.disabled = true; btn.innerText = 'Signing in...'; }
+          const data = await auth.loginUser(email, password);
+          // Fetch session to get role
+          const session = await auth.checkSession();
+          const isProvider = session && session.user && session.user.isProvider;
+          if (isProvider) window.location.href = '/providerProfile';
+          else window.location.href = '/userProfile';
+        } catch (err) {
+          alert('Login error: ' + (err.message || err));
+        } finally {
+          if (btn) { btn.disabled = false; if (originalText) btn.innerText = originalText; }
+        }
+      });
+    });
+  </script>
+ </body></html>

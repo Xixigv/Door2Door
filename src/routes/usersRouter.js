@@ -36,7 +36,7 @@ async function auroraQuery(text, params = []) {
   incluyendo el hash de contraseña para verificación.
 */
 async function getUserPasswordFromAurora(email) {
-  const rows = await auroraQuery('SELECT id, email, password, is_provider FROM users WHERE email = $1;', [email]);
+  const rows = await auroraQuery('SELECT id, email, password, isProvider FROM users WHERE email = $1;', [email]);
   return rows[0] || null;
 }
 
@@ -50,7 +50,7 @@ async function getUserPasswordFromAurora(email) {
 */
 async function createUserInAurora({ id, email, password, isProvider = false }) {
   const rows = await auroraQuery(
-    'INSERT INTO users (id, email, password, is_provider, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING id, email, is_provider;',
+    'INSERT INTO users (id, email, password, isProvider, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING id, email, isProvider;',
     [id, email, password, isProvider]
   );
   return rows[0];
@@ -58,15 +58,15 @@ async function createUserInAurora({ id, email, password, isProvider = false }) {
 
 /*
   Actualiza campos permitidos en Aurora:
-  Solo se pueden editar: email, password, is_provider.
+  Solo se pueden editar: email, password, isProvider.
 */
 async function updateUserInAurora(id, fields = {}) {
-  const allowed = ['email', 'password', 'is_provider'];
+  const allowed = ['email', 'password', 'isProvider'];
   const sets = [];
   const params = [];
   let idx = 1;
   for (const [k, v] of Object.entries(fields)) {
-    const key = k === 'isProvider' ? 'is_provider' : k;
+    const key = k === 'isProvider' ? 'isProvider' : k;
     if (!allowed.includes(key)) continue;
     sets.push(`${key} = $${idx}`);
     params.push(v);
@@ -74,7 +74,7 @@ async function updateUserInAurora(id, fields = {}) {
   }
   if (sets.length === 0) return null;
   params.push(id);
-  const q = `UPDATE users SET ${sets.join(', ')}, updated_at = NOW() WHERE id = $${idx} RETURNING id, email, is_provider;`;
+  const q = `UPDATE users SET ${sets.join(', ')}, updated_at = NOW() WHERE id = $${idx} RETURNING id, email, isProvider;`;
   const rows = await auroraQuery(q, params);
   return rows[0] || null;
 }
@@ -187,14 +187,26 @@ async function deleteUserInDynamo(id) {
 }
 
 /*
-  Middleware para autenticar JWT. (Luego lo podemos cambiar a su propio módulo)
-  - Verifica si viene el token en Authorization
+  Middleware para autenticar JWT desde Authorization header o cookie.
+  - Verifica si viene el token en Authorization header o en cookies
   - Si es válido, deja pasar a la siguiente ruta
 */
 function authenticateToken(req, res, next) {
+  let token = null;
+  
+  // Intenta obtener token desde Authorization header
   const auth = req.headers.authorization;
-  if (!auth || !auth.startsWith('Bearer ')) return res.status(401).json({ success: false, error: 'Falta token' });
-  const token = auth.slice(7);
+  if (auth && auth.startsWith('Bearer ')) {
+    token = auth.slice(7);
+  }
+  
+  // Si no está en header, intenta desde cookies
+  if (!token && req.cookies && req.cookies.authToken) {
+    token = req.cookies.authToken;
+  }
+  
+  if (!token) return res.status(401).json({ success: false, error: 'Falta token' });
+  
   try {
     const payload = jwt.verify(token, JWT_SECRET);
     req.user = payload;
@@ -222,10 +234,85 @@ router.get('/', async (req, res) => {
 });
 
 /*
+  Valida la sesión actual (verifica token en cookie o Authorization)
+  - Devuelve { loggedIn: true/false, user: {...}, role: 'user'/'provider' }
+*/
+router.get('/checkSession', authenticateToken, async (req, res) => {
+  try {
+    const user = await getUserPasswordFromAurora(req.user.email);
+    if (!user) {
+      return res.status(401).json({ 
+        success: false, 
+        loggedIn: false, 
+        error: 'Usuario no encontrado' 
+      });
+    }
+    
+    res.json({ 
+      success: true,
+      loggedIn: true,
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        isProvider: Boolean(user.is_provider) 
+      },
+      role: Boolean(user.is_provider) ? 'provider' : 'user'
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, loggedIn: false, error: err.message });
+  }
+});
+
+/*
+  Obtener perfil completo del usuario autenticado.
+  Busca primero en DynamoDB, y si no está, devuelve datos básicos de Aurora.
+*/
+router.get('/profile/me', authenticateToken, async (req, res) => {
+  try {
+    const auroraUser = await getUserPasswordFromAurora(req.user.email);
+    if (!auroraUser) {
+      return res.status(401).json({ 
+        success: false, 
+        error: 'Usuario no encontrado' 
+      });
+    }
+
+    // Intentar obtener perfil completo de DynamoDB
+    let dynamoUser = null;
+    try {
+      dynamoUser = await getUserFromDynamo(auroraUser.id);
+    } catch (e) {
+      // Si no existe en DynamoDB, está bien, usamos solo datos de Aurora
+    }
+
+    const profileData = {
+      id: auroraUser.id,
+      email: auroraUser.email,
+      isProvider: Boolean(auroraUser.is_provider),
+      // Datos de DynamoDB si existen
+      name: dynamoUser?.name || 'User',
+      phone: dynamoUser?.phone || '',
+      location: dynamoUser?.location || '',
+      avatar: dynamoUser?.avatar || '',
+      memberSince: dynamoUser?.memberSince || new Date().toISOString().split('T')[0],
+      totalBookings: dynamoUser?.totalBookings || 0,
+      totalSpent: dynamoUser?.totalSpent || 0
+    };
+
+    res.json({ 
+      success: true, 
+      data: profileData 
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/*
   Autenticación (Login):
   - Verifica usuario en Aurora
   - Compara contraseña usando bcrypt
-  - Si coincide, genera token JWT
+  - Si coincide, genera token JWT y lo envía en cookie httpOnly
 */
 router.post('/login', async (req, res) => {
   const { email, password } = req.body || {};
@@ -238,10 +325,32 @@ router.post('/login', async (req, res) => {
     const tokenPayload = { id: user.id, email: user.email };
     if (user.is_provider !== undefined) tokenPayload.isProvider = Boolean(user.is_provider);
     const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: JWT_EXPIRES });
-    res.json({ success: true, token, user: { id: user.id, email: user.email, isProvider: Boolean(user.is_provider) } });
+    
+    // Enviar token en cookie httpOnly (segura, no accesible por JavaScript)
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // solo HTTPS en producción
+      sameSite: 'Lax',
+      maxAge: 24 * 60 * 60 * 1000 // 24 horas
+    });
+    
+    // También devolver token en la respuesta por compatibilidad (el cliente puede no usarlo)
+    res.json({ 
+      success: true, 
+      token, 
+      user: { id: user.id, email: user.email, isProvider: Boolean(user.is_provider) } 
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
+});
+
+/*
+  Logout: limpia la cookie del token
+*/
+router.post('/logout', (req, res) => {
+  res.clearCookie('authToken');
+  res.json({ success: true, message: 'Sesión cerrada' });
 });
 
 /*
