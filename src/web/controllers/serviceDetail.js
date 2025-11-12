@@ -1,5 +1,4 @@
-function renderServiceDetailPage(service, reviews) {
-    console.log(reviews);
+function renderServiceDetailPage(service) {
     if (!service) {
         return createElement('div', 'container mx-auto px-4 py-6', 'Service not found');
     }
@@ -19,6 +18,7 @@ function renderServiceDetailPage(service, reviews) {
     
     // Left column
     const leftColumn = createElement('div', 'lg:col-span-2 space-y-6');
+    leftColumn.id = 'left-column';
     
     // Service header card
     const headerCard = createCard(null, '');
@@ -147,21 +147,9 @@ function renderServiceDetailPage(service, reviews) {
     
     servicesCard.querySelector('.card-content').appendChild(servicesGrid);
     
-    // Reviews card
-    const reviewsCard = createCard('Customer Reviews', '');
-    const reviewsContainer = createElement('div', 'space-y-6');
-    
-    reviews.forEach(review => {
-        const reviewElement = createReviewCard(review);
-        reviewsContainer.appendChild(reviewElement);
-    });
-    
-    reviewsCard.querySelector('.card-content').appendChild(reviewsContainer);
-    
     leftColumn.appendChild(headerCard);
     leftColumn.appendChild(providerCard);
     leftColumn.appendChild(servicesCard);
-    leftColumn.appendChild(reviewsCard);
     
     // Right column - Booking sidebar
     const rightColumn = createElement('div', 'lg:col-span-1');
@@ -245,6 +233,29 @@ function renderServiceDetailPage(service, reviews) {
     return container;
 }
 
+function renderReviewsSection(reviews) {
+
+    // Reviews card
+    const reviewsCard = createCard('Customer Reviews', '');
+    const reviewsContainer = createElement('div', 'space-y-6');
+    
+    reviews.forEach(async review => {
+        user = await getUserDetail(review.userId);
+        review.user = user.name;
+        review.avatar = user.avatar;
+        const reviewElement = createReviewCard(review);
+        reviewsContainer.appendChild(reviewElement);
+        initializeIcons();
+    });
+    
+    reviewsCard.querySelector('.card-content').appendChild(reviewsContainer);
+
+    // Append reviews card to left column
+    const leftColumn = document.getElementById('left-column');
+    leftColumn.appendChild(reviewsCard);
+
+}
+
 function createReviewCard(review) {
     const container = createElement('div', 'flex space-x-4');
     
@@ -290,22 +301,13 @@ function getService(id) {
     xhr.onload = function() {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
+            const serviceDetailPage = renderServiceDetailPage(response);
+            let main_content = document.getElementById('main-content');
+            main_content.innerHTML = '';
+            main_content.appendChild(serviceDetailPage);
+            localStorage.setItem('provider', response.provider.id);
+            initializeIcons();
             // Load reviews for this provider
-            if (response.provider && response.provider.id) {
-                getReviews({ providerId: response.provider.id, limit: 5 }, (error, reviews) => {
-                    if (error) {
-                        console.error('Failed to load reviews:', error);
-                    } else {
-                        console.log("test");
-                        const serviceDetailPage = renderServiceDetailPage(response, reviews);
-                        let main_content = document.getElementById('main-content');
-                        main_content.innerHTML = '';
-                        main_content.appendChild(serviceDetailPage);
-                        initializeIcons();
-                    }
-                });
-            }
-            
         } else {
             console.error('Request failed. Status:', xhr.status);
         }
@@ -336,31 +338,14 @@ function getReviews(params = {}, callback) {
     xhr.onload = function() {
         if (xhr.status === 200) {
             const reviews = JSON.parse(xhr.responseText);
-
+            
             // Enrich reviews with user data
             let completed = 0;
             const enrichedReviews = [];
-            console.log(reviews);
             if (reviews.length === 0) return callback(null, []);
-            return callback(null, reviews);
             // TODO: enable user data fetching
-            // reviews.forEach((review, index) => {
-            //     getUserDetail(review.userId, (err, user) => {
-            //         if (err) {
-            //             enrichedReviews[index] = review; // Use review as is if user fetch fails
-            //         } else {
-            //             enrichedReviews[index] = {
-            //                 ...review,
-            //                 user: user.name,
-            //                 avatar: user.avatar
-            //             };
-            //         }
-            //         completed++;
-            //         if (completed === reviews.length) {
-            //             callback(null, enrichedReviews);
-            //         }
-            //     });
-            // });
+                
+            return callback(null, reviews);
         } else if (xhr.status === 500) {
             const error = JSON.parse(xhr.responseText);
             callback(error.error, null);
@@ -378,37 +363,47 @@ function getReviews(params = {}, callback) {
 
 
 function getUserDetail(userId, /*authenticateToken,*/ ) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/users/detail/${userId}`, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `/users/detail/${userId}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
 
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            if (response.success) {
-                return response.data;
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    resolve(response.data);
+                } else {
+                    reject(new Error(response.error || 'Failed to get user'));
+                }
+            } else if (xhr.status === 404 || xhr.status === 500) {
+                const response = JSON.parse(xhr.responseText);
+                reject(new Error(response.error || `Error ${xhr.status}`));
             } else {
-                console.error('Failed to get user:', response.error);
+                reject(new Error(`Request failed. Status: ${xhr.status}`));
             }
-        } else if (xhr.status === 404) {
-            const response = JSON.parse(xhr.responseText);
-            console.error('User not found:', response.error);
-        } else if (xhr.status === 500) {
-            const response = JSON.parse(xhr.responseText);
-            console.error('Server error:', response.error);
-        } else {
-            console.error('Request failed. Status:', xhr.status);
-        }
-    };
+        };
 
-    xhr.onerror = function() {
-        console.error('Request error');
-    };
+        xhr.onerror = function() {
+            reject(new Error('Network or request error'));
+        };
 
-    xhr.send();
+        xhr.send();
+    });
 }
+
 
 window.onload = function() {
     const serviceId = localStorage.getItem('service');
     getService(serviceId);
+
+    const providerId = localStorage.getItem('provider');
+    
+    getReviews({ providerId: providerId, limit: 5 }, (error, reviews) => {
+        if (error) {
+            console.error('Failed to load reviews:', error);
+        } else {
+            renderReviewsSection(reviews);
+        }
+    });
 }
