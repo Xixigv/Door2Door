@@ -402,7 +402,8 @@ function setupReviewSection(role, status) {
 
         // Get provider and user IDs from storage
         const providerId = localStorage.getItem('provider');
-        const userId = localStorage.getItem('userId');
+        const user  = localStorage.getItem('currentUser'); // Get logged-in user ID
+        const userId = JSON.parse(user).id;
 
         if (!providerId || !userId) {
             alert("Missing user information. Please try again.");
@@ -435,7 +436,8 @@ function setupReviewSection(role, status) {
 window.onload = function() {
     const serviceId = localStorage.getItem('service');
     const bookingId = localStorage.getItem('booking');
-    const userId = localStorage.getItem('userId');
+    const user  = localStorage.getItem('currentUser'); // Get logged-in user ID
+    const userId = JSON.parse(user).id;
     
     
     if (serviceId) {

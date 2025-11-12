@@ -50,15 +50,15 @@ function updateHeaderWithUserInfo(user) {
     userNav.className = 'user-nav flex items-center space-x-3';
     
     // Avatar con inicial
-    const avatarBtn = document.createElement('button');
-    avatarBtn.className = 'flex items-center space-x-2 px-3 py-2 rounded-md hover:bg-accent';
-    avatarBtn.innerHTML = `
-      <div class="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-semibold">
-        ${user.email ? user.email.charAt(0).toUpperCase() : 'U'}
-      </div>
-      <span class="hidden md:block text-sm font-medium">${user.email || 'User'}</span>
-    `;
-    avatarBtn.addEventListener('click', () => window.location.href = '/userProfile');
+    // const avatarBtn = document.createElement('button');
+    // avatarBtn.className = 'flex items-center space-x-2 px-3 py-2 rounded-md hover:bg-accent';
+    // avatarBtn.innerHTML = `
+    //   <div class="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-semibold">
+    //     ${user.email ? user.email.charAt(0).toUpperCase() : 'U'}
+    //   </div>
+    //   <span class="hidden md:block text-sm font-medium">${user.email || 'User'}</span>
+    // `;
+    // avatarBtn.addEventListener('click', () => window.location.href = '/userProfile');
     
     // Botón Profile
     const profileBtn = document.createElement('button');
@@ -67,14 +67,14 @@ function updateHeaderWithUserInfo(user) {
     profileBtn.addEventListener('click', () => window.location.href = '/userProfile');
     
     // Botón Logout
-    const logoutBtn = document.createElement('button');
-    logoutBtn.className = 'inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-red-600 text-white hover:bg-red-700';
-    logoutBtn.innerHTML = '<i data-lucide="log-out" class="w-4 h-4 md:mr-2"></i><span class="hidden md:block">Logout</span>';
-    logoutBtn.addEventListener('click', () => auth.logout());
+    // const logoutBtn = document.createElement('button');
+    // logoutBtn.className = 'inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-red-600 text-white hover:bg-red-700';
+    // logoutBtn.innerHTML = '<i data-lucide="log-out" class="w-4 h-4 md:mr-2"></i><span class="hidden md:block">Logout</span>';
+    // logoutBtn.addEventListener('click', () => auth.logout());
     
-    userNav.appendChild(avatarBtn);
+    // userNav.appendChild(avatarBtn);
     userNav.appendChild(profileBtn);
-    userNav.appendChild(logoutBtn);
+    // userNav.appendChild(logoutBtn);
     
     // Reemplazar el botón de Login con los nuevos botones
     loginBtn.replaceWith(userNav);
@@ -141,13 +141,9 @@ lucide.createIcons();
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', async () => {
-    initializeApp();
+    // initializeApp();
     await checkAndRestoreSession();
 });
-
-
-
-
 
 // // Export global functions
 // window.AppState = AppState;
@@ -155,45 +151,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 // window.searchServices = searchServices;
 // window.sortSearchResults = sortSearchResults;
 
+// window.onload = async function() {
+//     const response = await fetch('/users/checkSession');
+//     const data = await response.json();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-window.onload = async function() {
-    const response = await fetch('/checkSession');
-    const data = await response.json();
-
-    if (data.loggedIn) {
-        if (data.role === 'provider') {
-            window.location.href = '/providerProfile.html';
-        } else {
-            window.location.href = '/userProfile.html';
-        }
-    }
-};
+//     if (data.loggedIn) {
+//         if (data.role === 'provider') {
+//             window.location.href = '/providerProfile.html';
+//         } else {
+//             window.location.href = '/userProfile.html';
+//         }
+//     }
+// };
