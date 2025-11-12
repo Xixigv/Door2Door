@@ -18,6 +18,7 @@ router.get('/home', (req, res) => res.sendFile(path.resolve(__dirname + "/../web
 router.get('/login', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/login.html")));
 router.get('/register', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/register.html")));
 router.get('/serviceDetail', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/serviceDetail.html")));
+router.get('/serviceDetails', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/serviceDetails.html")));
 router.get('/becomeProvider', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/becomeProvider.html")));
 router.get('/booking', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/booking.html")));
 router.get('/providerProfile', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/providerProfile.html")));
