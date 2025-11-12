@@ -18,16 +18,85 @@ const AppState = {
 // Initialize application
 function initializeApp() {
     initializeIcons();
-    // setupChatPopup();
-    // setupHeaderSearch();
+    console.log('Door2Door app initialized');
+}
+
+// Check session and update header
+async function checkAndRestoreSession() {
+    try {
+        const session = await auth.checkSession();
+        if (session && session.loggedIn && session.user) {
+            AppState.currentUser = session.user;
+            updateHeaderWithUserInfo(session.user);
+        } else {
+            updateHeaderLoggedOut();
+        }
+    } catch (err) {
+        console.warn('Session check failed:', err);
+        updateHeaderLoggedOut();
+    }
+}
+
+function updateHeaderWithUserInfo(user) {
+    const header = document.querySelector('header');
+    if (!header) return;
     
-    // // Load user data from localStorage if available
-    // const savedUser = loadFromStorage('currentUser');
-    // if (savedUser) {
-    //     AppState.currentUser = savedUser;
-    // }
+    // Buscar el botón de Login actual
+    const loginBtn = header.querySelector('button[onclick*="/login"]');
+    if (!loginBtn) return;
     
-    // console.log('Door2Door app initialized');
+    // Crear container para user info
+    const userNav = document.createElement('div');
+    userNav.className = 'user-nav flex items-center space-x-3';
+    
+    // Avatar con inicial
+    const avatarBtn = document.createElement('button');
+    avatarBtn.className = 'flex items-center space-x-2 px-3 py-2 rounded-md hover:bg-accent';
+    avatarBtn.innerHTML = `
+      <div class="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-semibold">
+        ${user.email ? user.email.charAt(0).toUpperCase() : 'U'}
+      </div>
+      <span class="hidden md:block text-sm font-medium">${user.email || 'User'}</span>
+    `;
+    avatarBtn.addEventListener('click', () => window.location.href = '/userProfile');
+    
+    // Botón Profile
+    const profileBtn = document.createElement('button');
+    profileBtn.className = 'inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground';
+    profileBtn.innerHTML = '<i data-lucide="user" class="w-4 h-4 md:mr-2"></i><span class="hidden md:block">Profile</span>';
+    profileBtn.addEventListener('click', () => window.location.href = '/userProfile');
+    
+    // Botón Logout
+    const logoutBtn = document.createElement('button');
+    logoutBtn.className = 'inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-red-600 text-white hover:bg-red-700';
+    logoutBtn.innerHTML = '<i data-lucide="log-out" class="w-4 h-4 md:mr-2"></i><span class="hidden md:block">Logout</span>';
+    logoutBtn.addEventListener('click', () => auth.logout());
+    
+    userNav.appendChild(avatarBtn);
+    userNav.appendChild(profileBtn);
+    userNav.appendChild(logoutBtn);
+    
+    // Reemplazar el botón de Login con los nuevos botones
+    loginBtn.replaceWith(userNav);
+    
+    // Recrear iconos de Lucide
+    lucide.createIcons();
+}
+
+function updateHeaderLoggedOut() {
+    const header = document.querySelector('header');
+    if (!header) return;
+    const userNav = header.querySelector('.user-nav');
+    if (userNav) {
+        // Recrear el botón de Login original
+        const loginBtn = document.createElement('button');
+        loginBtn.onclick = function() { window.location.href='/login'; };
+        loginBtn.className = 'inline-flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground';
+        loginBtn.innerHTML = '<i data-lucide="user" class="w-4 h-4 md:mr-2"></i><span class="hidden md:block">Login</span>';
+        
+        userNav.replaceWith(loginBtn);
+        lucide.createIcons();
+    }
 }
 
 // Setup header search functionality
@@ -70,8 +139,11 @@ window.addEventListener('error', (e) => {
 
 lucide.createIcons();
 
-// // Initialize app when DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeApp);
+// Initialize app when DOM is loaded
+document.addEventListener('DOMContentLoaded', async () => {
+    initializeApp();
+    await checkAndRestoreSession();
+});
 
 
 
