@@ -1,4 +1,5 @@
-function renderServiceDetailPage(service) {
+function renderServiceDetailPage(service, reviews) {
+    console.log(reviews);
     if (!service) {
         return createElement('div', 'container mx-auto px-4 py-6', 'Service not found');
     }
@@ -7,7 +8,6 @@ function renderServiceDetailPage(service) {
     const mainContainer = createElement('div', 'container mx-auto px-4 py-6');
     
     // Back button
-    // ToDo: replace with navigateTo function
     const backButton = createElement('button', 'inline-flex items-center text-muted-foreground hover:text-foreground mb-6');
     backButton.addEventListener('click', () => {
         window.location.href = '/';
@@ -147,22 +147,21 @@ function renderServiceDetailPage(service) {
     
     servicesCard.querySelector('.card-content').appendChild(servicesGrid);
     
-    // ToDo add reviews ednpoint
     // Reviews card
-    // const reviewsCard = createCard('Customer Reviews', '');
-    // const reviewsContainer = createElement('div', 'space-y-6');
+    const reviewsCard = createCard('Customer Reviews', '');
+    const reviewsContainer = createElement('div', 'space-y-6');
     
-    // REVIEWS.forEach(review => {
-    //     const reviewElement = createReviewCard(review);
-    //     reviewsContainer.appendChild(reviewElement);
-    // });
+    reviews.forEach(review => {
+        const reviewElement = createReviewCard(review);
+        reviewsContainer.appendChild(reviewElement);
+    });
     
-    // reviewsCard.querySelector('.card-content').appendChild(reviewsContainer);
+    reviewsCard.querySelector('.card-content').appendChild(reviewsContainer);
     
     leftColumn.appendChild(headerCard);
     leftColumn.appendChild(providerCard);
     leftColumn.appendChild(servicesCard);
-    // leftColumn.appendChild(reviewsCard);
+    leftColumn.appendChild(reviewsCard);
     
     // Right column - Booking sidebar
     const rightColumn = createElement('div', 'lg:col-span-1');
@@ -246,9 +245,42 @@ function renderServiceDetailPage(service) {
     return container;
 }
 
-function getService(id)
-{
+function createReviewCard(review) {
+    const container = createElement('div', 'flex space-x-4');
+    
+    const avatar = createAvatar(review.avatar, review.user, 'avatar');
+    
+    const content = createElement('div', 'flex-1');
+    
+    const header = createElement('div', 'flex items-center space-x-2 mb-2');
+    const userName = createElement('span', 'font-medium', review.user);
+    const ratingContainer = createElement('div', 'flex items-center');
+    
+    for (let i = 1; i <= 5; i++) {
+        const star = createIcon('star', 
+            `w-4 h-4 ${i <= review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`
+        );
+        ratingContainer.appendChild(star);
+    }
+    
+    const date = createElement('span', 'text-sm text-muted-foreground', review.date);
+    
+    header.appendChild(userName);
+    header.appendChild(ratingContainer);
+    header.appendChild(date);
+    
+    const comment = createElement('p', 'text-muted-foreground', review.comment);
+    
+    content.appendChild(header);
+    content.appendChild(comment);
+    
+    container.appendChild(avatar);
+    container.appendChild(content);
+    
+    return container;
+}
 
+function getService(id) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `/services/${id}`, true);
 
@@ -258,12 +290,112 @@ function getService(id)
     xhr.onload = function() {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
-            const serviceDetailPage = renderServiceDetailPage(response);
-            let main_content = document.getElementById('main-content');
-            main_content.innerHTML = '';
-            main_content.appendChild(serviceDetailPage);
-            lucide.createIcons();
+            // Load reviews for this provider
+            if (response.provider && response.provider.id) {
+                getReviews({ providerId: response.provider.id, limit: 5 }, (error, reviews) => {
+                    if (error) {
+                        console.error('Failed to load reviews:', error);
+                    } else {
+                        console.log("test");
+                        const serviceDetailPage = renderServiceDetailPage(response, reviews);
+                        let main_content = document.getElementById('main-content');
+                        main_content.innerHTML = '';
+                        main_content.appendChild(serviceDetailPage);
+                        initializeIcons();
+                    }
+                });
+            }
+            
+        } else {
+            console.error('Request failed. Status:', xhr.status);
+        }
+    };
 
+    xhr.onerror = function() {
+        console.error('Request error');
+    };
+
+    xhr.send();
+}
+
+function getReviews(params = {}, callback) {
+    const xhr = new XMLHttpRequest();
+    
+    // Build query string
+    const queryParams = new URLSearchParams();
+    if (params.providerId) queryParams.append('providerId', params.providerId);
+    if (params.userId) queryParams.append('userId', params.userId);
+    if (params.minRating) queryParams.append('minRating', params.minRating);
+    if (params.limit) queryParams.append('limit', params.limit);
+    
+    const url = `/reviews${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+    
+    xhr.open('GET', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const reviews = JSON.parse(xhr.responseText);
+
+            // Enrich reviews with user data
+            let completed = 0;
+            const enrichedReviews = [];
+            console.log(reviews);
+            if (reviews.length === 0) return callback(null, []);
+            return callback(null, reviews);
+            // TODO: enable user data fetching
+            // reviews.forEach((review, index) => {
+            //     getUserDetail(review.userId, (err, user) => {
+            //         if (err) {
+            //             enrichedReviews[index] = review; // Use review as is if user fetch fails
+            //         } else {
+            //             enrichedReviews[index] = {
+            //                 ...review,
+            //                 user: user.name,
+            //                 avatar: user.avatar
+            //             };
+            //         }
+            //         completed++;
+            //         if (completed === reviews.length) {
+            //             callback(null, enrichedReviews);
+            //         }
+            //     });
+            // });
+        } else if (xhr.status === 500) {
+            const error = JSON.parse(xhr.responseText);
+            callback(error.error, null);
+        } else {
+            callback('Request failed', null);
+        }
+    };
+
+    xhr.onerror = function() {
+        callback('Network error', null);
+    };
+
+    xhr.send();
+}
+
+
+function getUserDetail(userId, /*authenticateToken,*/ ) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `/users/detail/${userId}`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            if (response.success) {
+                return response.data;
+            } else {
+                console.error('Failed to get user:', response.error);
+            }
+        } else if (xhr.status === 404) {
+            const response = JSON.parse(xhr.responseText);
+            console.error('User not found:', response.error);
+        } else if (xhr.status === 500) {
+            const response = JSON.parse(xhr.responseText);
+            console.error('Server error:', response.error);
         } else {
             console.error('Request failed. Status:', xhr.status);
         }

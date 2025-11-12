@@ -420,12 +420,6 @@ function setupReviewSection(role, status) {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Review';
             } else {
-                // Save review locally for reference
-                saveToStorage("clientReview", {
-                    rating,
-                    comment,
-                    date: formatDate(new Date())
-                });
 
                 if (confirmation) {
                     confirmation.classList.remove("hidden");

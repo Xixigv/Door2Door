@@ -7,40 +7,6 @@
 
 
 // Review Component
-function createReviewCard(review) {
-    const container = createElement('div', 'flex space-x-4');
-    
-    const avatar = createAvatar(review.avatar, review.user, 'avatar');
-    
-    const content = createElement('div', 'flex-1');
-    
-    const header = createElement('div', 'flex items-center space-x-2 mb-2');
-    const userName = createElement('span', 'font-medium', review.user);
-    const ratingContainer = createElement('div', 'flex items-center');
-    
-    for (let i = 1; i <= 5; i++) {
-        const star = createIcon('star', 
-            `w-4 h-4 ${i <= review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`
-        );
-        ratingContainer.appendChild(star);
-    }
-    
-    const date = createElement('span', 'text-sm text-muted-foreground', review.date);
-    
-    header.appendChild(userName);
-    header.appendChild(ratingContainer);
-    header.appendChild(date);
-    
-    const comment = createElement('p', 'text-muted-foreground', review.comment);
-    
-    content.appendChild(header);
-    content.appendChild(comment);
-    
-    container.appendChild(avatar);
-    container.appendChild(content);
-    
-    return container;
-}
 
 // Booking History Item Component
 function createBookingHistoryItem(booking) {

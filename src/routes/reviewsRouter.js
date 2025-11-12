@@ -86,7 +86,7 @@ router.get('/', async (req, res) => {
       data = await dynamoDB.send(new ddb.QueryCommand({
         TableName: TABLE, IndexName: 'providerId-index',
         KeyConditionExpression: 'providerId = :p',
-        ExpressionAttributeValues: { ':p': { S: String(providerId) } },
+        ExpressionAttributeValues: { ':p': { N: providerId } },
         Limit: Math.min(parseInt(limit), 200) || 50
       }));
     } else if (userId) {
