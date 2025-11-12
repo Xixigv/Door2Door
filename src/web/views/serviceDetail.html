@@ -47,51 +47,65 @@
     </header>
 
     <main class="container mx-auto mt-8 p-4">
-    <div class="card">
-      <div class="card-header">
-        <h2 class="card-title">Upcoming Service Details</h2>
+      <div class="card bg-white shadow-sm rounded-2xl border border-gray-200">
+        <div class="card-header">
+          <h2 class="card-title text-xl font-semibold">Service Details</h2>
+        </div>
+
+        <div class="card-content space-y-4 px-6 py-4">
+          <!-- Cliente -->
+          <div id="client-info" class="flex items-center space-x-4 hidden">
+            <img id="client-img"
+              src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=100&h=100&fit=crop"
+              alt="Client" class="rounded-lg w-20 h-20 object-cover">
+            <div>
+              <h3 class="text-lg font-medium">Client: <span id="client-name">Ana Lopez</span></h3>
+              <p class="text-sm text-gray-500">Address: <span id="client-address">Av. Central #123</span></p>
+              <p class="text-sm text-gray-500">Telephone: <span id="client-phone">+52 55 1234 5678</span></p>
+            </div>
+          </div>
+
+          <!-- Detalles del servicio -->
+          <div id="service-details" class="space-y-4">
+            <!-- Inyectado desde JS -->
+          </div>
+
+          <!-- Sección de estado -->
+          <div id="status-section" class="space-y-4"></div>
+
+          <!-- Sección de review -->
+          <div id="review-section" class="hidden space-y-3 border-t pt-4">
+            <h4 class="font-medium text-lg">Leave a Review</h4>
+            <label class="block text-sm font-medium text-gray-700">Rating:</label>
+            <select id="review-rating"
+              class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:ring focus:ring-blue-200">
+              <option value="">Select a rating</option>
+              <option value="5">★★★★★ Excellent</option>
+              <option value="4">★★★★☆ Good</option>
+              <option value="3">★★★☆☆ Average</option>
+              <option value="2">★★☆☆☆ Poor</option>
+              <option value="1">★☆☆☆☆ Terrible</option>
+            </select>
+
+            <label class="block text-sm font-medium text-gray-700">Comments:</label>
+            <textarea id="review-comment" rows="3"
+              class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:ring focus:ring-blue-200"
+              placeholder="Write your experience..."></textarea>
+
+            <button id="submit-review" class="btn btn-primary w-full">Submit Review</button>
+
+            <p id="review-confirmation" class="text-green-600 text-sm hidden">✅ Thank you! Your review has been submitted.</p>
+          </div>
+        </div>
       </div>
-      <div class="card-content space-y-4">
-        
-        <!-- Cliente -->
-        <div class="flex items-center space-x-4">
-          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=100&h=100&fit=crop"
-               alt="Cliente" class="rounded-lg" width="80" height="80">
-          <div>
-            <h3 class="text-lg font-medium">Cilent: <span id="client-name">Ana Lopez</span></h3>
-            <p class="text-sm text-muted-foreground">Address: <span id="client-address">Av. Central #123</span></p>
-            <p class="text-sm text-muted-foreground">Telephone number: <span id="client-phone">+52 55 1234 5678</span></p>
-          </div>
-        </div>
+    </main>
+  </div>
 
-       
-        <div>
-          <h4 class="font-medium">Service:</h4>
-          <p id="service-name">General cleaning</p>
-        </div>
 
-     
-        <div>
-          <h4 class="font-medium">Date and Time:</h4>
-          <p id="service-date">12 november 2025, 10:00 AM</p>
-        </div>
+    
+  </div>
 
-        <div class="select w-full">
-          <div class="select-trigger" id="statusSelectTrigger">
-            Status: <span id="current-status-label" class="ml-2 text-foreground font-medium">Booked</span>
-          </div>
-          <div class="select-content" id="statusOptions">
-            <div class="select-item" data-status="Booked">Booked</div>
-            <div class="select-item" data-status="In Progress">In Progress</div>
-            <div class="select-item" data-status="Finalized">Finalized</div>
-          </div>
-        </div>
 
-        
-        <button id="status-btn" class="btn btn-primary w-full">Start service</button>
-      </div>
-    </div>
-  </main>
 
 
   <!-- Scripts -->

@@ -283,48 +283,189 @@ window.onload = function() {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
-  const statusTrigger = document.getElementById("statusSelectTrigger");
-  const statusOptions = document.getElementById("statusOptions");
-  const currentStatusLabel = document.getElementById("current-status-label");
+  // --- Datos de ejemplo ---
+  const services = [
+    {
+      id: 1,
+      name: "Premium Plumbing Services",
+      category: "Plumbing",
+      shortDescription: "Professional plumbing services",
+      image:
+        "https://images.unsplash.com/photo-1635221798248-8a3452ad07cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      pricing: { hourlyRate: 75, serviceCall: 45 },
+      description:
+        "Professional plumbing services including leak repairs, pipe installation, drain cleaning, and emergency services. Licensed and insured with 8+ years of experience.",
+      services: [
+        "Leak Detection & Repair",
+        "Pipe Installation",
+        "Drain Cleaning",
+        "Water Heater Service",
+        "Emergency Plumbing",
+        "Fixture Installation",
+      ],
+      location: "Downtown Area",
+      distance: "2.3 miles away",
+    },
+    {
+      id: 2,
+      name: "Expert Carpentry Solutions",
+      category: "Carpentry",
+      shortDescription: "Custom woodwork and repairs",
+      image:
+        "https://images.unsplash.com/photo-1638718260002-18bdc8082608?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      pricing: { hourlyRate: 85, serviceCall: 60 },
+      description:
+        "Custom carpentry and woodworking services for residential and commercial projects. Specializing in cabinetry, trim work, and furniture restoration with 12+ years of master craftsmanship.",
+      services: [
+        "Custom Cabinetry",
+        "Trim & Molding",
+        "Door Installation",
+        "Deck Building",
+        "Furniture Repair",
+        "Built-in Shelving",
+      ],
+      location: "Westside",
+      distance: "3.7 miles away",
+    },
+  ];
+
+  // --- Simulación del rol y servicio ---
+  const role = localStorage.getItem("role") || "provider"; // "provider" o "client"
+  const serviceId = parseInt(localStorage.getItem("service")) || 1;
+  const currentStatus = localStorage.getItem("serviceStatus") || "Booked";
+  const service = services.find((s) => s.id === serviceId);
+
+  if (!service) return;
+
+  renderServiceDetails(service);
+  setupStatusSection(role, currentStatus);
+  setupReviewSection(role, currentStatus);
+
+  if (role === "provider") document.getElementById("client-info").classList.remove("hidden");
+
+  lucide.createIcons();
+});
+
+function renderServiceDetails(service) {
+  const container = document.getElementById("service-details");
+  container.innerHTML = `
+    <div class="flex items-center space-x-4">
+      <img src="${service.image}" alt="${service.name}" class="w-24 h-24 rounded-lg object-cover">
+      <div>
+        <h3 class="text-xl font-semibold">${service.name}</h3>
+        <p class="text-sm text-gray-500">${service.category}</p>
+        <p class="text-sm text-gray-500">${service.location} • ${service.distance}</p>
+      </div>
+    </div>
+
+    <div>
+      <h4 class="font-medium">Description:</h4>
+      <p class="text-sm text-gray-700">${service.description}</p>
+    </div>
+
+    <div>
+      <h4 class="font-medium">Services Included:</h4>
+      <ul class="list-disc list-inside text-sm text-gray-700">
+        ${service.services.map((item) => `<li>${item}</li>`).join("")}
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="font-medium">Pricing:</h4>
+      <p class="text-sm text-gray-700">$${service.pricing.hourlyRate}/hr + $${service.pricing.serviceCall} Service Call</p>
+    </div>
+  `;
+}
+
+// --------- SECCIÓN DE ESTADO (PROVEEDOR) ---------
+function setupStatusSection(role, status) {
+  const section = document.getElementById("status-section");
+
+  if (role !== "provider") return;
+
+  section.innerHTML = `
+    <p class="text-sm mb-2">Status: <span id="current-status-label" class="font-medium">${status}</span></p>
+    <button id="status-btn" class="btn btn-primary w-full">Start Service</button>
+  `;
+
+  const statusLabel = document.getElementById("current-status-label");
   const statusBtn = document.getElementById("status-btn");
 
-  if (!statusTrigger || !statusOptions || !currentStatusLabel || !statusBtn) return;
+  updateStatusButton(statusBtn, status);
 
-  let currentStatus = currentStatusLabel.textContent.trim();
+  statusBtn.addEventListener("click", () => {
+    if (status === "Booked") status = "In Progress";
+    else if (status === "In Progress") status = "Finalized";
 
-  statusTrigger.addEventListener("click", () => {
-    statusOptions.classList.toggle("show");
+    localStorage.setItem("serviceStatus", status);
+    statusLabel.textContent = status;
+    updateStatusButton(statusBtn, status);
   });
+}
 
-  statusOptions.querySelectorAll(".select-item").forEach(item => {
-    item.addEventListener("click", () => {
-      currentStatus = item.getAttribute("data-status");
-      currentStatusLabel.textContent = currentStatus;
+function updateStatusButton(btn, status) {
+  switch (status) {
+    case "Booked":
+      btn.textContent = "Start Service";
+      btn.className = "btn btn-primary w-full";
+      btn.disabled = false;
+      break;
+    case "In Progress":
+      btn.textContent = "Mark as Finalized";
+      btn.className = "btn bg-yellow-500 text-white w-full";
+      btn.disabled = false;
+      break;
+    case "Finalized":
+      btn.textContent = "Service Completed";
+      btn.className = "btn bg-green-600 text-white w-full";
+      btn.disabled = true;
+      break;
+  }
+}
 
-      switch (currentStatus.toLowerCase()) {
-        case "booked":
-          statusBtn.textContent = "Start Service";
-          statusBtn.className = "btn btn-primary w-full";
-          break;
-        case "in progress":
-          statusBtn.textContent = "Mark as Finalized";
-          statusBtn.className = "btn bg-yellow-500 text-white w-full";
-          break;
-        case "finalized":
-          statusBtn.textContent = "Service Completed";
-          statusBtn.className = "btn bg-green-600 text-white w-full";
-          statusBtn.disabled = true;
-          break;
-      }
+// --------- SECCIÓN DE REVIEW (CLIENTE) ---------
+function setupReviewSection(role, status) {
+  if (role !== "client") return;
 
-      statusOptions.classList.remove("show");
-    });
-  });
+  const reviewSection = document.getElementById("review-section");
+  if (status !== "Finalized") return;
 
-  document.addEventListener("click", (e) => {
-    if (!statusTrigger.contains(e.target) && !statusOptions.contains(e.target)) {
-      statusOptions.classList.remove("show");
+  reviewSection.classList.remove("hidden");
+
+  const submitBtn = document.getElementById("submit-review");
+  const confirmation = document.getElementById("review-confirmation");
+
+  submitBtn.addEventListener("click", () => {
+    const rating = document.getElementById("review-rating").value;
+    const comment = document.getElementById("review-comment").value.trim();
+
+    if (!rating || !comment) {
+      alert("Please provide both a rating and a comment.");
+      return;
     }
+
+    const review = { rating, comment, date: new Date().toLocaleDateString() };
+    localStorage.setItem("clientReview", JSON.stringify(review));
+
+    confirmation.classList.remove("hidden");
+    submitBtn.disabled = true;
   });
-});
+}
