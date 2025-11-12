@@ -73,8 +73,55 @@ lucide.createIcons();
 // // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeApp);
 
+
+
+
+
 // // Export global functions
 // window.AppState = AppState;
 // window.navigateToRoute = navigateToRoute;
 // window.searchServices = searchServices;
 // window.sortSearchResults = sortSearchResults;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+window.onload = async function() {
+    const response = await fetch('/checkSession');
+    const data = await response.json();
+
+    if (data.loggedIn) {
+        if (data.role === 'provider') {
+            window.location.href = '/providerProfile.html';
+        } else {
+            window.location.href = '/userProfile.html';
+        }
+    }
+};
