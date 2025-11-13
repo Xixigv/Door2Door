@@ -288,7 +288,7 @@ router.get('/profile/me', authenticateToken, async (req, res) => {
     const profileData = {
       id: auroraUser.id,
       email: auroraUser.email,
-      isProvider: Boolean(auroraUser.is_provider),
+      isProvider: Boolean(auroraUser.isprovider),
       // Datos de DynamoDB si existen
       name: dynamoUser?.name || 'User',
       phone: dynamoUser?.phone || '',

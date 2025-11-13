@@ -11,9 +11,9 @@ function getService(id) {
             localStorage.setItem('providerId', service.providerId);
             renderServiceDetails(service);
 
-            const role = localStorage.getItem('role');
+            const isProvider = getCurrentUser().isProvider;
             
-            if (role === 'provider') {
+            if (isProvider) {
                 const clientInfo = document.getElementById('client-info');
                 if (clientInfo) {
                     clientInfo.classList.remove('hidden');
@@ -42,11 +42,11 @@ function getBooking(id) {
     xhr.onload = function() {
         if (xhr.status === 200) {
             const booking = JSON.parse(xhr.responseText);
-            const role = localStorage.getItem('role');
-            setupStatusSection(role, booking.status);
-            setupReviewSection(role, booking.status);
+            const isProvider = getCurrentUser().isProvider; // Get logged-in user ID
+            setupStatusSection(isProvider, booking.status);
+            setupReviewSection(isProvider, booking.status);
             
-            if (role === 'provider') {
+            if (isProvider) {
                 const clientInfo = document.getElementById('client-info');
                 if (clientInfo) {
                     clientInfo.classList.remove('hidden');
@@ -286,9 +286,9 @@ function renderServiceDetails(service) {
     container.appendChild(pricingSection);
 }
 
-function setupStatusSection(role, status) {
+function setupStatusSection(isProvider, status) {
     const section = document.getElementById("status-section");
-    if (!section || role !== "provider") return;
+    if (!section || !isProvider) return;
 
     section.innerHTML = '';
 
@@ -373,8 +373,8 @@ function updateStatusButton(btn, status) {
     }
 }
 
-function setupReviewSection(role, status) {
-    if (role !== "client") return;
+function setupReviewSection(isProvider, status) {
+    if (isProvider) return;
 
     const reviewSection = document.getElementById("review-section");
     if (!reviewSection || status !== "Completed") return;
@@ -402,10 +402,9 @@ function setupReviewSection(role, status) {
 
         // Get provider and user IDs from storage
         const providerId = localStorage.getItem('provider');
-        const user  = localStorage.getItem('currentUser'); // Get logged-in user ID
-        const userId = JSON.parse(user).id;
+        const id  = getCurrentUser().id; // Get logged-in user ID
 
-        if (!providerId || !userId) {
+        if (!providerId || !id) {
             alert("Missing user information. Please try again.");
             return;
         }
@@ -415,7 +414,7 @@ function setupReviewSection(role, status) {
         submitBtn.textContent = 'Submitting...';
 
         // Post the review
-        postReview(providerId, userId, rating, comment, (error, review) => {
+        postReview(providerId, id, rating, comment, (error, review) => {
             if (error) {
                 alert(`Failed to submit review: ${error}`);
                 submitBtn.disabled = false;
@@ -436,9 +435,7 @@ function setupReviewSection(role, status) {
 window.onload = function() {
     const serviceId = localStorage.getItem('service');
     const bookingId = localStorage.getItem('booking');
-    const user  = localStorage.getItem('currentUser'); // Get logged-in user ID
-    const userId = JSON.parse(user).id;
-    
+    const id  = getCurrentUser().id; // Get logged-in user ID    
     
     if (serviceId) {
         getService(serviceId);
@@ -452,7 +449,7 @@ window.onload = function() {
         console.error('No booking ID found in storage');
     }
 
-    if (userId) {
+    if (id) {
         getUserDetail(userId);
     } else {
         console.error('No user ID found in storage');

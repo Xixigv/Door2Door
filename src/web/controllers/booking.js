@@ -438,8 +438,7 @@ function renderCalendarPage(provider) {
         confirmBtn.disabled = true;
         confirmBtn.textContent = 'Creating booking...';
         
-        const user  = localStorage.getItem('currentUser'); // Get logged-in user ID
-        const userId = JSON.parse(user).id;
+        const userId  = getCurrentUser().id; // Get logged-in user ID
         const total = (bookingState.serviceCallFee + (bookingState.selectedService.hours * provider.hourlyRate)).toFixed(2);
         
         // Prepare booking data for API
