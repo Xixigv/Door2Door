@@ -28,6 +28,7 @@ router.get('/search', (req, res) => res.sendFile(path.resolve(__dirname + "/../w
 router.get('/userProfile', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/userProfile.html")));
 router.get('/payment', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/payment.html")));
 router.get('/providerProfileView', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/providerProfileView.html")));
+router.get('/chatPage', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/chatPage.html")));
 
 
 //Future pages

@@ -110,15 +110,54 @@ function renderServiceDetailPage(service) {
     
     const messageBtn = createButton(
         '<i data-lucide="message-square" class="w-4 h-4 mr-2"></i>Message',
-        null,
+        () => {
+            window.location.href = '/chatPage';
+        },
         'btn btn-outline btn-sm'
     );
     
-    const callBtn = createButton(
+ const callBtn = createButton(
         '<i data-lucide="phone" class="w-4 h-4 mr-2"></i>Call',
-        null,
+        () => {
+            if (!user.phone) {
+            alert('Phone number not available.');
+            return;
+            }
+
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+
+            // Create modal
+            const modal = document.createElement('div');
+            modal.className = 'bg-white rounded-lg shadow-lg p-6 w-80 text-center';
+            modal.innerHTML = `
+            <h2 class="text-lg font-semibold mb-2">Call this number</h2>
+            <p class="text-xl font-bold mb-4">${user.phone}</p>
+            <div class="flex justify-center space-x-3">
+                <button id="cancelCall" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+                <button id="confirmCall" class="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">Call</button>
+            </div>
+            `;
+
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+
+            // Handle buttons
+            document.getElementById('cancelCall').onclick = () => overlay.remove();
+            document.getElementById('confirmCall').onclick = () => {
+            window.location.href = `tel:${user.phone}`;
+            overlay.remove();
+            };
+        },
         'btn btn-outline btn-sm'
     );
+
+
+
+
+
+
     
     actionButtons.appendChild(viewProfileBtn);
     actionButtons.appendChild(messageBtn);
@@ -188,13 +227,19 @@ function renderServiceDetailPage(service) {
         },
         'btn btn-primary w-full btn-lg mb-3'
     );
+
+
     
     const quoteBtn = createButton(
         '<i data-lucide="message-square" class="w-4 h-4 mr-2"></i>Get Quote',
-        null,
+        () => {
+            window.location.href = '/chatPage';
+        },
         'btn btn-outline w-full mb-4'
     );
     
+
+
     const guarantees = createElement('div', 'pt-4 border-t');
     const guaranteeTitle = createElement('h4', 'font-medium mb-2', 'Satisfaction Guaranteed');
     const guaranteeList = createElement('ul', 'text-sm text-muted-foreground space-y-1');
