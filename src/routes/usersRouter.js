@@ -254,9 +254,9 @@ router.get('/checkSession', authenticateToken, async (req, res) => {
       user: { 
         id: user.id, 
         email: user.email, 
-        isProvider: Boolean(user.is_provider) 
+        isProvider: Boolean(user.isprovider) 
       },
-      role: Boolean(user.is_provider) ? 'provider' : 'user'
+      role: Boolean(user.isprovider) ? 'provider' : 'user'
     });
   } catch (err) {
     res.status(500).json({ success: false, loggedIn: false, error: err.message });
