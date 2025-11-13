@@ -323,7 +323,7 @@ router.post('/login', async (req, res) => {
     const match = await bcrypt.compare(password, user.password || '');
     if (!match) return res.status(401).json({ success: false, error: 'Credenciales inválidas' });
     const tokenPayload = { id: user.id, email: user.email };
-    if (user.is_provider !== undefined) tokenPayload.isProvider = Boolean(user.is_provider);
+    if (user.isprovider !== undefined) tokenPayload.isProvider = Boolean(user.isprovider);
     const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: JWT_EXPIRES });
     
     // Enviar token en cookie httpOnly (segura, no accesible por JavaScript)
@@ -338,7 +338,7 @@ router.post('/login', async (req, res) => {
     res.json({ 
       success: true, 
       token, 
-      user: { id: user.id, email: user.email, isProvider: Boolean(user.is_provider) } 
+      user: { id: user.id, email: user.email, isProvider: Boolean(user.isprovider) } 
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
