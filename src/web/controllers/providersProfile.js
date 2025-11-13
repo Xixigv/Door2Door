@@ -75,7 +75,7 @@ function renderProviderProfile(provider) {
         'btn btn-outline btn-sm'
     );
     
-    const user = { phone: provider.phone };
+
     const callBtn = createButton(
         '<i data-lucide="phone" class="w-4 h-4 mr-2"></i>Call',
         () => {
