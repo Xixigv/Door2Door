@@ -151,7 +151,6 @@ function renderUserProfile(user) {
 }
 
 // Función para cargar datos del perfil del usuario
-// Función para cargar datos del perfil del usuario
 async function loadUserProfile() {
   try {
     // Hacer fetch al endpoint /users/profile/me
@@ -402,61 +401,54 @@ async function loadBookedServicesTab(userId) {
     container.innerHTML = '<p class="text-muted-foreground text-center py-8">Loading...</p>';
     
     try {        
-        // SIEMPRE cargar donde él es el CLIENTE (userId)
-        const endpoint = `/bookings/user/${userId}`;
+        // Cargar bookings donde el usuario es el PROVEEDOR
+        const endpoint = `/bookings/provider/${userId}`;
         
-        // Cargar todo en paralelo
-        const [bookingsResponse, historyResponse, servicesResponse] = await Promise.all([
-            fetch(endpoint, {
-                method: 'GET',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' }
-            }),
-            fetch('/data/bookingHistory.json'),
-            fetch('/data/serviceDetails.json')
-        ]);
-        
-        if (!bookingsResponse.ok) throw new Error('Error loading booked services');
-        
-        const result = await bookingsResponse.json();
-        let bookings = result.data || [];
-        
-        // Procesar historial
-        if (historyResponse.ok) {
-            const historyData = await historyResponse.json();
+        const bookings = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', endpoint, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
             
-            // FILTRAR POR USER ID - servicios que él ha reservado como cliente
-            const historyBookings = historyData.filter(booking => {
-                return booking.userId === userId;
-            });
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        const data = JSON.parse(xhr.responseText);
+                        resolve(data);
+                    } catch (e) {
+                        reject(new Error('Invalid JSON response'));
+                    }
+                } else {
+                    reject(new Error('Error loading booked services'));
+                }
+            };
             
-            bookings = [...bookings, ...historyBookings];
-        }
-        
-        // Cargar detalles de servicios
-        let servicesData = [];
-        if (servicesResponse.ok) {
-            servicesData = await servicesResponse.json();
-        }
+            xhr.onerror = function() {
+                reject(new Error('Network error'));
+            };
+            
+            xhr.send();
+        });
         
         container.innerHTML = '';
         
         if (bookings.length === 0) {
             const emptyMsg = createElement('p', 'text-muted-foreground text-center py-8', 
-                'You haven\'t booked any services yet.');
+                'No services booked by clients yet.');
             container.appendChild(emptyMsg);
             return;
         }
         
+        // Ordenar por fecha (más recientes primero)
         bookings.sort((a, b) => new Date(b.date) - new Date(a.date));
         
-        // Crear todas las tarjetas con los datos de servicios ya cargados
-        // FALSE para indicar que NO es vista de provider (es vista de cliente)
-        // ToDo: optimizar búsqueda de detalles de servicios
-        // bookings.forEach(booking => {
-        //     const card = createBookingCardSync(booking, false, servicesData, userId);
-        //     container.appendChild(card);
-        // });
+        // Crear las tarjetas de booking
+        bookings.forEach(async booking => {
+            // Cargar detalles del servicio del proveedor (que es el userId actual)
+            let serviceData = await fetchServiceDetails(userId);
+            // TRUE porque es vista de provider (servicios que otros reservaron con él)
+            const card = createBookingCardSync(booking, true, serviceData, userId);
+            container.appendChild(card);
+        });
         
         initializeIcons();
     } catch (error) {
