@@ -75,6 +75,10 @@ GET http://localhost:3000/users/checkSession HTTP/1.1
 Content-Type: application/json
 
 ### Get booking details
-GET http://localhost:3000/localhost:3000/bookings?userId=HTTP/1.1
+GET http://localhost:3000/bookings/user/1 HTTP/1.1
+content-type: application/json
+
+### Get provider services
+GET http://localhost:3000/services/provider/1 HTTP/1.1
 content-type: application/json
 

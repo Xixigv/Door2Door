@@ -138,6 +138,31 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.get('/provider/:providerId', async (req, res) => {
+    try {
+        const providerId = parseInt(req.params.providerId);
+        
+        const command = new dynamoClient.ScanCommand({
+            TableName: TABLE_NAME,
+        });
+
+        const data = await dynamoDB.send(command);
+
+        // Filtrar servicios donde el provider.id coincide
+        const providerServices = data.Items
+            .map(item => unmarshall(item))
+            .filter(service => service.provider?.id === providerId);
+
+        if (providerServices.length === 0) {
+            return res.json([]); // Devolver array vacío si no hay servicios
+        }
+
+        res.json(providerServices);
+    } catch (err) {
+        console.error("Couldn't retrieve services for provider:", err);
+        res.status(500).json({ error: "Couldn't retrieve services for provider" });
+    }
+});
 
 
 module.exports = router;
