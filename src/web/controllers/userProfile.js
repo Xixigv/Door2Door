@@ -90,7 +90,7 @@ function renderUserProfile(user) {
     bookingsContent.id = 'tab-bookings';
     const bookingsGrid = createElement('div', 'grid grid-cols-1 lg:grid-cols-2 gap-6');
 
-    const recentBookingsCard = createCard('Recent Bookings', '');
+    const recentBookingsCard = createCard('Your Bookings', '');
     const bookingsContainer = createElement('div', 'space-y-4');
     bookingsContainer.id = 'bookings-list';
 
@@ -103,6 +103,7 @@ function renderUserProfile(user) {
     const actionsContainer = createElement('div', 'space-y-3');
 
     const action = { icon: 'calendar', text: 'Book New Service', href: '/search' };
+    
 
     const actionBtn = createButton(
         `<i data-lucide="${action.icon}" class="w-4 h-4 mr-2"></i>${action.text}`,
@@ -125,7 +126,7 @@ function renderUserProfile(user) {
     const bookedServicesContent = createElement('div', 'tabs-content');
     bookedServicesContent.id = 'tab-booked-services';
 
-    const bookedServicesCard = createCard('Services You Booked', '');
+    const bookedServicesCard = createCard('Services That Booked You', '');
     const bookedServicesContainer = createElement('div', 'space-y-4');
     bookedServicesContainer.id = 'booked-services-list';
 
