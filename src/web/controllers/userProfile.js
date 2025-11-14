@@ -52,17 +52,18 @@ function renderUserProfile(user) {
     const currUserRole = getCurrentUser();
     const tabs = [
         { id: 'bookings', label: 'Bookings' }
-      ];
-    if (currUserRole && currUserRole.role === 'provider') {
-        tabs.push({ id: 'Booked services', label: 'Booked services' });
-    }
-    // Tabs
+    ];
 
+    // AGREGAR TAB SI ES PROVIDER
+    if (currUserRole && currUserRole.isProvider === true) {
+        tabs.push({ id: 'booked-services', label: 'Booked services' });
+    }
+
+    // Tabs
     const tabsContainer = createElement('div', 'mt-6');
     const tabsList = createElement('div', 'tabs-list');
-    
 
-    
+    // FOREACH DE TABS
     tabs.forEach((tab, index) => {
         const tabTrigger = createElement('button', 
             `tabs-trigger ${index === 0 ? 'active' : ''}`, 
@@ -76,74 +77,105 @@ function renderUserProfile(user) {
             
             // Switch content
             document.querySelectorAll('.tabs-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(`tab-${tab.id}`).classList.add('active');
+            const tabContent = document.getElementById(`tab-${tab.id}`);
+            tabContent.classList.add('active');
+
+            if (tab.id === 'bookings') {
+                loadBookingsTab(user.id, user.isProvider);
+            } else if (tab.id === 'booked-services') {
+                loadBookedServicesTab(user.id);
+            }
         });
         
         tabsList.appendChild(tabTrigger);
     });
-    
-    // Tab content
-    const bookingsContent = createElement('div', 'tabs-content active grid grid-cols-1 lg:grid-cols-2 gap-6');
+
+    // AHORA SÍ, CREAR LOS CONTENIDOS DE LAS TABS
+
+    // Tab content - Bookings
+    const bookingsContent = createElement('div', 'tabs-content active');
     bookingsContent.id = 'tab-bookings';
-    
+    const bookingsGrid = createElement('div', 'grid grid-cols-1 lg:grid-cols-2 gap-6');
+
     const recentBookingsCard = createCard('Recent Bookings', '');
     const bookingsContainer = createElement('div', 'space-y-4');
-    
-    // BOOKING_HISTORY.forEach(booking => {
-    //     const bookingItem = createBookingHistoryItem(booking);
-    //      bookingsContainer.appendChild(bookingItem);
-    //  });
-    
+    bookingsContainer.id = 'bookings-list';
+
+    const loadingMsg = createElement('p', 'text-muted-foreground text-center py-8', 'Loading bookings...');
+    bookingsContainer.appendChild(loadingMsg);
+
     recentBookingsCard.querySelector('.card-content').appendChild(bookingsContainer);
-    
+
     const quickActionsCard = createCard('Quick Actions', '');
     const actionsContainer = createElement('div', 'space-y-3');
-    
+
     const actions = [
-        { icon: 'calendar', text: 'Book New Service', href: '#/search' }
+        { icon: 'calendar', text: 'Book New Service', href: '/search' }
     ];
-    
+
     actions.forEach(action => {
         const actionBtn = createButton(
             `<i data-lucide="${action.icon}" class="w-4 h-4 mr-2"></i>${action.text}`,
             () => {
                 if (action.href !== '#') {
-                    window.location.hash = action.href;
+                    window.location.href = action.href;
                 }
             },
             'btn btn-outline w-full justify-start'
         );
         actionsContainer.appendChild(actionBtn);
     });
-    
+
     quickActionsCard.querySelector('.card-content').appendChild(actionsContainer);
-    
-    bookingsContent.appendChild(recentBookingsCard);
-    bookingsContent.appendChild(quickActionsCard);
-    
+
+    bookingsGrid.appendChild(recentBookingsCard);
+    bookingsGrid.appendChild(quickActionsCard);
+    bookingsContent.appendChild(bookingsGrid);
+
+    // Tab content - Booked Services (AQUÍ, FUERA DEL FOREACH)
+    const bookedServicesContent = createElement('div', 'tabs-content');
+    bookedServicesContent.id = 'tab-booked-services';
+
+    const bookedServicesCard = createCard('Services You Booked', '');
+    const bookedServicesContainer = createElement('div', 'space-y-4');
+    bookedServicesContainer.id = 'booked-services-list';
+
+    const loadingMsg2 = createElement('p', 'text-muted-foreground text-center py-8', 'Loading booked services...');
+    bookedServicesContainer.appendChild(loadingMsg2);
+
+    bookedServicesCard.querySelector('.card-content').appendChild(bookedServicesContainer);
+    bookedServicesContent.appendChild(bookedServicesCard);
+
     // Other tab contents (simplified)
     const favoritesContent = createElement('div', 'tabs-content', '<p>Favorites content would go here...</p>');
     favoritesContent.id = 'tab-favorites';
-    
+
     const paymentsContent = createElement('div', 'tabs-content', '<p>Payments content would go here...</p>');
     paymentsContent.id = 'tab-payments';
-    
+
     const settingsContent = createElement('div', 'tabs-content', '<p>Settings content would go here...</p>');
     settingsContent.id = 'tab-settings';
-    
+
+    // APPEND EVERYTHING
     tabsContainer.appendChild(tabsList);
     tabsContainer.appendChild(bookingsContent);
+
+    if (currUserRole && currUserRole.isProvider === true) {
+        tabsContainer.appendChild(bookedServicesContent);
+    }
+
     tabsContainer.appendChild(favoritesContent);
     tabsContainer.appendChild(paymentsContent);
     tabsContainer.appendChild(settingsContent);
-    
+
     mainContainer.appendChild(profileCard);
     mainContainer.appendChild(tabsContainer);
     container.appendChild(mainContainer);
-    
-    return container;
+
+  return container;
 }
 
+// Función para cargar datos del perfil del usuario
 // Función para cargar datos del perfil del usuario
 async function loadUserProfile() {
   try {
@@ -152,7 +184,7 @@ async function loadUserProfile() {
     // Hacer fetch al endpoint /users/profile/me
     const response = await fetch('/users/profile/me', {
       method: 'GET',
-      credentials: 'include', // Enviar cookies
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       }
@@ -160,7 +192,6 @@ async function loadUserProfile() {
 
     if (!response.ok) {
       console.error('Error al obtener perfil:', response.status);
-      // Si no está autenticado, redirigir a login
       if (response.status === 401) {
         window.location.href = '/login';
       }
@@ -172,13 +203,36 @@ async function loadUserProfile() {
 
     if (result.success) {
       const userData = result.data;
+      
+      // DETECTAR SI ES PROVIDER AUTOMÁTICAMENTE
+      // Cargar serviceDetails para verificar si tiene servicios como provider
+      try {
+        const servicesResponse = await fetch('/data/serviceDetails.json');
+        if (servicesResponse.ok) {
+          const servicesData = await servicesResponse.json();
+          const hasServices = servicesData.some(service => 
+            service.provider && service.provider.id === userData.id
+          );
+          
+          // Si tiene servicios registrados pero isProvider es false, corregirlo
+          if (hasServices && !userData.isProvider) {
+            console.log('WARNING: User has services but isProvider is false. Correcting...');
+            userData.isProvider = true;
+          }
+          
+          console.log('Final isProvider status:', userData.isProvider);
+        }
+      } catch (err) {
+        console.error('Error checking provider status:', err);
+      }
+      
       const userProfilePage = renderUserProfile(userData);
       let main_content = document.getElementById('main-content');
       main_content.innerHTML = '';
       main_content.appendChild(userProfilePage);
-      // localStorage.setItem('provider', response.provider.id);
+      
       initializeIcons();
-
+      loadBookingsTab(userData.id, userData.isProvider);
     }
   } catch (error) {
     console.error('Error al cargar el perfil:', error);
@@ -295,6 +349,344 @@ function updateSettingsEmail(userData) {
 //     });
 //   }
 // });
+
+
+// Función para cargar bookings del usuario
+async function loadBookingsTab(userId, isProvider) {
+    const container = document.getElementById('bookings-list');
+    container.innerHTML = '<p class="text-muted-foreground text-center py-8">Loading...</p>';
+    
+    try {
+        console.log('=== loadBookingsTab ===');
+        console.log('userId:', userId);
+        console.log('isProvider:', isProvider);
+        
+        let endpoint;
+        if (isProvider) {
+            // Si es provider, cargar donde él es el provider
+            endpoint = `/bookings/provider/${userId}`;
+            console.log('Endpoint (provider view):', endpoint);
+        } else {
+            // Si NO es provider, cargar donde él es el cliente
+            endpoint = `/bookings/user/${userId}`;
+            console.log('Endpoint (user view):', endpoint);
+        }
+        
+        // Cargar todo en paralelo: bookings activos, historial y servicios
+        const [bookingsResponse, historyResponse, servicesResponse] = await Promise.all([
+            fetch(endpoint, {
+                method: 'GET',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' }
+            }),
+            fetch('/data/bookingHistory.json'),
+            fetch('/data/serviceDetails.json')
+        ]);
+        
+        if (!bookingsResponse.ok) throw new Error('Error loading bookings');
+        
+        const result = await bookingsResponse.json();
+        let bookings = result.data || [];
+        console.log('Bookings from API:', bookings);
+        
+        // Procesar historial
+        if (historyResponse.ok) {
+            const historyData = await historyResponse.json();
+            console.log('All history data:', historyData);
+            
+            let historyBookings = [];
+            
+            if (isProvider) {
+                // FILTRAR POR PROVIDER ID - servicios donde él es el proveedor
+                historyBookings = historyData.filter(booking => {
+                    console.log(`Checking history booking - providerId: ${booking.providerId}, userId to match: ${userId}`);
+                    return booking.providerId === userId;
+                });
+                console.log('Filtered history bookings (as provider):', historyBookings);
+            } else {
+                // FILTRAR POR USER ID - servicios que él ha reservado
+                historyBookings = historyData.filter(booking => {
+                    console.log(`Checking history booking - userId: ${booking.userId}, userId to match: ${userId}`);
+                    return booking.userId === userId;
+                });
+                console.log('Filtered history bookings (as user):', historyBookings);
+            }
+            
+            bookings = [...bookings, ...historyBookings];
+        }
+        
+        // Cargar detalles de servicios
+        let servicesData = [];
+        if (servicesResponse.ok) {
+            servicesData = await servicesResponse.json();
+            console.log('Services data:', servicesData);
+        }
+        
+        container.innerHTML = '';
+        
+        if (bookings.length === 0) {
+            const emptyMsg = createElement('p', 'text-muted-foreground text-center py-8', 
+                isProvider ? 'No bookings from clients yet.' : 'No bookings yet.');
+            container.appendChild(emptyMsg);
+            return;
+        }
+        
+        bookings.sort((a, b) => new Date(b.date) - new Date(a.date));
+        console.log('Final bookings to display:', bookings);
+        
+        // Crear todas las tarjetas con los datos de servicios ya cargados
+        bookings.forEach(booking => {
+            const card = createBookingCardSync(booking, isProvider, servicesData, userId);
+            container.appendChild(card);
+        });
+        
+        initializeIcons();
+    } catch (error) {
+        console.error('Error loading bookings:', error);
+        container.innerHTML = '<p class="text-red-500 text-center py-8">Error loading bookings</p>';
+    }
+}
+
+// Función para cargar servicios reservados por el provider (cuando él es cliente)
+async function loadBookedServicesTab(userId) {
+    const container = document.getElementById('booked-services-list');
+    container.innerHTML = '<p class="text-muted-foreground text-center py-8">Loading...</p>';
+    
+    try {
+        console.log('=== loadBookedServicesTab ===');
+        console.log('userId (as CLIENT):', userId);
+        
+        // SIEMPRE cargar donde él es el CLIENTE (userId)
+        const endpoint = `/bookings/user/${userId}`;
+        console.log('Endpoint:', endpoint);
+        
+        // Cargar todo en paralelo
+        const [bookingsResponse, historyResponse, servicesResponse] = await Promise.all([
+            fetch(endpoint, {
+                method: 'GET',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' }
+            }),
+            fetch('/data/bookingHistory.json'),
+            fetch('/data/serviceDetails.json')
+        ]);
+        
+        if (!bookingsResponse.ok) throw new Error('Error loading booked services');
+        
+        const result = await bookingsResponse.json();
+        let bookings = result.data || [];
+        console.log('Bookings from API (as client):', bookings);
+        
+        // Procesar historial
+        if (historyResponse.ok) {
+            const historyData = await historyResponse.json();
+            console.log('All history data:', historyData);
+            
+            // FILTRAR POR USER ID - servicios que él ha reservado como cliente
+            const historyBookings = historyData.filter(booking => {
+                console.log(`Checking history booking - userId: ${booking.userId}, userId to match: ${userId}`);
+                return booking.userId === userId;
+            });
+            console.log('Filtered history bookings (as client):', historyBookings);
+            
+            bookings = [...bookings, ...historyBookings];
+        }
+        
+        // Cargar detalles de servicios
+        let servicesData = [];
+        if (servicesResponse.ok) {
+            servicesData = await servicesResponse.json();
+            console.log('Services data:', servicesData);
+        }
+        
+        container.innerHTML = '';
+        
+        if (bookings.length === 0) {
+            const emptyMsg = createElement('p', 'text-muted-foreground text-center py-8', 
+                'You haven\'t booked any services yet.');
+            container.appendChild(emptyMsg);
+            return;
+        }
+        
+        bookings.sort((a, b) => new Date(b.date) - new Date(a.date));
+        console.log('Final booked services to display:', bookings);
+        
+        // Crear todas las tarjetas con los datos de servicios ya cargados
+        // FALSE para indicar que NO es vista de provider (es vista de cliente)
+        bookings.forEach(booking => {
+            const card = createBookingCardSync(booking, false, servicesData, userId);
+            container.appendChild(card);
+        });
+        
+        initializeIcons();
+    } catch (error) {
+        console.error('Error loading booked services:', error);
+        container.innerHTML = '<p class="text-red-500 text-center py-8">Error loading booked services</p>';
+    }
+}
+
+// Función para crear tarjeta de booking (versión síncrona con datos precargados)
+function createBookingCardSync(booking, isProviderView, servicesData, currentUserId) {
+    console.log('=== createBookingCardSync ===');
+    console.log('Booking:', booking);
+    console.log('isProviderView:', isProviderView);
+    console.log('currentUserId:', currentUserId);
+    
+    const card = createElement('div', 'bg-white rounded-lg border p-4 hover:shadow-md transition-shadow');
+    
+    let serviceDetails = null;
+    
+    // ESTRATEGIA DE BÚSQUEDA:
+    // El booking.service (ej: "Greywater Systems") está en el array service.services[]
+    // El booking.providerId debe coincidir con service.provider.id
+    
+    if (isProviderView) {
+        // VISTA PROVIDER: Buscar el servicio donde él es el provider
+        // Debe coincidir: service.provider.id === currentUserId (él es el proveedor)
+        // Y el booking.service debe estar en service.services[]
+        serviceDetails = servicesData.find(service => {
+            const matchById = service.provider && service.provider.id === currentUserId;
+            const matchByService = service.services && booking.service && 
+                                  service.services.some(s => s.toLowerCase().includes(booking.service.toLowerCase()));
+            
+            console.log(`Checking service (provider view): ${service.name}`);
+            console.log(`  - provider.id: ${service.provider?.id}, currentUserId: ${currentUserId}, matchById: ${matchById}`);
+            console.log(`  - services array:`, service.services);
+            console.log(`  - booking.service: ${booking.service}, matchByService: ${matchByService}`);
+            
+            // Debe ser SU servicio (provider.id) Y tener el servicio del booking
+            return matchById && matchByService;
+        });
+        
+        // Fallback: buscar solo por providerId si no encuentra por servicio específico
+        if (!serviceDetails) {
+            serviceDetails = servicesData.find(service => 
+                service.provider && service.provider.id === currentUserId
+            );
+            console.log('Fallback by providerId only:', serviceDetails);
+        }
+        
+        console.log('Service found (provider view):', serviceDetails);
+    } else {
+        // VISTA CLIENTE: Buscar el servicio que el usuario reservó
+        // Debe coincidir: service.provider.id === booking.providerId
+        // Y el booking.service debe estar en service.services[]
+        serviceDetails = servicesData.find(service => {
+            const matchByProviderId = service.provider && service.provider.id === booking.providerId;
+            const matchByService = service.services && booking.service && 
+                                  service.services.some(s => s.toLowerCase().includes(booking.service.toLowerCase()));
+            
+            console.log(`Checking service (client view): ${service.name}`);
+            console.log(`  - provider.id: ${service.provider?.id}, booking.providerId: ${booking.providerId}, matchByProviderId: ${matchByProviderId}`);
+            console.log(`  - services array:`, service.services);
+            console.log(`  - booking.service: ${booking.service}, matchByService: ${matchByService}`);
+            
+            // Debe coincidir el providerId Y tener el servicio específico
+            return matchByProviderId && matchByService;
+        });
+        
+        // Fallback: buscar solo por providerId si no encuentra por servicio específico
+        if (!serviceDetails) {
+            serviceDetails = servicesData.find(service => 
+                service.provider && service.provider.id === booking.providerId
+            );
+            console.log('Fallback by providerId only:', serviceDetails);
+        }
+        
+        console.log('Service found (client view):', serviceDetails);
+    }
+    
+    const content = createElement('div', 'flex gap-4');
+    
+    // Imagen del servicio
+    if (serviceDetails && serviceDetails.image) {
+        const img = createElement('img', 'w-20 h-20 rounded-lg object-cover');
+        img.src = serviceDetails.image;
+        img.alt = serviceDetails.name;
+        content.appendChild(img);
+    } else {
+        // Placeholder si no hay imagen
+        const placeholder = createElement('div', 'w-20 h-20 rounded-lg bg-gray-200 flex items-center justify-center');
+        placeholder.innerHTML = '<i data-lucide="briefcase" class="w-8 h-8 text-gray-400"></i>';
+        content.appendChild(placeholder);
+    }
+    
+    const info = createElement('div', 'flex-1');
+    
+    // Usar el nombre del servicio del booking si no hay serviceDetails
+    const serviceName = createElement('h3', 'font-semibold text-lg', 
+        serviceDetails ? serviceDetails.name : (booking.service || 'Service'));
+    
+    const details = createElement('div', 'space-y-1 text-sm text-muted-foreground mt-2');
+    
+    if (isProviderView) {
+        // MOSTRAR INFO DEL CLIENTE que hizo el booking
+        const clientInfo = createElement('div', 'flex items-center gap-2');
+        clientInfo.innerHTML = `<i data-lucide="user" class="w-4 h-4"></i><span>Booking from client (ID: ${booking.userId})</span>`;
+        details.appendChild(clientInfo);
+    } else {
+        // MOSTRAR INFO DEL PROVEEDOR del servicio
+        if (serviceDetails && serviceDetails.provider) {
+            const providerInfo = createElement('div', 'flex items-center gap-2');
+            providerInfo.innerHTML = `<i data-lucide="user" class="w-4 h-4"></i><span>Provider: ${serviceDetails.provider.name} (ID: ${serviceDetails.provider.id})</span>`;
+            details.appendChild(providerInfo);
+        } else if (booking.providerId) {
+            const providerInfo = createElement('div', 'flex items-center gap-2');
+            providerInfo.innerHTML = `<i data-lucide="user" class="w-4 h-4"></i><span>Provider ID: ${booking.providerId}</span>`;
+            details.appendChild(providerInfo);
+        }
+    }
+    
+    const dateInfo = createElement('div', 'flex items-center gap-2');
+    dateInfo.innerHTML = `<i data-lucide="calendar" class="w-4 h-4"></i><span>${booking.date}${booking.bookingTime ? ' at ' + booking.bookingTime : ''}</span>`;
+    details.appendChild(dateInfo);
+    
+    if (booking.serviceDuration) {
+        const durationInfo = createElement('div', 'flex items-center gap-2');
+        durationInfo.innerHTML = `<i data-lucide="clock" class="w-4 h-4"></i><span>${booking.serviceDuration} hours${booking.serviceType ? ' - ' + booking.serviceType : ''}</span>`;
+        details.appendChild(durationInfo);
+    }
+    
+    if (serviceDetails && serviceDetails.location) {
+        const locationInfo = createElement('div', 'flex items-center gap-2');
+        locationInfo.innerHTML = `<i data-lucide="map-pin" class="w-4 h-4"></i><span>${serviceDetails.location}</span>`;
+        details.appendChild(locationInfo);
+    }
+    
+    info.appendChild(serviceName);
+    info.appendChild(details);
+    
+    const rightSection = createElement('div', 'text-right');
+    
+    const statusBadge = createElement('span', 
+        `inline-block px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`
+    );
+    statusBadge.textContent = booking.status || 'Pending';
+    
+    const price = createElement('p', 'text-lg font-bold mt-2', `$${booking.amount || 0}`);
+    
+    rightSection.appendChild(statusBadge);
+    rightSection.appendChild(price);
+    
+    content.appendChild(info);
+    content.appendChild(rightSection);
+    
+    card.appendChild(content);
+    
+    return card;
+}
+
+// Función auxiliar para obtener color según estado
+function getStatusColor(status) {
+    const colors = {
+        'pending': 'bg-yellow-100 text-yellow-800',
+        'confirmed': 'bg-blue-100 text-blue-800',
+        'in-progress': 'bg-purple-100 text-purple-800',
+        'completed': 'bg-green-100 text-green-800',
+        'cancelled': 'bg-red-100 text-red-800'
+    };
+    return colors[status?.toLowerCase()] || 'bg-gray-100 text-gray-800';
+}
 
 window.onload = function() {
     loadUserProfile();
