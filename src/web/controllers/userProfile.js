@@ -290,22 +290,6 @@ function updateSettingsEmail(userData) {
   }
 }
 
-// Cargar el perfil cuando el DOM esté listo
-// document.addEventListener('DOMContentLoaded', () => {
-//   console.log('DOM cargado, inicializando perfil de usuario...');
-//   loadUserProfile();
-
-//   // Agregar evento para actualizar el email en settings si cambia de tab
-//   const settingsTab = document.getElementById('tab-settings');
-//   if (settingsTab) {
-//     settingsTab.addEventListener('click', () => {
-//       // El email ya se habrá cargado cuando se populate el perfil
-//       console.log('Tab de settings abierto');
-//     });
-//   }
-// });
-
-
 // Función para cargar bookings del usuario
 async function loadBookingsTab(userId, isProvider) {
     const container = document.getElementById('bookings-list');
@@ -395,7 +379,6 @@ async function fetchServiceDetails(providerId) {
   return serviceData;
 }
 
-// ToDo
 // Función para cargar servicios reservados por el provider (cuando él es proveedor)
 async function loadBookedServicesTab(userId) {
     const container = document.getElementById('booked-services-list');
@@ -459,7 +442,7 @@ async function loadBookedServicesTab(userId) {
 }
 
 // Función para crear tarjeta de booking (versión síncrona con datos precargados)
-function createBookingCardSync(booking, isProviderView, serviceDetails, currentUserId) {
+function createBookingCardSync(booking, isProviderView, serviceDetails) {
     const card = createElement('div', 'bg-white rounded-lg border p-4 hover:shadow-md transition-shadow');
     
     const content = createElement('div', 'flex gap-4');
@@ -538,6 +521,14 @@ function createBookingCardSync(booking, isProviderView, serviceDetails, currentU
     content.appendChild(rightSection);
     
     card.appendChild(content);
+
+    card.addEventListener('click', () => {
+        window.location.href = `/individualServiceDetail`;
+        localStorage.setItem('service', serviceDetails.id);
+        localStorage.setItem('booking', booking.id);
+        localStorage.setItem('providerId', booking.providerId);
+        localStorage.setItem('clientId', booking.userId);
+      });
     
     return card;
 }
@@ -547,7 +538,7 @@ function getStatusColor(status) {
     const colors = {
         'pending': 'bg-yellow-100 text-yellow-800',
         'confirmed': 'bg-blue-100 text-blue-800',
-        'in-progress': 'bg-purple-100 text-purple-800',
+        'in progress': 'bg-purple-100 text-purple-800',
         'completed': 'bg-green-100 text-green-800',
         'cancelled': 'bg-red-100 text-red-800'
     };

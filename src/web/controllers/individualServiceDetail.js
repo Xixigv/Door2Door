@@ -12,8 +12,10 @@ function getService(id) {
             renderServiceDetails(service);
 
             const isProvider = getCurrentUser().isProvider;
+            const userId  = getCurrentUser().id;
+
             
-            if (isProvider) {
+            if (isProvider && userId === service.providerId) {
                 const clientInfo = document.getElementById('client-info');
                 if (clientInfo) {
                     clientInfo.classList.remove('hidden');
@@ -43,10 +45,11 @@ function getBooking(id) {
         if (xhr.status === 200) {
             const booking = JSON.parse(xhr.responseText);
             const isProvider = getCurrentUser().isProvider; // Get logged-in user ID
-            setupStatusSection(isProvider, booking.status);
+
             setupReviewSection(isProvider, booking.status);
             
-            if (isProvider) {
+            if (isProvider && getCurrentUser().id === booking.providerId) {
+                setupStatusSection(isProvider, booking.status);
                 const clientInfo = document.getElementById('client-info');
                 if (clientInfo) {
                     clientInfo.classList.remove('hidden');
@@ -435,7 +438,7 @@ function setupReviewSection(isProvider, status) {
 window.onload = function() {
     const serviceId = localStorage.getItem('service');
     const bookingId = localStorage.getItem('booking');
-    const id  = getCurrentUser().id; // Get logged-in user ID    
+    const clientId = localStorage.getItem('clientId');
     
     if (serviceId) {
         getService(serviceId);
@@ -449,8 +452,8 @@ window.onload = function() {
         console.error('No booking ID found in storage');
     }
 
-    if (id) {
-        getUserDetail(userId);
+    if (clientId) {
+        getUserDetail(clientId);
     } else {
         console.error('No user ID found in storage');
     }
