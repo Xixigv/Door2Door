@@ -335,7 +335,41 @@ async function loadBookingsTab(userId, isProvider) {
         }
         
         // Ordenar por fecha (más recientes primero)
-        bookings.sort((a, b) => new Date(b.date) - new Date(a.date));
+        // bookings.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const now = new Date();
+        const statusOrder = {
+          'booked': 1,
+          'in progress': 2,
+          'completed': 3
+        };
+
+        bookings.sort((a, b) => {
+          // Por status
+          const statusA = statusOrder[a.status?.toLowerCase()] || 999;
+          const statusB = statusOrder[b.status?.toLowerCase()] || 999;
+          
+          if (statusA !== statusB) {
+            return statusA - statusB;
+          }
+          
+          // Por fecha y hora
+          const dateTimeA = new Date(a.date + 'T' + a.bookingTime);
+          const dateTimeB = new Date(b.date + 'T' + b.bookingTime);
+  
+          const aIsFuture = dateTimeA >= now;
+          const bIsFuture = dateTimeB >= now;
+          
+          // Futuros primero, luego pasados
+          if (aIsFuture && !bIsFuture) return -1;
+          if (!aIsFuture && bIsFuture) return 1;
+          
+          // Ambos futuros: más próximo primero
+          if (aIsFuture && bIsFuture) return dateTimeA - dateTimeB;
+          
+          // Ambos pasados: más reciente primero
+          return dateTimeB - dateTimeA;
+        });
 
         // Crear las tarjetas de booking
         bookings.forEach(async booking =>  {
@@ -423,7 +457,43 @@ async function loadBookedServicesTab(userId) {
         }
         
         // Ordenar por fecha (más recientes primero)
-        bookings.sort((a, b) => new Date(b.date) - new Date(a.date));
+        // bookings.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+        const now = new Date();
+        const statusOrder = {
+          'booked': 1,
+          'in progress': 2,
+          'completed': 3
+        };
+
+        bookings.sort((a, b) => {
+          // Por status
+          const statusA = statusOrder[a.status?.toLowerCase()] || 999;
+          const statusB = statusOrder[b.status?.toLowerCase()] || 999;
+          
+          if (statusA !== statusB) {
+            return statusA - statusB;
+          }
+          
+          // Por fecha y hora
+          const dateTimeA = new Date(a.date + 'T' + a.bookingTime); 
+          const dateTimeB = new Date(b.date + 'T' + b.bookingTime);
+  
+          
+          const aIsFuture = dateTimeA >= now;
+          const bIsFuture = dateTimeB >= now;
+          
+          // Futuros primero, luego pasados
+          if (aIsFuture && !bIsFuture) return -1;
+          if (!aIsFuture && bIsFuture) return 1;
+          
+          // Ambos futuros: más próximo primero
+          if (aIsFuture && bIsFuture) return dateTimeA - dateTimeB;
+          
+          // Ambos pasados: más reciente primero
+          return dateTimeB - dateTimeA;
+        }); 
+
         
         // Crear las tarjetas de booking
         bookings.forEach(async booking => {
@@ -471,7 +541,7 @@ function createBookingCardSync(booking, isProviderView, serviceDetails) {
     if (isProviderView) {
         // MOSTRAR INFO DEL CLIENTE que hizo el booking
         const clientInfo = createElement('div', 'flex items-center gap-2');
-        clientInfo.innerHTML = `<i data-lucide="user" class="w-4 h-4"></i><span>Booking from client (ID: ${booking.userId})</span>`;
+        // clientInfo.innerHTML = `<i data-lucide="user" class="w-4 h-4"></i><span>Booking from client (ID: ${booking.userId})</span>`;
         details.appendChild(clientInfo);
     } else {
         // MOSTRAR INFO DEL PROVEEDOR del servicio
