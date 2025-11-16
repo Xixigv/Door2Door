@@ -154,7 +154,6 @@ function updateBookingStatus(bookingId, status, callback) {
     xhr.onload = function() {
         if (xhr.status === 200) {
             const booking = JSON.parse(xhr.responseText);
-            console.log('Booking status updated successfully:', booking);
             if (callback) callback(null, booking);
         } else if (xhr.status === 400) {
             const error = JSON.parse(xhr.responseText);

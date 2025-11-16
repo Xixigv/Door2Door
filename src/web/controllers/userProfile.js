@@ -175,7 +175,7 @@ async function loadUserProfile() {
 
     if (result.success) {
       const userData = result.data;
-      console.log(userData);
+     
       
       const userProfilePage = renderUserProfile(userData);
       let main_content = document.getElementById('main-content');

@@ -460,7 +460,6 @@ function renderCalendarPage(provider) {
             bookingPayload,
             // Success callback
             (createdBooking) => {
-                console.log('Booking created:', createdBooking);
                 
                 // Store booking info for payment page
                 localStorage.setItem('amount', total);
@@ -532,7 +531,7 @@ function renderCalendarPage(provider) {
         xhr.onload = function() {
             if (xhr.status === 200) {
                 const bookings = JSON.parse(xhr.responseText);
-                console.log('Fetched bookings:', bookings);
+                
                 bookingState.existingBookings = bookings;
                 // Update time slots if a date is already selected
                 if (bookingState.selectedDate) {

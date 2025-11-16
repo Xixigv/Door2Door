@@ -15,7 +15,7 @@ async function loginUser(email, password) {
   }
 
   if (!data.success || !data.user) throw new Error('User data not received');
-  console.log('Logged in user:', data.user);
+  
   // Guardar user info en localStorage (pero NO el token, que está en cookie httpOnly)
   try { localStorage.setItem('currentUser', JSON.stringify(data.user)); } catch(e) {}
 

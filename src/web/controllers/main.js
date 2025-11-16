@@ -18,7 +18,6 @@ const AppState = {
 // Initialize application
 function initializeApp() {
     initializeIcons();
-    console.log('Door2Door app initialized');
 }
 
 // Check session and update header

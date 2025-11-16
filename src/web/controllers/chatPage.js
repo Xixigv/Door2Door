@@ -37,7 +37,7 @@ async function loadChats() {
     const response = await fetch(apiUrl, { credentials: 'include' });
     const data = await response.json();
 
-    console.log("📦 Datos cargados del backend:", data);
+    
 
     if (!data.conversations || Object.keys(data.conversations).length === 0) {
         console.warn("⚠️ No hay conversaciones disponibles.");
@@ -209,5 +209,5 @@ async function sendMessage() {
 window.onload = async () => {
     await loadCurrentUser();
     await loadChats();
-    console.log("✅ Chats cargados correctamente");
+    
 };
