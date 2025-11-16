@@ -32,19 +32,19 @@ router.use('/providers', providersRouter);
 router.use('/users', usersRouter);
 router.use('/reviews', reviewsRouter);
 
-// router.get('/', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/home.html")));
-// router.get('/home', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/home.html")));
-// router.get('/login', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/login.html")));
-// router.get('/register', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/register.html")));
-// router.get('/individualServiceDetail', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/individualServiceDetail.html")));
-// router.get('/serviceDetail', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/serviceDetail.html")));
-// router.get('/becomeProvider', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/becomeProvider.html")));
-// router.get('/booking', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/booking.html")));
-// router.get('/providerProfile', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/providerProfile.html")));
-// router.get('/search', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/search.html")));
-// router.get('/userProfile', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/userProfile.html")));
-// router.get('/payment', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/payment.html")));
-// router.get('/chatPage', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/chatPage.html")));
+router.get('/', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/home.html")));
+router.get('/home', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/home.html")));
+router.get('/login', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/login.html")));
+router.get('/register', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/register.html")));
+router.get('/individualServiceDetail', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/individualServiceDetail.html")));
+router.get('/serviceDetail', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/serviceDetail.html")));
+router.get('/becomeProvider', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/becomeProvider.html")));
+router.get('/booking', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/booking.html")));
+router.get('/providerProfile', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/providerProfile.html")));
+router.get('/search', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/search.html")));
+router.get('/userProfile', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/userProfile.html")));
+router.get('/payment', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/payment.html")));
+router.get('/chatPage', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/chatPage.html")));
 
 
 //Future pages
