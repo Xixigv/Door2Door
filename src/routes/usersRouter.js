@@ -113,6 +113,35 @@ async function getUserFromDynamo(id) {
   }
 }
 
+
+/*  Ruta para obtener datos básicos de un usuario para el chat.
+  Solo devuelve id, name y avatar.
+*/
+router.get('/basic/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await getUserFromDynamo(id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "Usuario no encontrado" });
+    }
+
+    // Solo mandamos lo que el chat necesita
+    return res.json({
+      success: true,
+      data: {
+        id: user.id,
+        name: user.name || user.fullName || "Usuario " + id,
+        avatar: user.avatar || null
+      }
+    });
+
+  } catch (err) {
+    console.error("Error obteniendo usuario:", err);
+    res.status(500).json({ success: false, message: "Error interno" });
+  }
+});
+
 /*
   Crea un registro de usuario en DynamoDB.
   Aquí se guarda la información de perfil completa,

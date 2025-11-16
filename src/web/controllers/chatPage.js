@@ -1,72 +1,190 @@
 // ==============================
 // CONFIGURACIÓN Y ESTADO GLOBAL
 // ==============================
+
 let currentUser = null;
 let selectedChatId = null;
 let chats = [];
 let chatMessages = {};
 
 // ==============================
+// WEBSOCKET
+// ==============================
+let socket = null;
+
+function initWebSocket() {
+    if (!currentUser || !currentUser.id) return;
+
+    const wsUrl = `wss://p2ksoatha8.execute-api.us-east-2.amazonaws.com/production?userID=${currentUser.id}`;
+
+    socket = new WebSocket(wsUrl);
+
+    socket.onopen = () => {
+        console.log("🔌 WebSocket conectado como usuario:", currentUser.id);
+    };
+
+    socket.onmessage = (event) => {
+        console.log("📩 Mensaje recibido raw:", event.data);
+
+        let msg;
+        try {
+            msg = JSON.parse(event.data);
+        } catch (e) {
+            console.warn("No se pudo parsear el mensaje:", e);
+            return;
+        }
+
+        // Normaliza tipos a string
+        const from = String(msg.from);
+        const to = msg.to !== undefined ? String(msg.to) : String(currentUser.id);
+        const message = msg.message;
+        const timestamp = msg.timestamp || Math.floor(Date.now() / 1000);
+
+        const chatId = from === String(currentUser.id) ? to : from; // conversación con el otro
+
+        // crea array si no existe
+        if (!chatMessages[chatId]) chatMessages[chatId] = [];
+
+        // empujar mensaje con estructura consistente
+        chatMessages[chatId].push({
+            from,
+            to,
+            message,
+            timestamp: Number(timestamp)
+        });
+
+        // actualizar lista/ventana
+        if (selectedChatId !== chatId) {
+            chats = chats.map(c =>
+                c.id === chatId ? { ...c, unread: true, lastMessage: message } : c
+            );
+            renderChatList();
+        } else {
+            renderChatWindow();
+        }
+    };
+
+    socket.onclose = () => {
+        console.warn("⚠️ WebSocket desconectado. Reintentando en 3s...");
+        setTimeout(initWebSocket, 3000);
+    };
+
+    socket.onerror = (err) => {
+        console.error("❌ Error en WebSocket:", err);
+    };
+}
+
+// ==============================
 // CARGAR USUARIO AUTENTICADO
 // ==============================
 async function loadCurrentUser() {
     try {
-    const res = await fetch('/users/profile/me', {
-        credentials: 'include'
-    });
-    const data = await res.json();
-    if (data.success && data.data) {
-        currentUser = data.data;
-        console.log("👤 Usuario autenticado:", currentUser);
-    } else {
-        console.warn("No se pudo cargar el usuario autenticado.");
-    }
+        const res = await fetch('/users/profile/me', {
+            credentials: 'include'
+        });
+        const data = await res.json();
+        if (data.success && data.data) {
+            currentUser = data.data;
+            console.log("👤 Usuario autenticado:", currentUser);
+        } else {
+            console.warn("No se pudo cargar el usuario autenticado.");
+        }
     } catch (err) {
-    console.error("Error al obtener usuario:", err);
+        console.error("Error al obtener usuario:", err);
     }
+}
+
+// ==============================
+// CARGAR DATOS DE USUARIOS
+// ==============================
+async function getUserById(userId) {
+  try {
+    const response = await fetch(`/users/basic/${userId}`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    if (!response.ok) return null;
+
+    const result = await response.json();
+    return result.success ? result.data : null;
+
+  } catch (e) {
+    console.error("Error cargando usuario:", e);
+    return null;
+  }
 }
 
 // ==============================
 // CARGAR CHATS REALES
 // ==============================
 async function loadChats() {
-    try {
+  try {
     if (!currentUser || !currentUser.id) return;
 
     const apiUrl = `https://pyj8f2353b.execute-api.us-east-2.amazonaws.com/messages?userA=${currentUser.id}`;
     const response = await fetch(apiUrl, { credentials: 'include' });
     const data = await response.json();
 
-    
-
     if (!data.conversations || Object.keys(data.conversations).length === 0) {
-        console.warn("⚠️ No hay conversaciones disponibles.");
-        return;
+      console.warn("⚠️ No hay conversaciones disponibles.");
+      return;
     }
 
-    // Transformar datos del backend al formato visual
-    chats = Object.entries(data.conversations).map(([otherUserId, messages]) => {
+    // ------------------------------------------------------
+    // 🧠 Convertir conversaciones, agregando datos reales del usuario
+    // ------------------------------------------------------
+    chats = await Promise.all(
+      Object.entries(data.conversations).map(async ([convId, messages]) => {
+        const parts = convId.split('#');
+        const otherUserId = parts[0] === String(currentUser.id) ? parts[1] : parts[0];
         const lastMsg = messages[messages.length - 1];
+
+        // 👉 Cargar datos reales del otro usuario
+        const otherUser = await getUserById(otherUserId);
+
+        const avatarURL = otherUser?.avatar
+          ? otherUser.avatar
+          : `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.name || "U" + otherUserId)}`;
+
         return {
-        id: otherUserId,
-        name: `Usuario ${otherUserId}`,
-        avatar: `<img src="https://ui-avatars.com/api/?name=U${otherUserId}" class="w-10 h-10 rounded-full"/>`,
-        lastMessage: lastMsg?.message || "(sin mensajes)",
-        timestamp: new Date(parseInt(lastMsg?.timestamp) * 1000).toLocaleTimeString('es-ES', {
-            hour: '2-digit',
-            minute: '2-digit'
-        }),
-        unread: false
+          id: String(otherUserId),
+          name: otherUser?.name || `Usuario ${otherUserId}`,
+          avatar: `<img src="${avatarURL}" class="w-10 h-10 rounded-full"/>`,
+          lastMessage: lastMsg?.message || "(sin mensajes)",
+          timestamp: lastMsg
+            ? new Date(parseInt(lastMsg.timestamp) * 1000).toLocaleTimeString('es-ES', {
+                hour: '2-digit',
+                minute: '2-digit'
+              })
+            : "",
+          unread: false
         };
+      })
+    );
+
+    // ------------------------------------------------------
+    // 🧠 Guardar mensajes normalizados
+    // ------------------------------------------------------
+    chatMessages = {};
+    Object.entries(data.conversations).forEach(([convId, messages]) => {
+      const parts = convId.split('#');
+      const otherUserId = parts[0] === String(currentUser.id) ? parts[1] : parts[0];
+
+      chatMessages[String(otherUserId)] = messages.map(m => ({
+        from: String(m.from),
+        to: String(m.to),
+        message: m.message,
+        timestamp: Number(m.timestamp)
+      }));
     });
 
-    chatMessages = data.conversations;
     renderChatList();
     renderChatWindow();
 
-    } catch (error) {
+  } catch (error) {
     console.error("Error cargando chats:", error);
-    }
+  }
 }
 
 // ==============================
@@ -105,24 +223,24 @@ function renderChatWindow() {
     if (!container) return;
 
     if (!selectedChatId) {
-    container.innerHTML = `
+        container.innerHTML = `
         <div class="h-full flex items-center justify-center bg-white rounded-lg">
-        <p class="text-gray-500">Selecciona un chat para comenzar</p>
+            <p class="text-gray-500">Selecciona un chat para comenzar</p>
         </div>
-    `;
-    return;
+        `;
+        return;
     }
 
     const messages = chatMessages[selectedChatId] || [];
     const selectedChat = chats.find(c => c.id === selectedChatId);
 
     const messagesHTML = messages.map(msg => `
-    <div class="flex ${msg.from == currentUser.id ? 'justify-end' : 'justify-start'}">
-        <div class="message-card ${msg.from == currentUser.id ? 'me' : ''}">
+    <div class="flex ${msg.from == String(currentUser.id) ? 'justify-end' : 'justify-start'}">
+        <div class="message-card ${msg.from == String(currentUser.id) ? 'me' : ''}">
         <p>${msg.message}</p>
-        <span class="text-xs mt-1 block ${msg.from == currentUser.id ? 'text-gray-300' : 'text-gray-500'}">
-            ${new Date(parseInt(msg.timestamp) * 1000).toLocaleTimeString('es-ES', {
-            hour: '2-digit', minute: '2-digit'
+        <span class="text-xs mt-1 block ${msg.from == String(currentUser.id) ? 'text-gray-300' : 'text-gray-500'}">
+            ${new Date(Number(msg.timestamp) * 1000).toLocaleTimeString('es-ES', {
+                hour: '2-digit', minute: '2-digit'
             })}
         </span>
         </div>
@@ -132,8 +250,8 @@ function renderChatWindow() {
     container.innerHTML = `
     <div class="chat-window-card">
         <div class="p-4 border-b border-gray-200 flex items-center gap-3">
-        <div class="avatar">${selectedChat.avatar}</div>
-        <h2>${selectedChat.name}</h2>
+        <div class="avatar">${selectedChat?.avatar || ''}</div>
+        <h2>${selectedChat?.name || ''}</h2>
         </div>
         
         <div id="messagesContainer" class="custom-scrollbar overflow-y-auto p-6">
@@ -156,8 +274,8 @@ function renderChatWindow() {
 
     // Auto scroll
     setTimeout(() => {
-    const msgContainer = document.getElementById('messagesContainer');
-    if (msgContainer) msgContainer.scrollTop = msgContainer.scrollHeight;
+        const msgContainer = document.getElementById('messagesContainer');
+        if (msgContainer) msgContainer.scrollTop = msgContainer.scrollHeight;
     }, 50);
 }
 
@@ -173,8 +291,8 @@ function selectChat(chatId) {
 
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
-    event.preventDefault();
-    sendMessage();
+        event.preventDefault();
+        sendMessage();
     }
 }
 
@@ -183,23 +301,33 @@ async function sendMessage() {
     const text = input.value.trim();
     if (!text || !selectedChatId || !currentUser) return;
 
-    const newMsg = {
-    from: currentUser.id,
-    to: selectedChatId,
-    message: text,
-    timestamp: Math.floor(Date.now() / 1000)
+    // Aseguramos strings para from/to
+    const payload = {
+        action: 'sendMessage',
+        from: String(currentUser.id),
+        to: String(selectedChatId),
+        message: text
     };
 
-    // Mostrar instantáneamente
+    // Mostrar instantáneamente en la UI con timestamp
     if (!chatMessages[selectedChatId]) chatMessages[selectedChatId] = [];
-    chatMessages[selectedChatId].push(newMsg);
+    const localMsg = {
+        from: String(currentUser.id),
+        to: String(selectedChatId),
+        message: text,
+        timestamp: Math.floor(Date.now() / 1000)
+    };
+    chatMessages[selectedChatId].push(localMsg);
     renderChatWindow();
 
     input.value = '';
 
     // Enviar al backend vía WebSocket
     if (socket && socket.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify(newMsg));
+        socket.send(JSON.stringify(payload));
+    } else {
+        console.error("❌ WebSocket no disponible. Reintentando conexión...");
+        initWebSocket();
     }
 }
 
@@ -209,5 +337,5 @@ async function sendMessage() {
 window.onload = async () => {
     await loadCurrentUser();
     await loadChats();
-    
+    initWebSocket();
 };
