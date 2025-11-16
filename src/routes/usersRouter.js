@@ -113,6 +113,38 @@ async function getUserFromDynamo(id) {
   }
 }
 
+/*
+  Obtiene varios usuarios desde DynamoDB usando un arreglo de ids.
+  Maneja automáticamente la diferencia entre tipo Number y String.
+*/
+async function getUsersBatchFromDynamo(ids) {
+  try {
+    if (!ids || ids.length === 0) return [];
+
+    const keys = ids.map(id => {
+      const n = asNumId(id);
+      return n
+        ? { id: { N: n } }
+        : { id: { S: String(id) } };
+    });
+
+    const command = new ddb.BatchGetItemCommand({
+      RequestItems: {
+        [TABLE]: { Keys: keys }
+      }
+    });
+
+    const response = await dynamoDB.send(command);
+    const items = response.Responses?.[TABLE] || [];
+
+    return items.map(item => unmarshall(item));
+
+  } catch (err) {
+    console.error("Error en getUsersBatchFromDynamo:", err);
+    return [];
+  }
+}
+
 
 /*  Ruta para obtener datos básicos de un usuario para el chat.
   Solo devuelve id, name y avatar.
@@ -511,6 +543,69 @@ router.delete('/:id', authenticateToken, async (req, res) => {
     res.json({ success: true, results });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/*
+  Búsqueda de proveedores por nombre.
+  - Busca primero en Aurora los IDs de usuarios que son proveedores 
+*/
+
+router.get("/search", async (req, res) => {
+  let client; 
+
+  try {
+    const q = (req.query.q || "").toLowerCase();
+    if (q.length < 2) {
+      return res.json({ success: true, results: [] });
+    }
+
+    client = await getConnection(); 
+
+    // 1. Saco solo los IDs de proveedores desde Aurora
+    const auroraResult = await client.query(`
+      SELECT id
+      FROM users
+      WHERE isprovider = true
+    `);
+
+    const providerIds = auroraResult.rows.map(r => r.id);
+
+    if (providerIds.length === 0) {
+      client.release(); 
+      return res.json({ success: true, results: [] });
+    }
+
+    // 2. Traigo info real desde Dynamo
+    const dynamoUsers = await getUsersBatchFromDynamo(providerIds);
+
+    // 3. Filtro por nombre (de Dynamo)
+    const filtered = dynamoUsers.filter(u => {
+      const name = (u.name || u.fullName || "").toLowerCase();
+      return name.includes(q);
+    });
+
+    client.release(); 
+
+    return res.json({
+      success: true,
+      results: filtered.map(u => ({
+        id: u.id,
+        name: u.name || u.fullName || `Usuario ${u.id}`,
+        avatar: u.avatar || null,
+        isProvider: true
+      }))
+    });
+
+  } catch (error) {
+    console.error("Error en /users/search:", error);
+
+    if (client) client.release(); 
+
+    return res.status(500).json({
+      success: false,
+      message: "Error interno en búsqueda"
+    });
   }
 });
 

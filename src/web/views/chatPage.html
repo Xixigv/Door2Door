@@ -25,10 +25,13 @@
 
           <div class="hidden md:flex flex-1 max-w-md mx-8">
             <div class="relative w-full">
-              <i data-lucide="search"
-                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4"></i>
-              <input type="text" placeholder="Search new people to chat..."
-                class="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring" />
+                <i data-lucide="search"
+                    class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4"></i>
+                <input id="searchInput" type="text" placeholder="Search a Provideer to chat..."
+                    class="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring" />
+                <div id="searchResultsBox" 
+                    class="absolute bg-white border border-gray-200 rounded-lg shadow-lg w-full mt-1 hidden z-50">
+                </div>
             </div>
           </div>
 

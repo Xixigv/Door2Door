@@ -127,65 +127,77 @@ async function loadChats() {
     const data = await response.json();
 
     if (!data.conversations || Object.keys(data.conversations).length === 0) {
-      console.warn("⚠️ No hay conversaciones disponibles.");
+      console.warn("No hay conversaciones disponibles.");
       return;
     }
 
-    // ------------------------------------------------------
-    // 🧠 Convertir conversaciones, agregando datos reales del usuario
-    // ------------------------------------------------------
-    chats = await Promise.all(
-      Object.entries(data.conversations).map(async ([convId, messages]) => {
-        const parts = convId.split('#');
-        const otherUserId = parts[0] === String(currentUser.id) ? parts[1] : parts[0];
-        const lastMsg = messages[messages.length - 1];
+    const convArray = Object.entries(data.conversations);
 
-        // 👉 Cargar datos reales del otro usuario
-        const otherUser = await getUserById(otherUserId);
-
-        const avatarURL = otherUser?.avatar
-          ? otherUser.avatar
-          : `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.name || "U" + otherUserId)}`;
-
-        return {
-          id: String(otherUserId),
-          name: otherUser?.name || `Usuario ${otherUserId}`,
-          avatar: `<img src="${avatarURL}" class="w-10 h-10 rounded-full"/>`,
-          lastMessage: lastMsg?.message || "(sin mensajes)",
-          timestamp: lastMsg
-            ? new Date(parseInt(lastMsg.timestamp) * 1000).toLocaleTimeString('es-ES', {
-                hour: '2-digit',
-                minute: '2-digit'
-              })
-            : "",
-          unread: false
-        };
-      })
-    );
-
-    // ------------------------------------------------------
-    // 🧠 Guardar mensajes normalizados
-    // ------------------------------------------------------
-    chatMessages = {};
-    Object.entries(data.conversations).forEach(([convId, messages]) => {
+    // Obtener IDs de usuarios
+    const userIds = convArray.map(([convId]) => {
       const parts = convId.split('#');
-      const otherUserId = parts[0] === String(currentUser.id) ? parts[1] : parts[0];
-
-      chatMessages[String(otherUserId)] = messages.map(m => ({
-        from: String(m.from),
-        to: String(m.to),
-        message: m.message,
-        timestamp: Number(m.timestamp)
-      }));
+      return parts[0] === String(currentUser.id) ? parts[1] : parts[0];
     });
 
+    // Obtener datos reales en paralelo
+    const userResults = await Promise.all(
+      userIds.map(uid => getUserById(uid))
+    );
+
+    // Diccionario rápido
+    const userMap = {};
+    userIds.forEach((id, i) => {
+      userMap[id] = userResults[i];
+    });
+
+    // Crear las cards de chat
+    chats = convArray.map(([convId, messages], index) => {
+        const otherUserId = userIds[index];
+        const otherUser = userMap[otherUserId];
+        const lastMsg = messages[messages.length - 1];
+
+        const rawTimestamp = lastMsg ? Number(lastMsg.timestamp) : 0;
+
+        const avatarURL = otherUser?.avatar;
+
+        return {
+        id: String(otherUserId),
+        name: otherUser?.name || `Usuario ${otherUserId}`,
+        avatar: `<img src="${avatarURL}" class="w-10 h-10 rounded-full"/>`,
+        lastMessage: lastMsg?.message || "(sin mensajes)",
+        timestamp: rawTimestamp
+            ? new Date(rawTimestamp * 1000).toLocaleTimeString("es-ES", {
+                hour: "2-digit",
+                minute: "2-digit"
+            })
+            : "",
+        _rawTimestamp: rawTimestamp,
+        unread: false
+        };
+    });
+
+    chatMessages = {};
+    convArray.forEach(([convId, messages], index) => {
+        const otherUserId = userIds[index];
+        chatMessages[String(otherUserId)] = messages.map(msg => ({
+            from: String(msg.from),
+            to: String(msg.to),
+            message: msg.message,
+            timestamp: Number(msg.timestamp)
+        }));
+    });
+    // ORDENAR POR MÁS RECIENTE
+    chats.sort((a, b) => (b._rawTimestamp || 0) - (a._rawTimestamp || 0));
+
+    // Render
     renderChatList();
     renderChatWindow();
 
-  } catch (error) {
+    } catch (error) {
     console.error("Error cargando chats:", error);
-  }
+    }
 }
+
 
 // ==============================
 // RENDERIZADO DEL LISTADO DE CHATS
@@ -280,6 +292,56 @@ function renderChatWindow() {
 }
 
 // ==============================
+// ACTUALIZAR CARD DE CHAT DESPUÉS DE ENVIAR MENSAJE
+// ==============================
+
+function updateChatCardAfterSend(toUserId, messageText) {
+  const now = Math.floor(Date.now() / 1000);
+
+  // 1. Actualizar mensajes en memoria
+  if (!chatMessages[toUserId]) chatMessages[toUserId] = [];
+  chatMessages[toUserId].push({
+    from: currentUser.id,
+    to: toUserId,
+    message: messageText,
+    timestamp: now
+  });
+
+  // 2. Actualizar la card correspondiente
+  let existing = chats.find(c => c.id === String(toUserId));
+
+  if (existing) {
+    existing.lastMessage = messageText;
+    existing._rawTimestamp = now;
+    existing.timestamp = new Date(now * 1000).toLocaleTimeString("es-ES", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  } else {
+    // Si no está en la lista (primer mensaje), la creamos
+    existing = {
+      id: String(toUserId),
+      name: "Usuario " + toUserId,
+      avatar: "",
+      lastMessage: messageText,
+      timestamp: new Date(now * 1000).toLocaleTimeString("es-ES", {
+        hour: "2-digit",
+        minute: "2-digit"
+      }),
+      _rawTimestamp: now,
+      unread: false
+    };
+    chats.push(existing);
+  }
+
+  // 3. Reordenar chats: más recientes arriba
+  chats.sort((a, b) => (b._rawTimestamp || 0) - (a._rawTimestamp || 0));
+
+  // 4. Volver a renderizar la lista
+  renderChatList();
+}
+
+// ==============================
 // INTERACCIÓN DE USUARIO
 // ==============================
 function selectChat(chatId) {
@@ -325,10 +387,147 @@ async function sendMessage() {
     // Enviar al backend vía WebSocket
     if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify(payload));
+        updateChatCardAfterSend(selectedChatId, text);
     } else {
-        console.error("❌ WebSocket no disponible. Reintentando conexión...");
+        console.error("WebSocket no disponible. Reintentando conexión...");
         initWebSocket();
     }
+}
+
+// ==============================
+// BUSCADOR DE NUEVAS PERSONAS / PROVEEDORES
+// ==============================
+
+const searchInput = document.getElementById("searchInput");
+const searchBox = document.getElementById("searchResultsBox");
+
+searchInput.addEventListener("input", async (e) => {
+    const query = e.target.value.trim();
+
+    // Cuando se borre → ocultar resultsBox COMPLETAMENTE
+    if (query.length === 0) {
+        searchBox.classList.add("hidden");
+        searchBox.innerHTML = "";   // Limpia contenido (evita que quede el texto “sin resultados”)
+        return;
+    }
+
+    // Cuando hay texto → buscar proveedores
+    const results = await searchProviders(query);
+    renderSearchResults(results);
+});
+
+// ==============================
+//  Llamada al backend
+// ==============================
+async function searchProviders(query) {
+    try {
+        const res = await fetch(`/users/search?q=${encodeURIComponent(query)}`);
+        const data = await res.json();
+
+        console.log("Respuesta backend:", data);
+
+        return data.results || []; 
+    } catch (e) {
+        console.error("Error buscando proveedores:", e);
+        return [];
+    }
+}
+
+// ==============================
+//  Render de resultados
+// ==============================
+function renderSearchResults(list) {
+    const box = document.getElementById("searchResultsBox");
+
+    if (!box) return;
+
+    // Si no hay búsqueda → ocultar box por completo
+    if (!list || list.length === 0) {
+        if (searchInput.value.trim().length === 0) {
+            box.classList.add("hidden");
+            box.innerHTML = "";
+            return;
+        }
+
+        box.classList.remove("hidden");
+        box.innerHTML = box.innerHTML = `<p class="text-gray-400 px-3 py-2">Sin resultados</p>`;
+        return;
+    }
+
+    box.classList.remove("hidden");
+
+    box.innerHTML = list.map(u => `
+        <div 
+            class="p-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2"
+            onclick="selectFromSearch('${u.id}', '${u.name}', '${u.avatar}')"
+        >
+            <img src="${u.avatar}" class="w-8 h-8 rounded-full">
+            <span>${u.name}</span>
+        </div>
+    `).join('');
+}
+
+// ==============================
+// CREAR / ABRIR CHAT DESDE BUSCADOR
+// ==============================
+async function selectFromSearch(userId, name, avatarUrl) {
+    // 1. Aseguramos que avatar sea HTML consistente
+    const avatarHTML = `
+        <img src="${avatarUrl}" class="w-10 h-10 rounded-full"/>
+    `;
+
+    // 2. Ver si el chat ya existe
+    let existingChat = chats.find(c => c.id === String(userId));
+
+    if (!existingChat) {
+        console.log("🆕 Creando nuevo chat local con", userId);
+
+        // Crear un chat vacío para este proveedor
+        existingChat = {
+            id: String(userId),
+            name,
+            avatar: avatarHTML,
+            lastMessage: "(nuevo chat)",
+            timestamp: "",
+            unread: false
+        };
+
+        chats.unshift(existingChat); // lo ponemos arriba de la lista
+        chatMessages[userId] = [];   // chat nuevo → sin mensajes
+    }
+
+    // 3. Seleccionarlo
+    selectedChatId = String(userId);
+
+    // 4. Actualizar UI
+    renderChatList();
+    renderChatWindow();
+
+    // 5. Ocultar resultados y limpiar input
+    const box = document.getElementById("searchResultsBox");
+    const input = document.getElementById("searchInput");
+
+    if (box) {
+        box.classList.add("hidden");
+        box.innerHTML = "";
+    }
+
+    if (input) {
+        input.value = "";
+    }
+}
+
+// ==============================
+// FUTURO: crear nuevo chat
+// (por ahora solo imprime en consola)
+// ==============================
+function startNewChat(userId) {
+    console.log("Abrir chat con:", userId);
+
+    // TODO: aquí después conectamos "abrir chat"
+    
+    searchResultsEl.classList.add("hidden");
+    searchInput.value = "";
 }
 
 // ==============================
