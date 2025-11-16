@@ -79,6 +79,6 @@ GET http://localhost:3000/bookings/user/1 HTTP/1.1
 content-type: application/json
 
 ### Get provider services
-GET http://localhost:3000/services/provider/1 HTTP/1.1
+GET http://3.129.21.2/services/categories HTTP/1.1
 content-type: application/json
 

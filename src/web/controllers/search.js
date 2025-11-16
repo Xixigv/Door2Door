@@ -307,7 +307,7 @@ function createSearchResultCard(service) {
 
 function getCategories() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:3000/services/categories', true);
+    xhr.open('GET', '/services/categories', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -504,7 +504,7 @@ function displayServices(services) {
 
 function getServices(){
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:3000/services/all', true);
+    xhr.open('GET', '/services/all', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
