@@ -50,7 +50,7 @@ async function getUserPasswordFromAurora(email) {
 */
 async function createUserInAurora({ id, email, password, isProvider = false }) {
   const rows = await auroraQuery(
-    'INSERT INTO users (id, email, password, isProvider, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING id, email, isProvider;',
+    'INSERT INTO users (id, email, password, isProvider, createdat) VALUES ($1, $2, $3, $4, NOW()) RETURNING id, email, isProvider;',
     [id, email, password, isProvider]
   );
   return rows[0];

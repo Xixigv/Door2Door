@@ -12,7 +12,6 @@ Content-Type: application/json
     "password": "test123",
     "phone": "1234567890",
     "location": "Test City",
-    "avatar": "https://example.com/avatar.jpg",
     "memberSince": "2025-11-06",
     "totalBookings": 0,
     "totalSpent": 0,
@@ -79,6 +78,6 @@ GET http://localhost:3000/bookings/user/1 HTTP/1.1
 content-type: application/json
 
 ### Get provider services
-GET http://3.129.21.2/services/categories HTTP/1.1
+GET http://web-tier-external-lb-1161380270.us-east-2.elb.amazonaws.com/providers/1 HTTP/1.1
 content-type: application/json
 

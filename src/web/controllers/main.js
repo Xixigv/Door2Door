@@ -31,7 +31,7 @@ async function checkAndRestoreSession() {
             updateHeaderLoggedOut();
         }
     } catch (err) {
-        console.warn('Session check failed:', err);
+        // console.warn('Session check failed:', err);
         updateHeaderLoggedOut();
     }
 }
@@ -128,8 +128,6 @@ function setupHeaderSearch() {
         debouncedSearch(e.target.value);
     });
 }
-
-
 
 // Global error handler
 window.addEventListener('error', (e) => {

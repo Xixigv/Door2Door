@@ -44,7 +44,7 @@ async function checkSession() {
 
     return data;
   } catch (err) {
-    console.warn('Error checking session:', err);
+    // console.warn('Error checking session:', err);
     return null;
   }
 }
