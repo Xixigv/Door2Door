@@ -81,3 +81,78 @@ content-type: application/json
 GET http://web-tier-external-lb-1161380270.us-east-2.elb.amazonaws.com/providers/1 HTTP/1.1
 content-type: application/json
 
+
+
+# ### Login with user Sarah
+# POST http://localhost:3000/users/login
+# Content-Type: application/json
+
+# {
+#     "email": "sarah.johnson@email.com",
+#     "password": "Painter2024!"
+# }
+
+
+# ### Become a Provider
+# POST http://localhost:3000/users/become-provider
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI5IiwiZW1haWwiOiJzYXJhaC5qb2huc29uQGVtYWlsLmNvbSIsImlzUHJvdmlkZXIiOmZhbHNlLCJpYXQiOjE3NjM3OTA4NDMsImV4cCI6MTc2Mzg3NzI0M30.9LuQysFXfsHDrpi7736pyXZkBPJc1aT9Hrb1vFNVgx4
+
+# {
+#   "serviceCategory": "Plumbing",
+#   "yearsExperience": 5,
+#   "professionalTitle": "Master Plumber",
+#   "hourlyRate": 75,
+#   "serviceDescription": "Professional plumbing services with over 5 years of experience.",
+#   "shortDescription": "Expert plumbing solutions",
+#   "specificServices": "Leak Detection, Pipe Installation, Drain Cleaning",
+#   "businessName": "Test Plumbing Co",
+#   "licenseNumber": "PL12345",
+#   "profileImage": "https://example.com/profile.jpg",
+#   "coverImage": "https://example.com/cover.jpg",
+#   "location": "San Francisco, CA"
+# }
+
+# ### Check the user session shows provider role
+# GET http://localhost:3000/users/checkSession
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwIiwiZW1haWwiOiJkYXZpZC5tYXJ0aW5lekBlbWFpbC5jb20iLCJpc1Byb3ZpZGVyIjpmYWxzZSwiaWF0IjoxNzYzNzg0ODYxLCJleHAiOjE3NjM4NzEyNjF9.Hd0s7AI5VCuKhmG7tgkwmByIAzr62EXS1e_uf7ULrE0
+
+# ### Check Aurora database
+# GET http://localhost:3000/users/detail/30
+
+# ### Check if user shows as provider in search (if they search themselves)
+# GET http://localhost:3000/users/search?q=david
+
+
+
+# ### 6. Get the created SERVICE by ID (copy service.id from step 2 response)
+# GET http://localhost:3000/services/1763790904697
+# Content-Type: application/json
+
+# ### 7. Get all services - verify your new service appears
+# GET http://localhost:3000/services?limit=50
+# Content-Type: application/json
+
+# ### 8. Get all services (full list) - verify structure matches
+# GET http://localhost:3000/services/all
+# Content-Type: application/json
+
+# ### 9. Get services by provider ID - should show the service created for user 30
+# GET http://localhost:3000/services/provider/29
+# Content-Type: application/json
+
+# ### 10. Get provider details - verify provider was created
+# GET http://localhost:3000/providers/29
+# Content-Type: application/json
+
+# ### 11. Get all providers - should include the new provider
+# GET http://localhost:3000/providers?limit=50
+# Content-Type: application/json
+
+
+
+### View all services
+GET http://localhost:3000/services/all
+
+### View services by provider
+GET http://localhost:3000/services/provider/29

@@ -609,4 +609,230 @@ router.get("/search", async (req, res) => {
   }
 });
 
+
+async function createProviderInDynamo(providerData) {
+  const ProvidersTable ='Providers';
+  const item = {
+    id: { N: String(providerData.id) },
+    name: { S: String(providerData.name) },
+    email: { S: String(providerData.email) },
+    phone: { S: String(providerData.phone || '') },
+    location: { S: String(providerData.location || '') },
+    service: { S: String(providerData.serviceCategory) },
+    serviceCategory: { S: String(providerData.serviceCategory) },
+    yearsExperience: { N: String(providerData.yearsExperience || 0) },
+    professionalTitle: { S: String(providerData.professionalTitle) },
+    hourlyRate: { N: String(providerData.hourlyRate) },
+    bio: { S: String(providerData.serviceDescription) },
+    shortDescription: { S: String(providerData.shortDescription || '') },
+    services: { L: (providerData.services || []).map(s => ({ S: String(s) })) },
+    businessName: { S: String(providerData.businessName || '') },
+    licenseNumber: { S: String(providerData.licenseNumber || '') },
+    avatar: { S: String(providerData.profileImage || '') },
+    coverImage: { S: String(providerData.coverImage || '') },
+    rating: { N: '0' },
+    reviewCount: { N: '0' },
+    completedJobs: { N: '0' },
+    availability: { S: 'Available Now' },
+    responseTime: { S: 'Within an hour' },
+    joinDate: { S: new Date().toISOString().split('T')[0] }
+  };
+
+  await dynamoDB.send(
+    new ddb.PutItemCommand({
+      TableName: ProvidersTable,
+      Item: item,
+      ConditionExpression: 'attribute_not_exists(id)'
+    })
+  );
+
+  return unmarshall(item);
+}
+
+
+async function createServiceInDynamo(serviceData) {
+  const ServicesTable = 'Services';
+  
+  const item = {
+    id: { N: String(serviceData.id) },
+    category: { S: String(serviceData.category) },
+    description: { S: String(serviceData.description) },
+    distance: { S: String(serviceData.distance || '0 miles away') },
+    image: { S: String(serviceData.image) },
+    location: { S: String(serviceData.location) },
+    name: { S: String(serviceData.name) },
+    shortDescription: { S: String(serviceData.shortDescription) },
+    pricing: {
+      M: {
+        hourlyRate: { N: String(serviceData.hourlyRate) },
+        serviceCall: { N: String(serviceData.serviceCall || 0) }
+      }
+    },
+    provider: {
+      M: {
+        id: { N: String(serviceData.providerId) },
+        availability: { S: 'Available Now' },
+        completedJobs: { N: '0' },
+        image: { S: String(serviceData.providerImage) },
+        name: { S: String(serviceData.providerName) },
+        rating: { N: '0' },
+        responseTime: { S: 'Within an hour' },
+        reviewCount: { N: '0' },
+        yearsExperience: { N: String(serviceData.yearsExperience || 0) }
+      }
+    },
+    services: { 
+      L: (serviceData.services || []).map(s => ({ S: String(s) })) 
+    }
+  };
+
+  await dynamoDB.send(
+    new ddb.PutItemCommand({
+      TableName: ServicesTable,
+      Item: item,
+      ConditionExpression: 'attribute_not_exists(id)'
+    })
+  );
+
+  return unmarshall(item);
+}
+router.post('/become-provider', authenticateToken, async (req, res) => {
+  try {
+    const {
+      serviceCategory,
+      yearsExperience,
+      professionalTitle,
+      hourlyRate,
+      serviceDescription,
+      shortDescription,
+      specificServices,
+      businessName,
+      licenseNumber,
+      profileImage,
+      coverImage,
+      location
+    } = req.body || {};
+
+    // Validate required fields
+    if (!serviceCategory || !professionalTitle || !hourlyRate || !serviceDescription) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Missing required fields: serviceCategory, professionalTitle, hourlyRate, serviceDescription' 
+      });
+    }
+
+    const userId = req.user.id;
+    const userEmail = req.user.email;
+    
+    // Check if user exists and is not already a provider
+    const auroraUser = await getUserPasswordFromAurora(userEmail);
+    if (!auroraUser) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'User not found' 
+      });
+    }
+    
+    if (auroraUser.isprovider) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'User is already a provider' 
+      });
+    }
+
+    // Get full user profile from DynamoDB
+    let dynamoUser = null;
+    try {
+      dynamoUser = await getUserFromDynamo(userId);
+    } catch (e) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'User profile not found in DynamoDB' 
+      });
+    }
+
+    // Update user to provider in Aurora
+    const updatedAurora = await auroraQuery(
+      'UPDATE users SET isprovider = $1 WHERE id = $2 RETURNING id, email, isprovider;',
+      [true, userId]
+    );
+    
+    if (!updatedAurora || updatedAurora.length === 0) {
+      return res.status(500).json({ 
+        success: false, 
+        error: 'Failed to update user to provider' 
+      });
+    }
+
+    // Parse services array
+    const servicesArray = Array.isArray(specificServices) 
+      ? specificServices 
+      : (typeof specificServices === 'string' 
+          ? specificServices.split(',').map(s => s.trim()) 
+          : []);
+
+    // Create provider data for Providers table (your existing logic)
+    const providerData = {
+      id: auroraUser.id,
+      name: dynamoUser.name || 'Provider',
+      email: dynamoUser.email,
+      phone: dynamoUser.phone || '',
+      location: location || dynamoUser.location || '',
+      serviceCategory: serviceCategory,
+      yearsExperience: parseInt(yearsExperience) || 0,
+      professionalTitle: professionalTitle,
+      hourlyRate: parseFloat(hourlyRate),
+      serviceDescription: serviceDescription,
+      shortDescription: shortDescription || serviceDescription.substring(0, 100),
+      services: servicesArray,
+      businessName: businessName || '',
+      licenseNumber: licenseNumber || '',
+      profileImage: profileImage || dynamoUser.avatar || '',
+      coverImage: coverImage || ''
+    };
+
+    // Create provider entry in Providers table (your existing function)
+    const createdProvider = await createProviderInDynamo(providerData);
+
+    // Create service entry in Services table
+    const serviceData = {
+      id: Date.now(), // Same pattern as reviews: Date.now() for unique ID
+      providerId: auroraUser.id,
+      providerName: dynamoUser.name || 'Provider',
+      providerImage: profileImage || dynamoUser.avatar || '',
+      category: serviceCategory,
+      name: businessName || `${serviceCategory} Services`,
+      description: serviceDescription,
+      shortDescription: shortDescription || serviceDescription.substring(0, 100),
+      image: coverImage || profileImage || '',
+      location: location || dynamoUser.location || '',
+      hourlyRate: parseFloat(hourlyRate),
+      serviceCall: 0, // Default service call fee
+      yearsExperience: parseInt(yearsExperience) || 0,
+      services: servicesArray
+    };
+
+    const createdService = await createServiceInDynamo(serviceData);
+
+    res.status(201).json({ 
+      success: true, 
+      message: 'Successfully converted to provider and created service',
+      data: {
+        aurora: updatedAurora[0],
+        provider: createdProvider,
+        service: createdService
+      }
+    });
+
+  } catch (err) {
+    console.error('Error in /users/become-provider:', err);
+    res.status(500).json({ 
+      success: false, 
+      error: err.message 
+    });
+  }
+});
+
+
+
 module.exports = router;
