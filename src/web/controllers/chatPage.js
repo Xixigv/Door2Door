@@ -6,6 +6,7 @@ let currentUser = null;
 let selectedChatId = null;
 let chats = [];
 let chatMessages = {};
+let wsUrl = null;
 
 // ==============================
 // WEBSOCKET
@@ -15,8 +16,7 @@ let socket = null;
 function initWebSocket() {
     if (!currentUser || !currentUser.id) return;
 
-    const wsUrl = `wss://p2ksoatha8.execute-api.us-east-2.amazonaws.com/production?userID=${currentUser.id}`;
-
+    console.log("Iniciando WebSocket con URL:", wsUrl);
     socket = new WebSocket(wsUrl);
 
     socket.onopen = () => {
@@ -80,6 +80,41 @@ function initWebSocket() {
     };
 }
 
+// Function to get WebSocket URL
+async function getSocketUrl() {
+    try {
+        const response = await fetch('/chat/socket');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data.wsUrl;
+    } catch (error) {
+        console.error('Error fetching socket URL:', error);
+        throw error;
+    }
+}
+
+// Function to get messages/Lambda URL
+async function getMessagesUrl() {
+    try {
+        const response = await fetch('/chat/messages');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log(data.apiUrl);
+        return data.apiUrl;
+    } catch (error) {
+        console.error('Error fetching messages URL:', error);
+        throw error;
+    }
+}
+
 // ==============================
 // CARGAR USUARIO AUTENTICADO
 // ==============================
@@ -128,7 +163,8 @@ async function loadChats() {
   try {
     if (!currentUser || !currentUser.id) return;
 
-    const apiUrl = `https://pyj8f2353b.execute-api.us-east-2.amazonaws.com/messages?userA=${currentUser.id}`;
+    apiUrl = await getMessagesUrl();
+    apiUrl = apiUrl + `/messages?userA=${currentUser.id}`;
     const response = await fetch(apiUrl, { credentials: 'include' });
     const data = await response.json();
 
@@ -534,5 +570,7 @@ function startNewChat(userId) {
 window.onload = async () => {
     await loadCurrentUser();
     await loadChats();
+    wsUrl = await getSocketUrl();
+    wsUrl = wsUrl + `?userID=${currentUser.id}`;
     initWebSocket();
 };

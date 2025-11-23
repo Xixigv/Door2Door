@@ -8,6 +8,8 @@ const providersRouter = require('../routes/providersRouter.js');
 const usersRouter = require('../routes/usersRouter.js');
 const bookingsRouter = require('../routes/bookingsRouter.js');
 const reviewsRouter = require('../routes/reviewsRouter.js');
+const chatRouter = require('../routes/chatRouter.js');
+
 
 // Health check endpoint
 router.get('/health', (req, res) => {
@@ -31,6 +33,7 @@ router.use('/services', servicesRouter);
 router.use('/providers', providersRouter);
 router.use('/users', usersRouter);
 router.use('/reviews', reviewsRouter);
+router.use('/chat', chatRouter);
 
 router.get('/', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/home.html")));
 router.get('/home', (req, res) => res.sendFile(path.resolve(__dirname + "/../web/views/home.html")));
