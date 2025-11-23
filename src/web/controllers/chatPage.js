@@ -34,6 +34,12 @@ function initWebSocket() {
             return;
         }
 
+        console.log("Mensaje recibido parseado:", msg, "Current user:", currentUser.id);
+
+        if (String(msg.from) === String(currentUser.id)) {
+            return;
+        }
+
         // Normaliza tipos a string
         const from = String(msg.from);
         const to = msg.to !== undefined ? String(msg.to) : String(currentUser.id);
@@ -298,16 +304,7 @@ function renderChatWindow() {
 function updateChatCardAfterSend(toUserId, messageText) {
   const now = Math.floor(Date.now() / 1000);
 
-  // 1. Actualizar mensajes en memoria
-  if (!chatMessages[toUserId]) chatMessages[toUserId] = [];
-  chatMessages[toUserId].push({
-    from: currentUser.id,
-    to: toUserId,
-    message: messageText,
-    timestamp: now
-  });
-
-  // 2. Actualizar la card correspondiente
+  // 1. Actualizar la card correspondiente
   let existing = chats.find(c => c.id === String(toUserId));
 
   if (existing) {
@@ -318,7 +315,7 @@ function updateChatCardAfterSend(toUserId, messageText) {
       minute: "2-digit"
     });
   } else {
-    // Si no está en la lista (primer mensaje), la creamos
+    // Crear card si no existe (primer mensaje)
     existing = {
       id: String(toUserId),
       name: "Usuario " + toUserId,
@@ -334,12 +331,13 @@ function updateChatCardAfterSend(toUserId, messageText) {
     chats.push(existing);
   }
 
-  // 3. Reordenar chats: más recientes arriba
+  // 2. Reordenar chats: más recientes arriba
   chats.sort((a, b) => (b._rawTimestamp || 0) - (a._rawTimestamp || 0));
 
-  // 4. Volver a renderizar la lista
+  // 3. Volver a renderizar la lista
   renderChatList();
 }
+
 
 // ==============================
 // INTERACCIÓN DE USUARIO
