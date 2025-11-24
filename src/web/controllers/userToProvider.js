@@ -117,75 +117,61 @@ async function handleProviderApplication(event) {
     }
 
 
-    // try {
-    //     const submitButton = event.target.querySelector('button[type="submit"]');
-    //     submitButton.disabled = true;
-    //     submitButton.textContent = 'Submitting...';
+    try {
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
 
+    // Parse services array
+    const servicesArr = formData.specificServices.split(',').map(s => s.trim());
+    
+    // This is what the backend expects - check usersRouter.js line 638-655
+    const applicationData = {
+        serviceCategory: formData.serviceCategory,
+        yearsExperience: parseInt(formData.yearsExperience),
+        professionalTitle: formData.professionalTitle,
+        hourlyRate: parseFloat(formData.hourlyRate),
+        serviceDescription: formData.serviceDescription,
+        shortDescription: formData.shortDescription,
+        specificServices: servicesArr,  // Backend expects 'specificServices'
+        businessName: formData.businessName,
+        licenseNumber: formData.licenseNumber,
+        profileImage: formData.profileImage,
+        coverImage: formData.coverImage,
+        location: document.getElementById('address').value.trim()
+    };
 
-    //     const providerID = user.id;
-    //     const servicesArr = formData.specificServices.split(',').map(s => s.trim());
-    //     const applicationData = {
-    //         userId: user.id,
-    //         serviceCategory: formData.serviceCategory,
-    //         yearsExperience: parseInt(formData.yearsExperience),
-    //         professionalTitle: formData.professionalTitle,
-    //         hourlyRate: parseFloat(formData.hourlyRate),
-    //         serviceDescription: formData.serviceDescription,
-    //         services: servicesArray,
-    //         businessName: formData.businessName,
-    //         licenseNumber: formData.licenseNumber
+    console.log('Submitting application:', applicationData);
 
-    //     };
+    const response = await fetch('/users/become-provider', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(applicationData)
+    });
+    
+    const data = await response.json();
+    
+    console.log('Backend response:', data);
+    
+    if (response.ok) {
+        alert('Application submitted successfully!');
+        event.target.reset();
+        setTimeout(() => {
+            window.location.href = '/userProfile';
+        }, 1000);
+    } else {
+        alert(data.error || 'Application failed');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Application';
+    }
+    } catch (error) {
+        console.error('Error submitting application:', error);
+        alert('An error occurred. Please try again.');
+        const submitButton = event.target.querySelector('button[type="submit"]');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Application';
+    }
 
-    //     const serviceData = {
-    //         id: providerID,
-    //         availability: 'Available Now',
-    //         avatar: formData.profileImage,
-    //         bio: formData.serviceDescription,
-    //         completedJobs: 0,
-    //         converImage: formData.coverImage,
-    //         hourlyRate: parseFloat(formData.hourlyRate),
-    //         joinDate: new Date().toISOString().split('T')[0],
-    //         location: user.location,
-    //         name:user.name,
-    //         rating: 0,
-    //         responseTime: 'Within an hour',
-    //         reviewCount: 0,
-    //         service: formData.serviceCategory,
-    //         serviceID: providerID,
-    //         services: servicesArr,
-    //         yearsExperience: parseInt(formData.yearsExperience)
-    //     };
-
-    //     const response = await fetch('/users/become-provider', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(applicationData)
-    //     });
-    //     const data = await response.json();
-    //     if (response.ok) {
-    //         alert('Application submitted successfully!');
-    //         event.target.reset();
-    //         setTimeout(() => {
-    //             window.location.href = '/userProfile';
-    //         }, 1000);
-    //     } else {
-    //         alert(data.error || 'Application failed');
-    //         submitButton.disabled = false;
-    //         submitButton.textContent = 'Submit Application';
-    //     }
-    // } catch (error) {
-    //     console.error('Error submitting application:', error);
-    //     alert('An error occurred. Please try again.');
-    //     const submitButton = event.target.querySelector('button[type="submit"]');
-    //     submitButton.disabled = false;
-    //     submitButton.textContent = 'Submit Application';
-    // }
-      
 }
-
-
-
