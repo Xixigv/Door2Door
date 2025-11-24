@@ -91,6 +91,7 @@ body {
     padding: 0.75rem 1rem;
     border: 1px solid #e5e7eb;
     background: white;
+    height: fit-content;
 }
 
 .message-card.me {

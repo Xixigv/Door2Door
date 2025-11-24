@@ -309,7 +309,7 @@ function renderChatWindow() {
         </div>
         
         <div id="messagesContainer" class="custom-scrollbar overflow-y-auto p-6">
-        <div class="grid gap-4">${messagesHTML}</div>
+        <div class="flex flex-col gap-4">${messagesHTML}</div>
         </div>
         
         <div class="p-4 border-t border-gray-200">
