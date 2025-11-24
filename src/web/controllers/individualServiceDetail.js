@@ -8,19 +8,8 @@ function getService(id) {
     xhr.onload = function() {
         if (xhr.status === 200) {
             const service = JSON.parse(xhr.responseText);
-            localStorage.setItem('providerId', service.providerId);
+            localStorage.setItem('providerId', service.provider.id);
             renderServiceDetails(service);
-
-            const isProvider = getCurrentUser().isProvider;
-            const userId  = getCurrentUser().id;
-
-            
-            if (isProvider && userId === service.providerId) {
-                const clientInfo = document.getElementById('client-info');
-                if (clientInfo) {
-                    clientInfo.classList.remove('hidden');
-                }
-            }
             
             initializeIcons();
         } else {
@@ -438,12 +427,6 @@ window.onload = function() {
     const serviceId = localStorage.getItem('service');
     const bookingId = localStorage.getItem('booking');
     const clientId = localStorage.getItem('clientId');
-    
-    if (serviceId) {
-        getService(serviceId);
-    } else {
-        console.error('No service ID found in storage');
-    }
 
     if (bookingId) {
         getBooking(bookingId);
@@ -455,5 +438,23 @@ window.onload = function() {
         getUserDetail(clientId);
     } else {
         console.error('No user ID found in storage');
+    }
+
+    if (serviceId) {
+        getService(serviceId);
+    } else {
+        console.error('No service ID found in storage');
+    }
+
+    const isProvider = getCurrentUser().isProvider;
+    const userId  = getCurrentUser().id;
+    const providerId = localStorage.getItem('providerId');
+
+    
+    if (isProvider && userId === providerId) {
+        const clientInfo = document.getElementById('client-info');
+        if (clientInfo) {
+            clientInfo.classList.remove('hidden');
+        }
     }
 };
