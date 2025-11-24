@@ -10,7 +10,6 @@ function getService(id) {
             const service = JSON.parse(xhr.responseText);
             localStorage.setItem('providerId', service.provider.id);
             renderServiceDetails(service);
-            
             initializeIcons();
         } else {
             console.error('Request failed. Status:', xhr.status);
@@ -33,18 +32,10 @@ function getBooking(id) {
     xhr.onload = function() {
         if (xhr.status === 200) {
             const booking = JSON.parse(xhr.responseText);
-            const isProvider = getCurrentUser().isProvider; // Get logged-in user ID
 
-            setupReviewSection(isProvider, booking.status);
-            
-            if (isProvider && getCurrentUser().id === booking.providerId) {
-                setupStatusSection(isProvider, booking.status);
-                const clientInfo = document.getElementById('client-info');
-                if (clientInfo) {
-                    clientInfo.classList.remove('hidden');
-                }
-            }
-            
+            setupReviewSection(booking.status);
+            setupStatusSection(booking.status);
+
             initializeIcons();
         } else {
             console.error('Request failed. Status:', xhr.status);
@@ -171,10 +162,16 @@ function updateBookingStatus(bookingId, status, callback) {
 }
 
 function renderClientInfo(client) {
+
+    isProvider = getCurrentUser().isProvider;
+    userId = getCurrentUser().id;
+    if (!isProvider || parseInt(userId, 10) === parseInt(client.id, 10)) return;
+
     const container = document.getElementById("client-info");
     if (!container) return;
 
     container.innerHTML = '';
+    container.classList.remove('hidden');
 
     // Create wrapper div for flex layout
     const wrapper = createElement('div', 'flex items-start space-x-4');
@@ -277,9 +274,13 @@ function renderServiceDetails(service) {
     container.appendChild(pricingSection);
 }
 
-function setupStatusSection(isProvider, status) {
+function setupStatusSection(status) {
     const section = document.getElementById("status-section");
-    if (!section || !isProvider) return;
+    if (!section || !getCurrentUser().isProvider) return;
+
+    const userId = getCurrentUser().id;
+    const clientId = localStorage.getItem('clientId');
+    if (parseInt(userId, 10) === parseInt(clientId, 10)) return;
 
     section.innerHTML = '';
 
@@ -364,8 +365,10 @@ function updateStatusButton(btn, status) {
     }
 }
 
-function setupReviewSection(isProvider, status) {
-    if (isProvider) return;
+function setupReviewSection(status) {
+    const userId = getCurrentUser().id;
+    const clientId = localStorage.getItem('clientId');
+    if (parseInt(userId, 10) !== parseInt(clientId, 10)) return;
 
     const reviewSection = document.getElementById("review-section");
     if (!reviewSection || status !== "Completed") return;
@@ -433,6 +436,12 @@ window.onload = function() {
     } else {
         console.error('No booking ID found in storage');
     }
+    
+    if (serviceId) {
+        getService(serviceId);
+    } else {
+        console.error('No service ID found in storage');
+    }
 
     if (clientId) {
         getUserDetail(clientId);
@@ -440,21 +449,5 @@ window.onload = function() {
         console.error('No user ID found in storage');
     }
 
-    if (serviceId) {
-        getService(serviceId);
-    } else {
-        console.error('No service ID found in storage');
-    }
-
-    const isProvider = getCurrentUser().isProvider;
-    const userId  = getCurrentUser().id;
-    const providerId = localStorage.getItem('providerId');
-
-    
-    if (isProvider && userId === providerId) {
-        const clientInfo = document.getElementById('client-info');
-        if (clientInfo) {
-            clientInfo.classList.remove('hidden');
-        }
-    }
 };
+
