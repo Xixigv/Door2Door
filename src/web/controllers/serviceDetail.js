@@ -153,12 +153,6 @@ function renderServiceDetailPage(service) {
         'btn btn-outline btn-sm'
     );
 
-
-
-
-
-
-    
     actionButtons.appendChild(viewProfileBtn);
     actionButtons.appendChild(messageBtn);
     actionButtons.appendChild(callBtn);
@@ -437,18 +431,23 @@ function getUserDetail(userId, /*authenticateToken,*/ ) {
     });
 }
 
-
 window.onload = function() {
     const serviceId = localStorage.getItem('service');
     getService(serviceId);
 
-    const providerId = localStorage.getItem('provider');
-    
-    getReviews({ providerId: providerId, limit: 5 }, (error, reviews) => {
-        if (error) {
-            console.error('Failed to load reviews:', error);
-        } else {
-            renderReviewsSection(reviews);
-        }
-    });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    setTimeout(() => {
+        const providerId = localStorage.getItem('provider');
+        getReviews({ providerId: providerId, limit: 5 }, (error, reviews) => {
+            if (error) {
+                console.error('Failed to load reviews:', error);
+            } else {
+                renderReviewsSection(reviews);
+            }
+    });
+    }, 1000);
+
+});
