@@ -16,15 +16,13 @@ let socket = null;
 function initWebSocket() {
     if (!currentUser || !currentUser.id) return;
 
-    console.log("Iniciando WebSocket con URL:", wsUrl);
     socket = new WebSocket(wsUrl);
 
     socket.onopen = () => {
         console.log("🔌 WebSocket conectado como usuario:", currentUser.id);
     };
 
-    socket.onmessage = (event) => {
-        console.log("📩 Mensaje recibido raw:", event.data);
+    socket.onmessage = async (event) => {
 
         let msg;
         try {
@@ -33,8 +31,6 @@ function initWebSocket() {
             console.warn("No se pudo parsear el mensaje:", e);
             return;
         }
-
-        console.log("Mensaje recibido parseado:", msg, "Current user:", currentUser.id);
 
         if (String(msg.from) === String(currentUser.id)) {
             return;
@@ -45,8 +41,36 @@ function initWebSocket() {
         const to = msg.to !== undefined ? String(msg.to) : String(currentUser.id);
         const message = msg.message;
         const timestamp = msg.timestamp || Math.floor(Date.now() / 1000);
-
         const chatId = from === String(currentUser.id) ? to : from; // conversación con el otro
+
+        // crea array si no existe
+        if (!chatMessages[chatId]) chatMessages[chatId] = [];
+
+        let existingChat = chats.find(c => c.id === String(from));
+
+        if (!existingChat) {
+            const user = await getUserById(from);
+
+            // Crear un chat vacío para este proveedor
+            existingChat = {
+                id: String(from),
+                name: user.name || `Usuario ${from}`,
+                avatar: `<img src="${user.avatar}" class="w-10 h-10 rounded-full"/>`,
+                lastMessage: message || "(sin mensajes)",
+                timestamp: timestamp
+                    ? new Date(timestamp * 1000).toLocaleTimeString("es-ES", {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })
+                    : "",
+                _rawTimestamp: timestamp,
+                unread: false
+            };
+
+            chats.unshift(existingChat); // lo ponemos arriba de la lista
+            chatMessages[from] = [];   // chat nuevo → sin mensajes
+        }
+
 
         // crea array si no existe
         if (!chatMessages[chatId]) chatMessages[chatId] = [];
@@ -107,7 +131,6 @@ async function getMessagesUrl() {
         }
         
         const data = await response.json();
-        console.log(data.apiUrl);
         return data.apiUrl;
     } catch (error) {
         console.error('Error fetching messages URL:', error);
@@ -126,7 +149,6 @@ async function loadCurrentUser() {
         const data = await res.json();
         if (data.success && data.data) {
             currentUser = data.data;
-            console.log("👤 Usuario autenticado:", currentUser);
         } else {
             console.warn("No se pudo cargar el usuario autenticado.");
         }
@@ -169,6 +191,8 @@ async function loadChats() {
     const data = await response.json();
 
     if (!data.conversations || Object.keys(data.conversations).length === 0) {
+      renderChatList();
+      renderChatWindow("Inicie un chat para comenzar a enviar mensajes.");
       console.warn("No hay conversaciones disponibles.");
       return;
     }
@@ -272,14 +296,19 @@ function renderChatList() {
 // ==============================
 // RENDERIZADO DEL CHAT SELECCIONADO
 // ==============================
-function renderChatWindow() {
+function renderChatWindow(mensaje=null){
     const container = document.getElementById('chatWindowContainer');
     if (!container) return;
+
+    if (mensaje === null) {
+        mensaje = 'Selecciona un chat para comenzar.';
+    }
+    
 
     if (!selectedChatId) {
         container.innerHTML = `
         <div class="h-full flex items-center justify-center bg-white rounded-lg">
-            <p class="text-gray-500">Selecciona un chat para comenzar</p>
+            <p class="text-gray-500">${mensaje}</p>
         </div>
         `;
         return;
@@ -458,8 +487,6 @@ async function searchProviders(query) {
         const res = await fetch(`/users/search?q=${encodeURIComponent(query)}`);
         const data = await res.json();
 
-        console.log("Respuesta backend:", data);
-
         return data.results || []; 
     } catch (e) {
         console.error("Error buscando proveedores:", e);
@@ -514,7 +541,6 @@ async function selectFromSearch(userId, name, avatarUrl) {
     let existingChat = chats.find(c => c.id === String(userId));
 
     if (!existingChat) {
-        console.log("🆕 Creando nuevo chat local con", userId);
 
         // Crear un chat vacío para este proveedor
         existingChat = {
@@ -556,7 +582,6 @@ async function selectFromSearch(userId, name, avatarUrl) {
 // (por ahora solo imprime en consola)
 // ==============================
 function startNewChat(userId) {
-    console.log("Abrir chat con:", userId);
 
     // TODO: aquí después conectamos "abrir chat"
     
