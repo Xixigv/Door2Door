@@ -200,3 +200,14 @@
   Revisas que todo este correcto y das click en Crear pila.
 
   Esperar a que se levante por completo y en la cinta de opciones nos vamos a salidas, buscamos la salida que diga Web Tier Load Balancer hacemos click en el link y deberías poder entrar a la página. A veces tarda un poco más en inicializarse las instancias web por lo que puede dar error 504, esperar un momento y refrescar la página.
+
+
+# Flujo Sugerido para probar aplicación
+
+  - Entrar a home, buscar el botón de login
+  - Crear una nueva cuenta
+  - Regresar a la pagina de home
+  - Presionar sobre un servicio Popular
+  - Presionar Schedule
+  - Llenar los datos
+  - Presionar confirmar
