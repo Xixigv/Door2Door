@@ -39,7 +39,7 @@ async function getAuthToken(clusterEndpoint, user, region) {
 async function initPool() {
   const clusterEndpoint = process.env.CLUSTER_ENDPOINT;
   const user = process.env.CLUSTER_USER;
-  const region = 'us-east-2';
+  const region = process.env.AWS_REGION;
 
   const token = await getAuthToken(clusterEndpoint, user, region);
 

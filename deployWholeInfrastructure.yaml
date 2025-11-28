@@ -1,0 +1,600 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Scalable Three-Tier Architecture for Development Environment'
+
+Parameters:
+  MinSize:
+    Type: Number
+    Description: Minimum number of App Tier instances
+    Default: 2
+  
+  MaxSize:
+    Type: Number
+    Description: Maximum number of App Tier instances
+    Default: 2
+  
+  DesiredCapacity:
+    Type: Number
+    Description: Desired number of App Tier instances
+    Default: 2
+
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: EC2 Key Pair for SSH access
+    Default: instanciasWeb
+
+Resources:
+  # VPC
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: ThreeTierVPC
+
+  # Internet Gateway
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: ThreeTierIGW
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # Public Subnets (Web Tier)
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.0.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: Public-Subnet-AZ1
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.30.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: Public-Subnet-AZ2
+
+  # Private Subnets (App Tier)
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.10.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      Tags:
+        - Key: Name
+          Value: Private-Subnet-App-AZ1
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.40.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags:
+        - Key: Name
+          Value: Private-Subnet-App-AZ2
+
+  # Route Tables
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: Public-Route-Table
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnetRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable
+
+  NATGatewayEIPAZ1:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: NAT-Gateway-EIPaz1
+
+  NATGatewayEIPAZ2:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: NAT-Gateway-EIPaz2
+
+  NATGatewayAZ1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NATGatewayEIPAZ1.AllocationId
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: NAT-Gateway-AZ1
+
+  NATGatewayAZ2:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NATGatewayEIPAZ2.AllocationId
+      SubnetId: !Ref PublicSubnet2
+      Tags:
+        - Key: Name
+          Value: NAT-Gateway-AZ2
+
+  # Route Tables
+  PrivateRouteTableAZ1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: Private-Route-Table-AZ1
+
+  PrivateRouteTableAZ2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: Private-Route-Table-AZ2
+
+  PrivateRouteAZ1:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PrivateRouteTableAZ1
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref NATGatewayAZ1
+
+  PrivateRouteAZ2:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PrivateRouteTableAZ2
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref NATGatewayAZ2
+
+  PrivateSubnetRouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet1
+      RouteTableId: !Ref PrivateRouteTableAZ1
+
+  PrivateSubnetRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet2
+      RouteTableId: !Ref PrivateRouteTableAZ2
+
+  InternetFacingLBSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for external load balancer
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: Internet-LB-Security-Group
+
+  # Security Groups
+  #ToDo: add internetFacingWebBalancerGroup
+  WebSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Web Tier
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref InternetFacingLBSG
+      Tags:
+        - Key: Name
+          Value: Web-Security-Group
+
+  InternalLBSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for internal load balancer
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: InternalLBSG
+
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for App Tier
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          SourceSecurityGroupId: !Ref InternalLBSG
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: App-Security-Group
+
+  # IAM Role for SSM
+  EC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Tags:
+        - Key: Name
+          Value: EC2-SSM-Role
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref EC2Role
+
+  AppTierTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: AppTierTargetGroup
+      Port: 3000
+      Protocol: HTTP
+      VpcId: !Ref VPC  # Your existing VPC
+      HealthCheckEnabled: true
+      HealthCheckPath: /health
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      TargetType: instance  # Options: instance, ip, lambda
+
+  WebTierTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: WebTierTargetGroup
+      Port: 80
+      Protocol: HTTP
+      VpcId: !Ref VPC  # Your existing VPC
+      HealthCheckEnabled: true
+      HealthCheckPath: /webHealth
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      TargetType: instance  # Options: instance, ip, lambda
+
+  AppTierInternalLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: app-tier-internal-lb
+      Type: application  # Options: application, network, gateway
+      Scheme: internal  # Internal load balancer (not internet-facing)
+      IpAddressType: ipv4
+      Subnets:
+        - !Ref PrivateSubnet1  # Your existing private subnet
+        - !Ref PrivateSubnet2  # Your existing private subnet
+      SecurityGroups:
+        - !Ref InternalLBSG  # Your existing security group
+      Tags:
+        - Key: Name
+          Value: app-tier-internal-lb
+
+  ListenerAppTierInternalLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref AppTierInternalLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref AppTierTargetGroup
+
+  WebTierExternalLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: web-tier-external-lb
+      Type: application  # Options: application, network, gateway
+      Scheme: internet-facing  # Publicly accessible
+      IpAddressType: ipv4
+      Subnets:
+        - !Ref PublicSubnet1  # Your existing public subnet
+        - !Ref PublicSubnet2  # Your existing public subnet
+      SecurityGroups:
+        - !Ref InternetFacingLBSG  # Your existing security group
+      Tags:
+        - Key: Name
+          Value: web-tier-external-lb
+
+  ListenerWebTierExternalLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref WebTierExternalLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref WebTierTargetGroup
+
+  AppTierLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: AppTierLaunchTemplate
+      LaunchTemplateData:
+        ImageId: ami-025ca978d4c1d9825 # Uses your custom App Tier AMI
+        InstanceType: t3.micro  # Change as needed: t2.small, t3.medium, etc.
+        SecurityGroupIds:
+          - !Ref AppSecurityGroup  # Your existing security group
+        KeyName: !Ref KeyPairName
+        IamInstanceProfile:
+          Arn: !GetAtt EC2InstanceProfile.Arn  # Your existing instance profile ARN (leave empty in params if not needed)
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            exec > >(tee /var/log/user-data.log)
+            exec 2>&1
+
+            echo "Starting UserData script..."
+
+            sudo yum update -y
+            sudo yum install git -y
+
+            sudo -i -u ec2-user bash << 'EOF'
+            # Install NVM
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+            nvm install 24.11
+            nvm use 24.11
+            npm install -g pm2
+
+            cd /home/ec2-user/
+            git clone https://github.com/Xixigv/Door2Door.git
+            mv Door2Door/ app-tier/
+            cd app-tier/
+            npm install
+
+            aws s3 cp s3://<your-bucket-name>/.env .env
+
+            pm2 start server.js
+            pm2 save
+
+            pm2 startup systemd -u ec2-user --hp /home/ec2-user
+            EOF
+
+            sudo env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v24.11.1/bin /home/ec2-user/.nvm/versions/node/v24.11.1/lib/node_modules/pm2/bin/pm2 startup systemd -u ec2-user --hp /home/ec2-user
+
+            echo "UserData script completed"
+
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: AppTierInstance
+              - Key: Tier
+                Value: Application
+
+  WebTierLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: WebTierLaunchTemplate
+      LaunchTemplateData:
+        ImageId: ami-025ca978d4c1d9825  # Uses your custom Web Tier AMI
+        InstanceType: t3.micro  # Change as needed: t2.small, t3.medium, etc.
+        KeyName: !Ref KeyPairName
+        SecurityGroupIds:
+          - !Ref WebSecurityGroup  # Your existing security group
+        IamInstanceProfile:
+          Arn: !GetAtt EC2InstanceProfile.Arn  # Your existing instance profile ARN (leave empty in params if not needed)
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            exec > >(tee /var/log/user-data.log)
+            exec 2>&1
+
+            echo "Starting UserData script..."
+
+            sudo yum update -y
+            sudo yum install git -y
+            sudo yum install nginx -y
+
+            sudo systemctl enable nginx
+            cd /etc/nginx/
+            mv nginx.conf nginx.conf.bak
+            aws s3 cp s3://<your-bucket-name>/nginx.conf nginx.conf
+
+            sudo -i -u ec2-user bash << 'EOF'
+            # Install NVM
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+            nvm install 24.11
+            nvm use 24.11
+            npm install -g pm2
+
+            cd /home/ec2-user/
+            git clone https://github.com/Xixigv/Door2Door.git
+            mv Door2Door/ web-tier/
+            cd web-tier/
+            npm install
+
+            aws s3 cp s3://<your-bucket-name>/.env .env
+
+            pm2 start server.js
+            pm2 save
+
+            pm2 startup systemd -u ec2-user --hp /home/ec2-user
+
+            APP_LB_DNS="${AppTierInternalLoadBalancer.DNSName}"
+            sudo sed -i "s|APP-LB-PLACEHOLDER|$APP_LB_DNS|g" /etc/nginx/nginx.conf
+
+            sudo systemctl restart nginx
+            EOF
+
+            sudo env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v24.11.1/bin /home/ec2-user/.nvm/versions/node/v24.11.1/lib/node_modules/pm2/bin/pm2 startup systemd -u ec2-user --hp /home/ec2-user
+
+            echo "UserData script completed"
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: WebTierInstance
+              - Key: Tier
+                Value: Web
+
+  AppTierASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: AppTierASG
+      LaunchTemplate:
+        LaunchTemplateId: !Ref AppTierLaunchTemplate
+        Version: !GetAtt AppTierLaunchTemplate.LatestVersionNumber
+      MinSize: !Ref MinSize
+      MaxSize: !Ref MaxSize
+      DesiredCapacity: !Ref DesiredCapacity
+      HealthCheckType: ELB  # Options: ELB or EC2
+      HealthCheckGracePeriod: 300  # Seconds to wait before health checks
+      VPCZoneIdentifier:
+        - !Ref PrivateSubnet1  # Your existing private subnet
+        - !Ref PrivateSubnet2  # Your existing private subnet
+      TargetGroupARNs:
+        - !Ref AppTierTargetGroup
+      Tags:
+        - Key: Name
+          Value: AppTierInstance
+          PropagateAtLaunch: true
+        - Key: Tier
+          Value: Application
+          PropagateAtLaunch: true
+
+  WebTierASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: WebTierASG
+      LaunchTemplate:
+        LaunchTemplateId: !Ref WebTierLaunchTemplate
+        Version: !GetAtt WebTierLaunchTemplate.LatestVersionNumber
+      MinSize: !Ref MinSize
+      MaxSize: !Ref MaxSize
+      DesiredCapacity: !Ref DesiredCapacity
+      HealthCheckType: ELB  # Options: ELB or EC2
+      HealthCheckGracePeriod: 300  # Seconds to wait before health checks
+      VPCZoneIdentifier:
+        - !Ref PublicSubnet1  # Your existing public subnet
+        - !Ref PublicSubnet2  # Your existing public subnet
+      TargetGroupARNs:
+        - !Ref WebTierTargetGroup
+      Tags:
+        - Key: Name
+          Value: WebTierInstance
+          PropagateAtLaunch: true
+        - Key: Tier
+          Value: Web
+          PropagateAtLaunch: true
+
+Outputs:
+  WebTierLoadBalancerDNS:
+    Description: DNS name of the Web Tier Load Balancer
+    Value: !GetAtt WebTierExternalLoadBalancer.DNSName
+    Export:
+      Name: !Sub "${AWS::StackName}-WebLB-DNS"
+  
+  AppTierLoadBalancerDNS:
+    Description: DNS name of the App Tier Load Balancer
+    Value: !GetAtt AppTierInternalLoadBalancer.DNSName
+    Export:
+      Name: !Sub "${AWS::StackName}-AppLB-DNS"
+  
+  WebTierTargetGroupArn:
+    Description: ARN of Web Tier Target Group
+    Value: !Ref WebTierTargetGroup
+  
+  AppTierTargetGroupArn:
+    Description: ARN of App Tier Target Group
+    Value: !Ref AppTierTargetGroup
+  
+  WebTierASGName:
+    Description: Name of Web Tier Auto Scaling Group
+    Value: !Ref WebTierASG
+  
+  AppTierASGName:
+    Description: Name of App Tier Auto Scaling Group
+    Value: !Ref AppTierASG

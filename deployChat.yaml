@@ -1,0 +1,652 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'WebSocket API Lambda Functions with DynamoDB and IAM Roles'
+
+Parameters:
+  ConnectionsTableName:
+    Type: String
+    Default: websocket-connections
+    Description: Name of existing DynamoDB connections table
+  
+  MessagesTableName:
+    Type: String
+    Default: messages
+    Description: Name of existing DynamoDB messages table
+
+Resources:
+
+  # ============================================
+  # IAM ROLES
+  # ============================================
+
+  # Role for Connect Lambda
+  ConnectLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${AWS::StackName}-connect-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ConnectLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: VisualEditor0
+                Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - logs:CreateLogGroup
+                Resource:
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
+                  - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ConnectionsTableName}'
+              - Sid: VisualEditor1
+                Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/websocket-Connect:*'
+
+  # Role for Disconnect Lambda
+  DisconnectLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${AWS::StackName}-disconnect-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: DisconnectLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: VisualEditor0
+                Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:GetItem
+                  - logs:CreateLogGroup
+                Resource:
+                  - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ConnectionsTableName}'
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
+              - Sid: VisualEditor1
+                Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/websocket-Disconnect:*'
+
+  # Role for Send Lambda
+  SendLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${AWS::StackName}-send-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: SendLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: VisualEditor0
+                Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:Scan
+                  - dynamodb:DeleteItem
+                  - execute-api:ManageConnections
+                  - logs:CreateLogGroup
+                Resource:
+                  - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ConnectionsTableName}'
+                  - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${MessagesTableName}'
+                  - !Sub 'arn:aws:execute-api:*:${AWS::AccountId}:*/*/*/*'
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
+              - Sid: VisualEditor1
+                Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/websocket-send:*'
+
+  # Role for Get Lambda
+  GetLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${AWS::StackName}-get-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: GetLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: VisualEditor0
+                Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:Scan
+                  - dynamodb:Query
+                  - logs:CreateLogGroup
+                Resource:
+                  - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${MessagesTableName}'
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
+              - Sid: VisualEditor1
+                Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/websocket-Get:*'
+
+  # ============================================
+  # LAMBDA FUNCTIONS
+  # ============================================
+
+  # Connect Lambda Function
+  ConnectFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: websocket-Connect
+      Runtime: python3.11
+      Handler: index.lambda_handler
+      Role: !GetAtt ConnectLambdaRole.Arn
+      Timeout: 30
+      MemorySize: 256
+      Environment:
+        Variables:
+          WEBSOCKET_TABLE: !Ref ConnectionsTableName
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import os
+
+          dynamodb = boto3.client('dynamodb')
+
+          def lambda_handler(event, context):
+              print("Event:", event)
+
+              connection_id = event.get('requestContext', {}).get('connectionId')
+              user_id = event.get('queryStringParameters', {}).get('userID', 'unknown')
+
+              if not connection_id:
+                  return {'statusCode': 400, 'body': json.dumps({'error': 'Missing connectionId'})}
+
+              dynamodb.put_item(
+                  TableName=os.environ['WEBSOCKET_TABLE'],
+                  Item={
+                      'connectionID': {'S': connection_id},
+                      'userID': {'S': user_id}
+                  }
+              )
+
+              return {'statusCode': 200, 'body': json.dumps({'response': f'Connected: {user_id}'})}
+
+  # Disconnect Lambda Function
+  DisconnectFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: websocket-Disconnect
+      Runtime: python3.11
+      Handler: index.lambda_handler
+      Role: !GetAtt DisconnectLambdaRole.Arn
+      Timeout: 30
+      MemorySize: 256
+      Environment:
+        Variables:
+          WEBSOCKET_TABLE: !Ref ConnectionsTableName
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import os
+
+          dynamodb = boto3.resource('dynamodb')
+          table = dynamodb.Table(os.environ['WEBSOCKET_TABLE'])  # O 'WBSOCKET_TABLE' si no la cambias
+
+          def lambda_handler(event, context):
+              print("Disconnect event:", event)
+              connection_id = event.get('requestContext', {}).get('connectionId')
+
+              if not connection_id:
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'error': 'Missing connectionId in event'})
+                  }
+
+              table.delete_item(
+                  Key={'connectionID': connection_id}
+              )
+
+              print(f"Deleted connectionID: {connection_id}")
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps({'message': 'Disconnected successfully'})
+              }
+
+  # Send Message Lambda Function
+  SendFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: websocket-Send
+      Runtime: python3.11
+      Handler: index.lambda_handler
+      Role: !GetAtt SendLambdaRole.Arn
+      Timeout: 30
+      MemorySize: 256
+      Environment:
+        Variables:
+          WEBSOCKET_TABLE: !Ref ConnectionsTableName
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import os
+          import time
+
+          dynamodb = boto3.client('dynamodb')
+
+          def get_conversation_id(user_a, user_b):
+              return "#".join(sorted([user_a, user_b]))
+
+          def lambda_handler(event, context):
+              print("Event:", event)
+              body = json.loads(event.get('body', '{}'))
+
+              from_user = body.get('from').strip()
+              to_user = body.get('to').strip()
+              message = body.get('message', '').strip()
+
+              if not to_user or not message:
+                  return {'statusCode': 400, 'body': json.dumps({'error': 'Missing "to" or "message"'})}
+
+              receivers = dynamodb.scan(
+                  TableName=os.environ['WEBSOCKET_TABLE'],
+                  FilterExpression='userID = :uid',
+                  ExpressionAttributeValues={':uid': {'S': to_user}}
+              ).get('Items', [])
+
+              conversation_id = get_conversation_id(from_user, to_user)
+              timestamp = int(time.time())
+
+              dynamodb.put_item(
+                  TableName='messages',
+                  Item={
+                      'conversationID': {'S': conversation_id},
+                      'timestamp': {'N': str(timestamp)},
+                      'from': {'S': from_user},
+                      'to': {'S': to_user},
+                      'message': {'S': message}
+                  }
+              )
+
+              domain = event['requestContext']['domainName']
+              stage = event['requestContext']['stage']
+              apigw = boto3.client('apigatewaymanagementapi', endpoint_url=f"https://{domain}/{stage}")
+
+              for item in receivers:
+                  try:
+                      apigw.post_to_connection(
+                          ConnectionId=item['connectionID']['S'],
+                          Data=json.dumps({'from': from_user, 'message': message}).encode('utf-8')
+                      )
+                  except apigw.exceptions.GoneException:
+                      print(f"Stale connection {item['connectionID']['S']}")
+                      dynamodb.delete_item(
+                          TableName=os.environ['WEBSOCKET_TABLE'],
+                          Key={'connectionID': {'S': item['connectionID']['S']}}
+                      )
+
+              return { "statusCode": 200 }
+
+  # Get Messages Lambda Function
+  GetFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: websocket-Get
+      Runtime: python3.11
+      Handler: index.lambda_handler
+      Role: !GetAtt GetLambdaRole.Arn
+      Timeout: 30
+      MemorySize: 256
+      Environment:
+        Variables:
+          MESSAGES_TABLE: !Ref MessagesTableName
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import os
+          from decimal import Decimal
+
+          dynamodb = boto3.client('dynamodb')
+          TABLE_NAME = os.environ['MESSAGES_TABLE']
+
+          def get_conversation_id(user_a, user_b):
+              """Genera un ID consistente para la conversación."""
+              return "#".join(sorted([user_a, user_b]))
+
+          def decimal_default(obj):
+              if isinstance(obj, Decimal):
+                  if obj % 1 == 0:
+                      return int(obj)
+                  return float(obj)
+              raise TypeError
+
+          def lambda_handler(event, context):
+              print("Event:", event)
+              params = event.get('queryStringParameters', {}) or {}
+              user_a = params.get('userA')
+              user_b = params.get('userB')
+
+              if not user_a:
+                  return {
+                      'statusCode': 400,
+                      'body': json.dumps({'error': 'Missing userA'})
+                  }
+
+              try:
+                  # 🔹 Caso 1: se pidió una conversación específica
+                  if user_b:
+                      conversation_id = get_conversation_id(user_a, user_b)
+                      response = dynamodb.query(
+                          TableName=TABLE_NAME,
+                          KeyConditionExpression='conversationID = :cid',
+                          ExpressionAttributeValues={':cid': {'S': conversation_id}},
+                          ScanIndexForward=True
+                      )
+                      messages = [
+                          {
+                              'timestamp': item['timestamp']['N'],
+                              'from': item['from']['S'],
+                              'to': item['to']['S'],
+                              'message': item['message']['S']
+                          }
+                          for item in response.get('Items', [])
+                      ]
+                      body = {'conversationID': conversation_id, 'messages': messages}
+
+                  # 🔹 Caso 2: solo se pasó userA → traer TODAS las conversaciones donde participa
+                  else:
+                      response = dynamodb.scan(
+                          TableName=TABLE_NAME,
+                          FilterExpression='(#f = :user) OR (#t = :user)',
+                          ExpressionAttributeNames={
+                              '#f': 'from',
+                              '#t': 'to'
+                          },
+                          ExpressionAttributeValues={
+                              ':user': {'S': user_a}
+                          }
+                      )
+
+                      # Agrupar por conversación
+                      conversations = {}
+                      for item in response.get('Items', []):
+                          cid = item['conversationID']['S']
+                          msg = {
+                              'timestamp': item['timestamp']['N'],
+                              'from': item['from']['S'],
+                              'to': item['to']['S'],
+                              'message': item['message']['S']
+                          }
+                          conversations.setdefault(cid, []).append(msg)
+
+                      body = {'user': user_a, 'conversations': conversations}
+
+                  return {
+                      'statusCode': 200,
+                      'headers': {'Content-Type': 'application/json'},
+                      'body': json.dumps(body, default=decimal_default)
+                  }
+
+              except Exception as e:
+                  print("Error:", str(e))
+                  return {
+                      'statusCode': 500,
+                      'body': json.dumps({'error': str(e)})
+                  }
+
+# ============================================
+# API
+# ============================================
+
+  WebSocketApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: WebSocketChatAPI
+      ProtocolType: WEBSOCKET
+      RouteSelectionExpression: "$request.body.action"
+      Description: WebSocket API for real-time chat
+  
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: MessagesHttpAPI
+      ProtocolType: HTTP
+      Description: HTTP API for getting messages
+      CorsConfiguration:
+        AllowOrigins:
+          - 'http://*'
+          - 'http://localhost:3000'
+        AllowMethods:
+          - GET
+        AllowHeaders:
+          - 'content-type'
+          - 'authorization'
+        AllowCredentials: true
+
+  # ============================================
+  # ROUTES
+  # ============================================
+
+  # $connect Route
+  ConnectRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref WebSocketApi
+      RouteKey: $connect
+      Target: !Sub 'integrations/${ConnectIntegration}'
+
+  # $disconnect Route
+  DisconnectRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref WebSocketApi
+      RouteKey: $disconnect
+      AuthorizationType: NONE
+      Target: !Sub 'integrations/${DisconnectIntegration}'
+
+  # sendMessage Route
+  SendMessageRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref WebSocketApi
+      RouteKey: sendMessage
+      AuthorizationType: NONE
+      Target: !Sub 'integrations/${SendMessageIntegration}'
+
+  # getMessages Route
+  GetMessagesHttpRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'GET /messages'
+      Target: !Sub 'integrations/${GetMessagesHttpIntegration}'
+
+# ============================================
+  # INTEGRATIONS
+  # ============================================
+
+  ConnectIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref WebSocketApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub 
+        - 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FunctionArn}/invocations'
+        - FunctionArn: !GetAtt ConnectFunction.Arn
+      IntegrationMethod: POST
+
+  DisconnectIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref WebSocketApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub 
+        - 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FunctionArn}/invocations'
+        - FunctionArn: !GetAtt DisconnectFunction.Arn
+      IntegrationMethod: POST
+
+  SendMessageIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref WebSocketApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub 
+        - 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FunctionArn}/invocations'
+        - FunctionArn: !GetAtt SendFunction.Arn
+      IntegrationMethod: POST
+
+  # GetMessagesIntegration:
+  GetMessagesHttpIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetFunction.Arn}/invocations'
+      IntegrationMethod: POST
+      PayloadFormatVersion: '2.0'
+
+  # ============================================
+  # LAMBDA PERMISSIONS
+  # ============================================
+
+  ConnectPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ConnectFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${WebSocketApi}/*/$connect'
+
+  DisconnectPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref DisconnectFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${WebSocketApi}/*/$disconnect'
+
+  SendMessagePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref SendFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${WebSocketApi}/*/sendMessage'
+
+  # GetMessagesPermission:
+  GetMessagesHttpPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref GetFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/messages'
+
+  # ============================================
+  # DEPLOYMENT & STAGE
+  # ============================================
+
+  Deployment:
+    Type: AWS::ApiGatewayV2::Deployment
+    DependsOn:
+      - ConnectRoute
+      - DisconnectRoute
+      - SendMessageRoute
+      # - GetMessagesRoute
+    Properties:
+      ApiId: !Ref WebSocketApi
+      Description: Deployment for Demo stage
+
+  Stage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref WebSocketApi
+      DeploymentId: !Ref Deployment
+      StageName: Demo
+      Description: Demo stage
+
+  HttpApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref HttpApi
+      StageName: Demo
+      AutoDeploy: true
+      Description: Demo stage for HTTP API
+# ============================================
+# OUTPUTS
+# ============================================
+
+Outputs:
+  ConnectionsTableName:
+    Description: DynamoDB Connections Table Name (existing)
+    Value: !Ref ConnectionsTableName
+
+  MessagesTableName:
+    Description: DynamoDB Messages Table Name (existing)
+    Value: !Ref MessagesTableName
+
+  ConnectFunctionArn:
+    Description: Connect Lambda Function ARN
+    Value: !GetAtt ConnectFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-ConnectFunctionArn'
+
+  DisconnectFunctionArn:
+    Description: Disconnect Lambda Function ARN
+    Value: !GetAtt DisconnectFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-DisconnectFunctionArn'
+
+  SendFunctionArn:
+    Description: Send Lambda Function ARN
+    Value: !GetAtt SendFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-SendFunctionArn'
+
+  GetFunctionArn:
+    Description: Get Lambda Function ARN
+    Value: !GetAtt GetFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-GetFunctionArn'
+
+  HttpApiEndpoint:
+    Description: HTTP API endpoint for getting messages
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/Demo'
+    Export:
+      Name: !Sub '${AWS::StackName}-HttpApiEndpoint'
+    
+  WssApiEndpoint:
+    Description: WSS API endpoint for connecting to chat
+    Value: !Sub 'wss://${WebSocketApi}.execute-api.${AWS::Region}.amazonaws.com/Demo'
+    Export:
+      Name: !Sub '${AWS::StackName}-WssApiEndpoint'

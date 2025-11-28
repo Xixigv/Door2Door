@@ -1,11 +1,11 @@
 import { DynamoDBClient, BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
-import services from "./bookingHistory.json" assert { type: "json" };
+import dataTable from "./bookingHistory.json" assert { type: "json" };
 import dotenv from "dotenv";
 dotenv.config({ path: "../../.env" });
 
 const client = new DynamoDBClient({
-  region: "us-east-2",
+  region: process.env.AWS_REGION,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -25,8 +25,8 @@ function chunkArray(array, size) {
 }
 
 async function uploadServicesBulk() {
-  const chunks = chunkArray(services, BATCH_SIZE);
-  console.log(`Uploading ${services.length} services in ${chunks.length} batches...`);
+  const chunks = chunkArray(dataTable, BATCH_SIZE);
+  console.log(`Uploading ${dataTable.length} data in ${chunks.length} batches...`);
 
   for (let i = 0; i < chunks.length; i++) {
     const batch = {
@@ -56,7 +56,7 @@ async function uploadServicesBulk() {
     }
   }
 
-  console.log("🎉 All services uploaded successfully!");
+  console.log("🎉 All data uploaded successfully!");
 }
 
 uploadServicesBulk();
